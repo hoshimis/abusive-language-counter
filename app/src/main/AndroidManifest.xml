@@ -5,24 +5,25 @@
 
 <!--    音声入力を許可する-->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-<!--    Speach ReCognizerでは温帯んでの音声入力とオフラインでの音声入力両方に対応している
+<!--    Speech Recognizerでは温帯んでの音声入力とオフラインでの音声入力両方に対応している
         オンラインで音声入力できるようにするために以下のパーミッションも許可しておく
 -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
 
-<!--   Speech Recognizerを使うための記述 -->
+<!--   Speech Recognizerを使うための記述ここから -->
     <queries>
         <intent>
             <action android:name="android.speech.RecognitionService"/>
         </intent>
     </queries>
+<!--    ここまで-->
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Appnav">
         <activity

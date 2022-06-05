@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">App-nav</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_Recognition">Recognition</string>
+    <string name="title_Graph">Graph</string>
+    <string name="title_BBS">BBS</string>
 
     <string name="start_speech">スピーチ開始</string>
     <string name="stop_speech">スピーチ終了</string>
