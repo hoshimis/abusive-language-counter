@@ -10,7 +10,7 @@ public class BbsViewModel extends ViewModel {
 
     public BbsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("");
+        mText.setValue("掲示板がめんだよー");
     }
 
     public LiveData<String> getText() {

@@ -10,7 +10,7 @@ public class GraphViewModel extends ViewModel {
 
     public GraphViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("");
+        mText.setValue("グラフがめんだよー");
     }
 
     public LiveData<String> getText() {
