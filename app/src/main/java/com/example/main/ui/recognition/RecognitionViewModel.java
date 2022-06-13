@@ -1,16 +1,16 @@
-package com.example.app_nav.ui.bbs;
+package com.example.main.ui.recognition;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class BbsViewModel extends ViewModel {
+public class RecognitionViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public BbsViewModel() {
+    public RecognitionViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("掲示板がめんだよー");
+        mText.setValue("");
     }
 
     public LiveData<String> getText() {

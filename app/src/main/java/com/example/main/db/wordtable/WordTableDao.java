@@ -1,4 +1,4 @@
-package com.example.app_nav.db;
+package com.example.main.db.wordtable;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -29,8 +29,8 @@ public interface WordTableDao {
     void autoIncrementReset();
 
     //入力した単語と既存のデータベースの単語を比較する
-    //TODO:引数と一致した単語を検出する
-    @Query("")
+    @Query("SELECT EXISTS(SELECT * FROM wordtable WHERE word like '%' ||:word ||'%')")
+    boolean checkWord(String word);
 
     //
     @Insert

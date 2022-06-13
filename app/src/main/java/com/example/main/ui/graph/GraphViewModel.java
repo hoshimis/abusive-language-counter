@@ -1,4 +1,4 @@
-package com.example.app_nav.ui.graph;
+package com.example.main.ui.graph;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

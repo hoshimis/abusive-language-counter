@@ -1,4 +1,4 @@
-package com.example.app_nav.db;
+package com.example.main.db.wordtable;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
@@ -9,6 +9,6 @@ import androidx.room.RoomDatabase;
  */
 
 @Database(entities = {WordTable.class}, version = 1, exportSchema = false)
-public abstract class AppDatabase extends RoomDatabase {
+public abstract class WordDatabase extends RoomDatabase {
     public abstract WordTableDao wordTableDao();
 }

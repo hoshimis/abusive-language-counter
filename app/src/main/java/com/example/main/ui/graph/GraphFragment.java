@@ -1,4 +1,4 @@
-package com.example.app_nav.ui.graph;
+package com.example.main.ui.graph;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.app_nav.R;
+import com.example.main.R;
 
 public class GraphFragment extends Fragment {
 

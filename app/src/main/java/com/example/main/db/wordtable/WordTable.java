@@ -1,4 +1,4 @@
-package com.example.app_nav.db;
+package com.example.main.db.wordtable;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -23,7 +23,7 @@ public class WordTable {
     private String word;
 
     @ColumnInfo(name = "other")
-    private  String other;
+    private String other;
 
     public WordTable(String word, String other) {
         this.word = word;

@@ -1,4 +1,4 @@
-package com.example.app_nav;
+package com.example.main;
 
 import org.junit.Test;
 

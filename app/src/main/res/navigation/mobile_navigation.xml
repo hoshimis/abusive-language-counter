@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_recognition"
-        android:name="com.example.app_nav.ui.recognition.RecognitionFragment"
+        android:name="com.example.main.ui.recognition.RecognitionFragment"
         android:label="@string/title_Recognition"
         tools:layout="@layout/fragment_recognition" />
 
     <fragment
         android:id="@+id/navigation_graph"
-        android:name="com.example.app_nav.ui.graph.GraphFragment"
+        android:name="com.example.main.ui.graph.GraphFragment"
         android:label="@string/title_Graph"
         tools:layout="@layout/fragment_graph" />
 
     <fragment
         android:id="@+id/navigation_bbs"
-        android:name="com.example.app_nav.ui.bbs.BbsFragment"
+        android:name="com.example.main.ui.bbs.BbsFragment"
         android:label="@string/title_BBS"
         tools:layout="@layout/fragment_bbs" />
 </navigation>
