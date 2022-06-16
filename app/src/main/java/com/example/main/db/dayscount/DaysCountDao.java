@@ -15,6 +15,9 @@ public interface DaysCountDao {
     @Query("select * from dayscount where id in (:ids)")
     List<DaysCount> loadAllByIds(int[] ids);
 
+    @Query("select count(*) from dayscount where date like (:date)")
+    int getCount(String date);
+
     @Insert
     void insertAll(DaysCount... daysCount);
 

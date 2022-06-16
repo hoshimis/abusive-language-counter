@@ -13,7 +13,7 @@ public class WordDatabaseSingleton {
         }
 
         instance = Room.databaseBuilder(context,
-                WordDatabase.class, "thoughtless-words").build();
+                WordDatabase.class, "words").build();
         return instance;
     }
 }

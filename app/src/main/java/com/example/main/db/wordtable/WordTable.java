@@ -25,9 +25,8 @@ public class WordTable {
     @ColumnInfo(name = "other")
     private String other;
 
-    public WordTable(String word, String other) {
+    public WordTable(String word) {
         this.word = word;
-        this.other = other;
     }
 
     //以下getter,setterメソッド
