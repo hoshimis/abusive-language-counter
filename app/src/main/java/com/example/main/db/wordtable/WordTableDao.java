@@ -28,10 +28,6 @@ public interface WordTableDao {
     @Query("delete from sqlite_sequence where name='wordtable'")
     void autoIncrementReset();
 
-    //入力した単語と既存のデータベースの単語を比較する
-    @Query("SELECT EXISTS(SELECT * FROM wordtable WHERE word like '%' ||:word ||'%')")
-    boolean checkWord(String word);
-
     //デフォルト：データを挿入
     @Insert
     void insertAll(WordTable... wordTable);

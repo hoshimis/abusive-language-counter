@@ -1,7 +1,10 @@
 package com.example.main.ui.recognition;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.main.db.dayscount.CountDatabase;
@@ -18,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 //以下からデータベース接続などの非同期処理
 //メソッドとして、doInBackgroundを実装している
 public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
@@ -32,8 +36,6 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
     //1日 = 86400000ms
     //日付取得の時に使う
     final long DAY = 86400000;
-
-    int count = 0;
 
     //コンストラクタ―
     public DataStoreAsyncTask(Activity activity, CountDatabase countDatabase, WordDatabase wordDatabase, String speechText, TextView countText) {
@@ -70,6 +72,8 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
 //            wordTableDao.insert(new WordTable("死ね"));
 //            wordTableDao.insert(new WordTable("消えろ"));
 //            wordTableDao.insert(new WordTable("ハゲ"));
+//            wordTableDao.insert(new WordTable("おはよう"));
+//            wordTableDao.insert(new WordTable("ばーか"));
 
         //単語DBからすべてのワードを取得してリストに代入する。
         List<WordTable> atList = wordTableDao.getAll();
@@ -85,7 +89,7 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
                 //最終的に対応する日付の行数をカウントすればその日の日付がカウントされる
                 daysCountDao.insert(new DaysCount(getDay(0, "yyyy/ MM/ dd HH:mm:ss"), speechText));
                 //今日の日付の分を今日行った暴言の回数として扱う
-                count = daysCountDao.getCount("%" + getDay(0, "yyyy/ MM/ dd") + "%");
+                RecognitionFragment.count = daysCountDao.getCount("%" + getDay(0, "yyyy/ MM/ dd") + "%");
 
                 //ループされても困るので、一回正規表現にマッチすればループから抜けるようにする。
                 break;
@@ -102,6 +106,7 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
             return;
         }
         //DBから今日の日付分の回数を取得してテキスト
-        countText.setText(String.valueOf(count));
+        Log.d(TAG, "onPostExecute: " + RecognitionFragment.count);
+        countText.setText(String.valueOf(RecognitionFragment.count));
     }
 }

@@ -1,9 +1,10 @@
 package com.example.main.ui.recognition;
 
+import static android.Manifest.permission.RECORD_AUDIO;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -20,25 +21,20 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.main.R;
 import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.CountDatabaseSingleton;
-import com.example.main.db.dayscount.DaysCount;
 import com.example.main.db.wordtable.WordDatabase;
 import com.example.main.db.wordtable.WordDatabaseSingleton;
 import com.example.main.layout.CircleView;
 
 import java.util.ArrayList;
 
-import static android.Manifest.permission.RECORD_AUDIO;
-
 public class RecognitionFragment extends Fragment {
 
 
     //以下フィールド
-    private RecognitionViewModel homeViewModel;
     //以下音声認識に使う変数
     private final int PERMISSIONS_RECORD_AUDIO = 1000;
     private SpeechRecognizer speechRecognizer;
@@ -51,6 +47,8 @@ public class RecognitionFragment extends Fragment {
     private WordDatabase wordDatabase;
     private CountDatabase countDatabase;
 
+    public static int count;
+
     //リスト構造を宣言
     ArrayList<String> data = new ArrayList<>();
 
@@ -60,7 +58,8 @@ public class RecognitionFragment extends Fragment {
      * onCreateView()で渡されるLayoutInflaterにFragmentのレイアウトを挿入して返す
      */
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new ViewModelProvider(this).get(RecognitionViewModel.class);
+//        RecognitionViewModel homeViewModel;
+//        homeViewModel = new ViewModelProvider(this).get(RecognitionViewModel.class);
         View root = inflater.inflate(R.layout.fragment_recognition, container, false);
 
         //デフォルトで生成されるコード意味は後で調べる
@@ -77,10 +76,10 @@ public class RecognitionFragment extends Fragment {
         //countText -> 単語DBと何回マッチしたかを表示するテキストビューの紐づけ
         //listView -> その日になんの言葉を話したか表示するListViewの紐づけ
 
-        mText = (TextView) root.findViewById(R.id.recognize_text_view);
-        titleView = (TextView) root.findViewById(R.id.text_Recognition);
-        countText = (TextView) root.findViewById(R.id.count_text);
-        listView = (ListView) root.findViewById(R.id.listView);
+        mText = root.findViewById(R.id.recognize_text_view);
+        titleView = root.findViewById(R.id.text_Recognition);
+        countText = root.findViewById(R.id.count_text);
+        listView = root.findViewById(R.id.listView);
 
         //データベースとの紐づけ
         wordDatabase = WordDatabaseSingleton.getInstance(getActivity().getApplicationContext());
@@ -89,18 +88,17 @@ public class RecognitionFragment extends Fragment {
         //speechRecognizerにnullを代入
         speechRecognizer = null;
 
-        /**
-         * 音声機能についてパーミッションを明示的にユーザにリクエストする処理
-         * */
+
+        //音声機能についてパーミッションを明示的にユーザにリクエストする処理
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{RECORD_AUDIO}, PERMISSIONS_RECORD_AUDIO);
         }
 
-        /**
-         * 以下ボタンを押されたときの挙動
-         * startButton -> 音声識別開始
-         * stopButton -> 音声識別終了
-         */
+
+        // 以下ボタンを押されたときの挙動
+        // startButton -> 音声識別開始
+        // stopButton -> 音声識別終了
+
 
         //以下のボタンは開発ように作成したもの
 //        root.findViewById(R.id.recognize_start_button).setOnClickListener(
@@ -120,8 +118,10 @@ public class RecognitionFragment extends Fragment {
 //                }
 //        );
 
-        CircleView circleView = (CircleView) root.findViewById(R.id.circle_view);
-        circleView.setColor(R.color.purple);
+
+        //画面に正円を描画するための処理
+        CircleView circleView = root.findViewById(R.id.circle_view);
+        circleView.setColor(R.color.teal_200);
 
         //SpeechRecognizerを使用することができるか確認する
         checkSpeechRecognizer();
@@ -129,50 +129,43 @@ public class RecognitionFragment extends Fragment {
         if (checkSpeechRecognizer()) {
             startRecording();
         }
-
-
-
-
         // Adapterとリスト構造の結びつけ
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, data);
 
-        //xmlとの紐づけ
-        final ListView listView = (ListView) root.findViewById(R.id.listView);
+        new GetCountAsyncTask(getActivity(), countDatabase, data);
 
         listView.setAdapter(adapter);
+
+        //暴言と認識された言葉を日時とともにリストビューに追加していく
+        new GetCountAsyncTask(getActivity(), countDatabase, data).execute();
 
         return root;
     }
 
-    /**
-     * checkSpeechRecognizer()
-     * 音声認識サポート端末であるかどうかを調べるメソッド
-     * サポート端末ではなかったらその旨のテキストを表示(string.xmlから)
-     * 録音が許可されていなかったらユーザに許可を求めるシステムダイアログを表示する。
-     **/
-    public Boolean checkSpeechRecognizer() {
 
+//      checkSpeechRecognizer()
+//      音声認識サポート端末であるかどうかを調べるメソッド
+//      サポート端末ではなかったらその旨のテキストを表示(string.xmlから)
+//      録音が許可されていなかったらユーザに許可を求めるシステムダイアログを表示する。
+
+    public Boolean checkSpeechRecognizer() {
         //音声認識が可能かチェックする
         if (!SpeechRecognizer.isRecognitionAvailable(getActivity().getApplicationContext())) {
-            //mAlert.setMessage(getString(R.string.speech_not_available));
-            //mAlert.show();
             mText.setText(getString(R.string.speech_not_available));
             return false;
         }
 
         //録音機能のパーミッションが許可されていなかったら許可するようにアラートを出す
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (ActivityCompat.checkSelfPermission(getActivity(),
-                    Manifest.permission.RECORD_AUDIO)
-                    != PackageManager.PERMISSION_GRANTED) {
-                mText.setText(getString(R.string.speech_not_granted));
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{
-                                Manifest.permission.RECORD_AUDIO
-                        },
-                        PERMISSIONS_RECORD_AUDIO);
-                return false;
-            }
+        if (ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            mText.setText(getString(R.string.speech_not_granted));
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{
+                            Manifest.permission.RECORD_AUDIO
+                    },
+                    PERMISSIONS_RECORD_AUDIO);
+            return false;
         }
         return true;
     }
@@ -180,20 +173,18 @@ public class RecognitionFragment extends Fragment {
 
     // 許可ダイアログの承認結果を受け取る
     @Override
-    public void onRequestPermissionsResult(int requestcode, String[] permission, int[] grantResults) {
-        super.onRequestPermissionsResult(requestcode, permission, grantResults);
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permission, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permission, grantResults);
         Log.d(TAG, "onRequestPermissionResult");
 
         if (grantResults.length <= 0) {
             return;
         }
 
-        switch (requestcode) {
-            case PERMISSIONS_RECORD_AUDIO:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mText.setText("");
-                }
-                break;
+        if (requestCode == PERMISSIONS_RECORD_AUDIO) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mText.setText("");
+            }
         }
     }
 
@@ -208,10 +199,8 @@ public class RecognitionFragment extends Fragment {
             speechRecognizer = SpeechRecognizer.createSpeechRecognizer(getActivity());
             speechRecognizer.setRecognitionListener(new listener(countDatabase, wordDatabase, countText));
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,
-                    getActivity().getPackageName());
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getActivity().getPackageName());
             //以下指定で途中の認識を拾う
             intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
             speechRecognizer.startListening(intent);
@@ -234,24 +223,30 @@ public class RecognitionFragment extends Fragment {
         startRecording();
     }
 
-    /**
-     * 必要がなくなった SpeechRecognizer は破棄する
-     * SpeechRecognizer の破棄は destroy で行う
-     * 使い終わったらdestroyで破棄する
-     */
-//    public void onDestroy() {
-//        super.onDestroy();
-//        speechRecognizer.destroy();
+    //フラグメントが切り替わったらレコーディングを停止する
+//    public void onResume() {
+//        Log.d(TAG, "continuationRecording: 停止しました！");
+//        super.onResume();
+//        stopRecording();
 //    }
+
+    //必要がなくなった SpeechRecognizer は破棄する
+    //SpeechRecognizer の破棄は destroy で行う
+    //使い終わったらdestroyで破棄する
+    public void onDestroyView() {
+        Log.d(TAG, "onDestroy: デストロイされました！！");
+        super.onDestroyView();
+        speechRecognizer.destroy();
+    }
 
     /**
      * 以下がRecognitionListenerの実装
      * onCreate内のsetRecognitionListenerの引数にlistenerを設定するために、新しくクラスを宣言してそのインスタンスを渡して上げる。
      */
     class listener implements RecognitionListener {
-        private CountDatabase countDatabase;
-        private WordDatabase wordDatabase;
-        private TextView CountTextView;
+        private final CountDatabase countDatabase;
+        private final WordDatabase wordDatabase;
+        private final TextView CountTextView;
 
         //コンストラクタ―
         //インスタンス化されたときに渡された引数をフィールドに代入する
@@ -298,10 +293,13 @@ public class RecognitionFragment extends Fragment {
 
         //ネットワークエラー、音声入力に関するエラーが発生したら呼び出される
         @Override
-        public void onError(int i) {
-            Log.d(TAG, "onError=" + i);
-
-            mText.setText(getString(R.string.speech_error) + "\nエラーコード：" + i);
+        public void onError(int error) {
+            Log.d(TAG, "onError=" + error);
+            if ((error == SpeechRecognizer.ERROR_NO_MATCH) || (error == SpeechRecognizer.ERROR_NETWORK_TIMEOUT)){
+                startRecording();
+                return;
+            }
+            mText.setText(getString(R.string.speech_error) + "\nエラーコード：" + error);
             stopRecording();
         }
 
@@ -320,7 +318,7 @@ public class RecognitionFragment extends Fragment {
                 mText.setText(str);
                 //ここで、認識した言葉を非同期処理に渡して、マッチするかを確認する
                 new DataStoreAsyncTask(getActivity(), countDatabase, wordDatabase, str, CountTextView).execute();
-                new GetCountAsyncTask(getActivity(), countDatabase, data);
+                new GetCountAsyncTask(getActivity(), countDatabase, data).execute();
 
             }
         }

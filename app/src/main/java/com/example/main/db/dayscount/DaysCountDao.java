@@ -28,10 +28,6 @@ public interface DaysCountDao {
     @Query("select count(*) from dayscount where date like :date")
     int getCount(String date);
 
-//    //指定した日付のワードを抽出する
-//    @Query("select * from dayscount where date like :date")
-//    String getDateWord(String date);
-
     //デフォルト：要素を挿入
     @Insert
     void insertAll(DaysCount... daysCount);

@@ -1,7 +1,10 @@
 package com.example.main.ui.recognition;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.DaysCount;
@@ -37,6 +40,11 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
     //非同期処理が行われる場所
     @Override
     protected Integer doInBackground(Void... aVoid) {
+        DaysCountDao daysCountDao = countDatabase.daysCountDao();
+        List<DaysCount> atList = daysCountDao.getDayAll("%" + getDay("yyyy/ MM/ dd") + "%");
+        for (DaysCount at : atList) {
+            arrayList.add(at.getDate().substring(12,19) + "     " + at.getWord());
+        }
         return 0;
     }
 
@@ -44,13 +52,8 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
     @Override
     protected void onPostExecute(Integer code) {
         Activity activity = weakReference.get();
-        DaysCountDao daysCountDao = countDatabase.daysCountDao();
-        List<DaysCount> list = daysCountDao.getDayAll(getDay("yyyy/ MM/ dd"));
         if (activity == null) {
             return;
-        }
-        for (DaysCount dc : list) {
-            arrayList.add(dc.getWord());
         }
     }
 }

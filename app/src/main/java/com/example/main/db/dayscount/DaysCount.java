@@ -18,9 +18,7 @@ public class DaysCount {
     @ColumnInfo(name = "word")
     private String word;
 
-
     //コンストラクタ―
-    //インスタンス化するときに回数を引数として渡す
     public DaysCount(String date, String word) {
         this.date = date;
         this.word = word;
