@@ -1,10 +1,8 @@
 package com.example.main.ui.recognition;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -14,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,23 +26,17 @@ import com.example.main.R;
 import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.CountDatabaseSingleton;
 import com.example.main.db.dayscount.DaysCount;
-import com.example.main.db.dayscount.DaysCountDao;
 import com.example.main.db.wordtable.WordDatabase;
 import com.example.main.db.wordtable.WordDatabaseSingleton;
-import com.example.main.db.wordtable.WordTable;
-import com.example.main.db.wordtable.WordTableDao;
+import com.example.main.layout.CircleView;
 
-import java.lang.ref.WeakReference;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
 
 import static android.Manifest.permission.RECORD_AUDIO;
 
 public class RecognitionFragment extends Fragment {
+
+
     //以下フィールド
     private RecognitionViewModel homeViewModel;
     //以下音声認識に使う変数
@@ -51,20 +45,21 @@ public class RecognitionFragment extends Fragment {
     private TextView mText;
     private TextView titleView;
     private TextView countText;
+    private ListView listView;
     //log.dで使う文字列
     private final String TAG = "MainActivity";
     private WordDatabase wordDatabase;
     private CountDatabase countDatabase;
 
-    static int count;
+    //リスト構造を宣言
+    ArrayList<String> data = new ArrayList<>();
 
     /**
      * ActivityのようにFragmentにもライフサイクルがある
      * Viewを生成するたタイミングで呼ばれるのがonCreateView()
      * onCreateView()で渡されるLayoutInflaterにFragmentのレイアウトを挿入して返す
      */
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(RecognitionViewModel.class);
         View root = inflater.inflate(R.layout.fragment_recognition, container, false);
 
@@ -79,10 +74,13 @@ public class RecognitionFragment extends Fragment {
 
         // mText -> 認識した音声をテキスト化して表示するテキストビューを紐づけ
         //titleView -> 音声認識の状態を表示する部分のテキストビューを紐づけ
-        //countText -> 単語DBと何回マッチしたかを表示するテキストビューの貼り付け
+        //countText -> 単語DBと何回マッチしたかを表示するテキストビューの紐づけ
+        //listView -> その日になんの言葉を話したか表示するListViewの紐づけ
+
         mText = (TextView) root.findViewById(R.id.recognize_text_view);
         titleView = (TextView) root.findViewById(R.id.text_Recognition);
         countText = (TextView) root.findViewById(R.id.count_text);
+        listView = (ListView) root.findViewById(R.id.listView);
 
         //データベースとの紐づけ
         wordDatabase = WordDatabaseSingleton.getInstance(getActivity().getApplicationContext());
@@ -103,22 +101,27 @@ public class RecognitionFragment extends Fragment {
          * startButton -> 音声識別開始
          * stopButton -> 音声識別終了
          */
-        root.findViewById(R.id.recognize_start_button).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startRecording();
-                    }
-                }
-        );
-        root.findViewById(R.id.recognize_stop_button).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        stopRecording();
-                    }
-                }
-        );
+
+        //以下のボタンは開発ように作成したもの
+//        root.findViewById(R.id.recognize_start_button).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        startRecording();
+//                    }
+//                }
+//        );
+//        root.findViewById(R.id.recognize_stop_button).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        stopRecording();
+//                    }
+//                }
+//        );
+
+        CircleView circleView = (CircleView) root.findViewById(R.id.circle_view);
+        circleView.setColor(R.color.purple);
 
         //SpeechRecognizerを使用することができるか確認する
         checkSpeechRecognizer();
@@ -126,6 +129,17 @@ public class RecognitionFragment extends Fragment {
         if (checkSpeechRecognizer()) {
             startRecording();
         }
+
+
+
+
+        // Adapterとリスト構造の結びつけ
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, data);
+
+        //xmlとの紐づけ
+        final ListView listView = (ListView) root.findViewById(R.id.listView);
+
+        listView.setAdapter(adapter);
 
         return root;
     }
@@ -166,8 +180,7 @@ public class RecognitionFragment extends Fragment {
 
     // 許可ダイアログの承認結果を受け取る
     @Override
-    public void onRequestPermissionsResult(
-            int requestcode, String[] permission, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestcode, String[] permission, int[] grantResults) {
         super.onRequestPermissionsResult(requestcode, permission, grantResults);
         Log.d(TAG, "onRequestPermissionResult");
 
@@ -227,103 +240,9 @@ public class RecognitionFragment extends Fragment {
      * 使い終わったらdestroyで破棄する
      */
 //    public void onDestroy() {
-//
 //        super.onDestroy();
 //        speechRecognizer.destroy();
 //    }
-
-    //以下からデータベース接続などの非同期処理
-    //メソッドとして、doInBackgroundを実装している
-    private static class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
-        private WeakReference<Activity> weakReference;
-        //データベース二つとの紐づけ
-        private CountDatabase countDatabase;
-        private WordDatabase wordDatabase;
-        //音声認識した言葉をここに入力する
-        private String speechText;
-        //マッチした回数を表示するテキストビュー
-        private TextView countText;
-        //1日 = 86400000ms
-        //日付取得の時に使う
-        final long DAY = 86400000;
-
-        //コンストラクタ―
-        public DataStoreAsyncTask(Activity activity, CountDatabase countDatabase, WordDatabase wordDatabase, String speechText, TextView countText) {
-            //ここで、インスタンス化した時に渡された引数の値をフィールドの値に代入する
-            weakReference = new WeakReference<>(activity);
-            this.countDatabase = countDatabase;
-            this.wordDatabase = wordDatabase;
-            this.speechText = speechText;
-            this.countText = countText;
-        }
-
-        //今日の日付を取得するメソッド
-        private String getToday(int days) {
-            DateFormat df = new SimpleDateFormat("yyyy/ MM/ dd HH:mm:ss");
-            Date date = new Date(System.currentTimeMillis() + DAY * days);
-
-            return df.format(date);
-        }
-
-        //今日の日付を取得するメソッド
-        private String getDay(int days) {
-            DateFormat df = new SimpleDateFormat("yyy/ MM/ dd");
-            Date date = new Date(System.currentTimeMillis() + DAY * days);
-
-            return df.format(date);
-        }
-
-        //AsyncTaskの実装
-        //非同期処理(Activityの処理を止めることなく実行したい処理)
-        //Activityに何も書いてないけどどうなんでしょうね？？
-        //このフラグメントにいろんな処理書いてあるからそれでいいのかもしれないですね
-        @Override
-        protected Integer doInBackground(Void... params) {
-            WordTableDao wordTableDao = wordDatabase.wordTableDao();
-            DaysCountDao daysCountDao = countDatabase.daysCountDao();
-
-            //データベースに値を入れる処理
-//            wordTableDao.insert(new WordTable("バカ"));
-//            wordTableDao.insert(new WordTable("アホ"));
-//            wordTableDao.insert(new WordTable("死ね"));
-//            wordTableDao.insert(new WordTable("消えろ"));
-//            wordTableDao.insert(new WordTable("ハゲ"));
-
-            //単語DBからすべてのワードを取得してリストに代入する。
-            List<WordTable> atList = wordTableDao.getAll();
-
-            for (WordTable at : atList) {
-                //単語を１つずつ取り出して、正規表現のパターンに当てはめる
-                Pattern pattern = Pattern.compile(".*" + at.getWord() + ".*");
-                Matcher matcher = pattern.matcher(speechText);
-
-                //正規表現にマッチしたらtrueしなかったらfalseになる
-                if (matcher.find()) {
-                    //カウントDBに今日の日付をDBに挿入する
-                    //最終的に対応する日付の行数をカウントすればその日の日付がカウントされる
-                    daysCountDao.insert(new DaysCount(getToday(0), speechText));
-                    //今日の日付の分を今日行った暴言の回数として扱う
-                    count = daysCountDao.getCount("%" + getDay(0) + "%");
-
-                    Log.d("AAA", String.valueOf(count));
-                    //ループされても困るので、一回正規表現にマッチすればループから抜けるようにする。
-                    break;
-                }
-            }
-            return 0;
-        }
-
-        @Override
-        protected void onPostExecute(Integer code) {
-            Activity activity = weakReference.get();
-            DaysCountDao daysCountDao = countDatabase.daysCountDao();
-            if (activity == null) {
-                return;
-            }
-            //DBから今日の日付分の回数を取得してテキスト
-            countText.setText(String.valueOf(count));
-        }
-    }
 
     /**
      * 以下がRecognitionListenerの実装
@@ -335,6 +254,7 @@ public class RecognitionFragment extends Fragment {
         private TextView CountTextView;
 
         //コンストラクタ―
+        //インスタンス化されたときに渡された引数をフィールドに代入する
         listener(CountDatabase countDatabase, WordDatabase wordDatabase, TextView CountTextView) {
             this.wordDatabase = wordDatabase;
             this.countDatabase = countDatabase;
@@ -400,6 +320,8 @@ public class RecognitionFragment extends Fragment {
                 mText.setText(str);
                 //ここで、認識した言葉を非同期処理に渡して、マッチするかを確認する
                 new DataStoreAsyncTask(getActivity(), countDatabase, wordDatabase, str, CountTextView).execute();
+                new GetCountAsyncTask(getActivity(), countDatabase, data);
+
             }
         }
 

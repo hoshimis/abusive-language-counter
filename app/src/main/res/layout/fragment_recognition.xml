@@ -25,38 +25,70 @@
         android:textSize="32sp" />
 
     <!--    以下が音声入力された物を表示＆音声入力開始＆音声入力停止-->
-    <TextView
-        android:id="@+id/count_text"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="回数"
-        android:textSize="40dp" />
+        android:layout_height="wrap_content">
 
+        <com.example.main.layout.CircleView
+            android:id="@+id/circle_view"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:text="0" />
 
-    <!--    開始ボタン、停止ボタン-->
+        <TextView
+            android:id="@+id/count_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:text="0"
+            android:textSize="50dp" />
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="?android:attr/listDivider" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="300dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/recognize_start_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Start"
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-            />
-
-        <Button
-            android:id="@+id/recognize_stop_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Stop" />
 
     </LinearLayout>
+
+
+    <!--    開始ボタン、停止ボタン、開発用-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:orientation="horizontal">-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/recognize_start_button"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:text="Start"-->
+
+    <!--            />-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/recognize_stop_button"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:text="Stop" />-->
+    <!--    </LinearLayout>-->
+
 
 </LinearLayout>

@@ -19,9 +19,11 @@ public class WordTable {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    //カラム　認識する言葉
     @ColumnInfo(name = "word")
     private String word;
 
+    //実際に動かせてはいないけど、認識する言葉に対応した言い換えの言葉とかを入れれたらいいなぁ
     @ColumnInfo(name = "other")
     private String other;
 

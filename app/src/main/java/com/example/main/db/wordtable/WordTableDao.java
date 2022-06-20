@@ -32,13 +32,15 @@ public interface WordTableDao {
     @Query("SELECT EXISTS(SELECT * FROM wordtable WHERE word like '%' ||:word ||'%')")
     boolean checkWord(String word);
 
-    //
+    //デフォルト：データを挿入
     @Insert
     void insertAll(WordTable... wordTable);
 
+    //デフォルト：データを挿入
     @Insert
     void insert(WordTable wordTable);
 
+    //デフォルト:データを削除
     @Delete
     void delete(WordTable wordTable);
 }

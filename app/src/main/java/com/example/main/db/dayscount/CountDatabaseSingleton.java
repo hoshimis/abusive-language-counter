@@ -9,7 +9,6 @@ import androidx.room.Room;
  * DataBase呼び出し用のクラス
  * シングルプロセスで実行するアプリの場合は、AppDatabaseオブジェクトをインスタンス化する際にシングルトン設計パターンに従う
  * インスタンスは非常に高コストであり、単一のプロセス内でインスタンスにアクセスする必要はない
- * <p>
  * 要は、生成されるインスタンスを1つに制限するデザイン設計？？
  */
 public class CountDatabaseSingleton {
