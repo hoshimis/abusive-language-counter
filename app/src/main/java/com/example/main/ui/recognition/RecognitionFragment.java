@@ -100,7 +100,7 @@ public class RecognitionFragment extends Fragment {
         // stopButton -> 音声識別終了
 
 
-        //以下のボタンは開発ように作成したもの
+        //以下のボタンは開発用
 //        root.findViewById(R.id.recognize_start_button).setOnClickListener(
 //                new View.OnClickListener() {
 //                    @Override
@@ -132,12 +132,14 @@ public class RecognitionFragment extends Fragment {
         // Adapterとリスト構造の結びつけ
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, data);
 
-        new GetCountAsyncTask(getActivity(), countDatabase, data);
+        new InsertListViewAsyncTask(getActivity(), countDatabase, data);
 
         listView.setAdapter(adapter);
 
         //暴言と認識された言葉を日時とともにリストビューに追加していく
-        new GetCountAsyncTask(getActivity(), countDatabase, data).execute();
+        new InsertListViewAsyncTask(getActivity(), countDatabase, data).execute();
+        //ビュー作成時にデータベースから回数を取得してきて、画面に表示する
+        new GetCountAsyncTask(getActivity(), countDatabase, countText).execute();
 
         return root;
     }
@@ -283,6 +285,7 @@ public class RecognitionFragment extends Fragment {
         }
 
         //ユーザが発話を終えたら呼びされる
+        //一度入力が終わったら停止したのちに音声入力を再開する
         @Override
         public void onEndOfSpeech() {
             titleView.setText("停止");
@@ -292,6 +295,8 @@ public class RecognitionFragment extends Fragment {
         }
 
         //ネットワークエラー、音声入力に関するエラーが発生したら呼び出される
+        //一定時間無入力、ネットワークもタイムアウトをしてしまうとエラーで止まってしまうので、
+        //そのエラーが来ても、音声入力を再開するようにする
         @Override
         public void onError(int error) {
             Log.d(TAG, "onError=" + error);
@@ -307,6 +312,8 @@ public class RecognitionFragment extends Fragment {
         @Override
         public void onResults(Bundle bundle) {
             Log.d(TAG, "onResults:");
+            new InsertListViewAsyncTask(getActivity(), countDatabase, data).execute();
+
         }
 
         //ここに認識した結果がかえってくる部分的な認識結果が利用可能な時に呼び出される。
@@ -318,7 +325,6 @@ public class RecognitionFragment extends Fragment {
                 mText.setText(str);
                 //ここで、認識した言葉を非同期処理に渡して、マッチするかを確認する
                 new DataStoreAsyncTask(getActivity(), countDatabase, wordDatabase, str, CountTextView).execute();
-                new GetCountAsyncTask(getActivity(), countDatabase, data).execute();
 
             }
         }

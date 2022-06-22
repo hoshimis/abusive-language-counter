@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//TODO geDayメソッドとその類似メソッドを1つのクラスとしてまとめる
+
 //以下からデータベース接続などの非同期処理
 //メソッドとして、doInBackgroundを実装している
 public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {

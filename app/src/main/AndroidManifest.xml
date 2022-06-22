@@ -26,6 +26,8 @@
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Appnav">
+        <activity android:name=".ui.graph.GraphYearActivity"></activity>
+        <activity android:name=".ui.graph.GraphMonthActivity"></activity>
         <activity
             android:name="com.example.main.MainActivity"
             android:label="@string/app_name">
