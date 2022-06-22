@@ -27,7 +27,7 @@ import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.CountDatabaseSingleton;
 import com.example.main.db.wordtable.WordDatabase;
 import com.example.main.db.wordtable.WordDatabaseSingleton;
-import com.example.main.layout.CircleView;
+import com.example.main.util.CircleView;
 
 import java.util.ArrayList;
 
@@ -44,9 +44,11 @@ public class RecognitionFragment extends Fragment {
     private ListView listView;
     //log.dで使う文字列
     private final String TAG = "MainActivity";
+    //DBの宣言
     private WordDatabase wordDatabase;
     private CountDatabase countDatabase;
 
+    //今日の暴言をいった回数をカウントするための変数
     public static int count;
 
     //リスト構造を宣言
@@ -71,7 +73,7 @@ public class RecognitionFragment extends Fragment {
 //            }
 //        });
 
-        // mText -> 認識した音声をテキスト化して表示するテキストビューを紐づけ
+        //mText -> 認識した音声をテキスト化して表示するテキストビューを紐づけ
         //titleView -> 音声認識の状態を表示する部分のテキストビューを紐づけ
         //countText -> 単語DBと何回マッチしたかを表示するテキストビューの紐づけ
         //listView -> その日になんの言葉を話したか表示するListViewの紐づけ
@@ -131,9 +133,7 @@ public class RecognitionFragment extends Fragment {
         }
         // Adapterとリスト構造の結びつけ
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, data);
-
         new InsertListViewAsyncTask(getActivity(), countDatabase, data);
-
         listView.setAdapter(adapter);
 
         //暴言と認識された言葉を日時とともにリストビューに追加していく
@@ -224,13 +224,6 @@ public class RecognitionFragment extends Fragment {
     public void continuationRecording() {
         startRecording();
     }
-
-    //フラグメントが切り替わったらレコーディングを停止する
-//    public void onResume() {
-//        Log.d(TAG, "continuationRecording: 停止しました！");
-//        super.onResume();
-//        stopRecording();
-//    }
 
     //必要がなくなった SpeechRecognizer は破棄する
     //SpeechRecognizer の破棄は destroy で行う

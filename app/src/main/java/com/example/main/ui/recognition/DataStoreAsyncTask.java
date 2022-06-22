@@ -13,20 +13,17 @@ import com.example.main.db.dayscount.DaysCountDao;
 import com.example.main.db.wordtable.WordDatabase;
 import com.example.main.db.wordtable.WordTable;
 import com.example.main.db.wordtable.WordTableDao;
+import com.example.main.util.GetDay;
 
 import java.lang.ref.WeakReference;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//TODO geDayメソッドとその類似メソッドを1つのクラスとしてまとめる
-
 //以下からデータベース接続などの非同期処理
 //メソッドとして、doInBackgroundを実装している
 public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
+    /*フィールド*/
     private WeakReference<Activity> weakReference;
     //データベース二つとの紐づけ
     private CountDatabase countDatabase;
@@ -35,9 +32,8 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
     private String speechText;
     //マッチした回数を表示するテキストビュー
     private TextView countText;
-    //1日 = 86400000ms
-    //日付取得の時に使う
-    final long DAY = 86400000;
+    //日付取得機能の準備
+    GetDay gt = new GetDay();
 
     //コンストラクタ―
     public DataStoreAsyncTask(Activity activity, CountDatabase countDatabase, WordDatabase wordDatabase, String speechText, TextView countText) {
@@ -47,15 +43,6 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
         this.wordDatabase = wordDatabase;
         this.speechText = speechText;
         this.countText = countText;
-    }
-
-
-    //今日の日付を取得するメソッド
-    private String getDay(int days, String format) {
-        DateFormat df = new SimpleDateFormat(format);
-        Date date = new Date(System.currentTimeMillis() + DAY * days);
-
-        return df.format(date);
     }
 
     //AsyncTaskの実装
@@ -89,10 +76,9 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
             if (matcher.find()) {
                 //カウントDBに今日の日付をDBに挿入する
                 //最終的に対応する日付の行数をカウントすればその日の日付がカウントされる
-                daysCountDao.insert(new DaysCount(getDay(0, "yyyy/ MM/ dd HH:mm:ss"), speechText));
+                daysCountDao.insert(new DaysCount(gt.getDate(GetDay.TODAY, "yyyy/ MM/ dd HH:mm:ss"), speechText));
                 //今日の日付の分を今日行った暴言の回数として扱う
-                RecognitionFragment.count = daysCountDao.getCount("%" + getDay(0, "yyyy/ MM/ dd") + "%");
-
+                RecognitionFragment.count = daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ MM/ dd") + "%");
                 //ループされても困るので、一回正規表現にマッチすればループから抜けるようにする。
                 break;
             }
@@ -110,7 +96,5 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
         //DBから今日の日付分の回数を取得してテキスト
         Log.d(TAG, "onPostExecute: " + RecognitionFragment.count);
         countText.setText(String.valueOf(RecognitionFragment.count));
-
-
     }
 }

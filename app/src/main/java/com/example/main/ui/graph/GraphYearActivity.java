@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.main.R;
+import com.example.main.util.GetDay;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -20,39 +22,30 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class GraphYearActivity extends AppCompatActivity {
+    /*フィールド*/
     //maker Ryo Kamizato feat シュトゥーデューム
 
     private BarChart mchart;
     private Typeface tfRegular;
     private LineChart mChart;
-    final long DAY = -86400000;
-    //private DashboardViewModel dashboardViewModel;
-    protected String getYear() {
-        DateFormat df = new SimpleDateFormat("yyyy");
-        Date date = new Date(System.currentTimeMillis());
-        return df.format(date);
-    }
+
+    //日付取得機能の準備
+    GetDay gt = new GetDay();
+    final String YEAR = gt.getDate(GetDay.TODAY, "yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
 
-
         findViewById(R.id.syuukan).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(GraphYearActivity.this, GraphFragment.class);
-                        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
                         finish();
                     }
                 }
@@ -61,16 +54,20 @@ public class GraphYearActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(GraphYearActivity.this, GraphMonthActivity.class);
-                        startActivity(intent);
+                        Intent toMonth = new Intent(GraphYearActivity.this, GraphMonthActivity.class);
+                        startActivity(toMonth);
                         finish();
                     }
                 }
         );
-        final TextView hiduke =(TextView) findViewById(R.id.gurahunenkan);//結びつけ
-        hiduke.setText(getYear()+"年");
+        final TextView hiduke = (TextView) findViewById(R.id.gurahunenkan);//結びつけ
+        hiduke.setText(YEAR + "年");
 
-
+        //上部のアクションバーを非表示にする
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -82,18 +79,12 @@ public class GraphYearActivity extends AppCompatActivity {
         mchart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
         mchart.setExtraLeftOffset(0);
         mchart.setExtraRightOffset(0);
-
         mchart.setDrawBarShadow(false);
         mchart.setDrawValueAboveBar(true);
-
         mchart.getDescription().setEnabled(false);
-
         // scaling can now only be done on x- and y-axis separately
         mchart.setPinchZoom(true);
-
         mchart.setDrawGridBackground(false);
-
-
 
         XAxis xAxis = mchart.getXAxis();
         xAxis.setPosition(XAxisPosition.BOTTOM);
@@ -118,13 +109,13 @@ public class GraphYearActivity extends AppCompatActivity {
         mchart.getAxisRight().setEnabled(false);
         mchart.getLegend().setEnabled(false);
 
-
         // THIS IS THE ORIGINAL DATA YOU WANT TO PLOT
+        //TODO ここに月ごとの回数を挿入していく
         //データの設定
         final List<Data> data = new ArrayList<>();
 
-        data.add(new Data(1,1 , "12-29"));
-        data.add(new Data(2,1 , "12-30"));
+        data.add(new Data(1, 1, "12-29"));
+        data.add(new Data(2, 1, "12-30"));
         data.add(new Data(3, 4, "12-31"));
         data.add(new Data(4, 5, "01-01"));
         data.add(new Data(5, 1, "01-02"));

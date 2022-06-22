@@ -8,11 +8,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.main.R;
+import com.example.main.util.GetDay;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.components.YAxis;
@@ -21,48 +22,25 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class GraphMonthActivity extends AppCompatActivity {
+    /*フィールド*/
     //maker Ryo Kamizato feat シュトゥーデューム
-
 
     //月間画面
     private BarChart mchart;
     private Typeface tfRegular;
-    private LineChart mChart;
-    final long DAY = -86400000;
 
-    //TODO getDayメソッドが冗長なので簡潔にしたい　→　インターフェースしたい
-    protected String getYear() {
-        DateFormat df = new SimpleDateFormat("yyyy");
-        //DateFormat df2 = new SimpleDateFormat("MM");
-        Date date = new Date(System.currentTimeMillis());
-        return df.format(date);
-    }
+    //日付取得機能の準備
+    GetDay gt = new GetDay();
+    //年、月をそれぞれ定義しておく
+    final String YEAR = gt.getDate(GetDay.TODAY, "yyyy");
+    final String MONTH = gt.getDate(GetDay.TODAY, "MM");
 
-    protected String getMonth() {
-        DateFormat df2 = new SimpleDateFormat("MM");
-        Date date = new Date(System.currentTimeMillis());
-        return df2.format(date);
-    }
-
-    protected Integer getMonths() {
-        DateFormat df4 = new SimpleDateFormat("MM");
-        Date date2 = new Date(System.currentTimeMillis());
-        return Integer.valueOf(df4.format(date2));
-    }
-
-    protected String getDay(int days) {
-        DateFormat df3 = new SimpleDateFormat("dd");
-        Date date = new Date(System.currentTimeMillis() + DAY * days);
-        return df3.format(date);
-    }
-
+    //1ヶ月分の回数を格納する配列を宣言
+    public static int []monthCount = new int[31];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +59,22 @@ public class GraphMonthActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(GraphMonthActivity.this, GraphYearActivity.class);
+                        Intent toYear = new Intent(GraphMonthActivity.this, GraphYearActivity.class);
                         //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
+                        startActivity(toYear);
                         finish();
                     }
                 }
         );
-        final TextView hiduke = (TextView) findViewById(R.id.gurahugekkan);//結びつけ
-        hiduke.setText(getYear() + "年" + getMonth() + "月");
 
+        final TextView hiduke = findViewById(R.id.gurahugekkan);//結びつけ
+        hiduke.setText(YEAR + "年" + MONTH + "月");
+
+        //上部のアクションバーを非表示にする
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -102,53 +86,47 @@ public class GraphMonthActivity extends AppCompatActivity {
         mchart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
         mchart.setExtraLeftOffset(0);
         mchart.setExtraRightOffset(0);
-
         mchart.setDrawBarShadow(false);
         mchart.setDrawValueAboveBar(true);
-
         mchart.getDescription().setEnabled(false);
-
         // scaling can now only be done on x- and y-axis separately
         mchart.setPinchZoom(true);
-
         mchart.setDrawGridBackground(false);
 
-
         XAxis xAxis = mchart.getXAxis();
-        Integer x = getMonths();
-        String label[] = new String[40];
+
+        //x軸の値を格納する　→　日付
+        int x = Integer.parseInt(MONTH);
+        String[] label = new String[31];
         switch (x) {
             case 1:
             case 3:
             case 5:
             case 7:
-            case 9:
-            case 11:
-                for (int i = 31; i >= 0; i--) {
-                    label[31 - i] = getDay(i);
+            case 8:
+            case 10:
+            case 12:
+                for (int i = 0; i < 32; i++) {
+                    label[i] = String.valueOf(i + 1);
                 }
                 xAxis.setValueFormatter(new IndexAxisValueFormatter((label)));
                 break;
             case 2:
-                for (int i = 0; i <= 28; i++) {
-                    label[28 - i] = getDay(i);
+                for (int i = 0; i < 28; i++) {
+                    label[i] = String.valueOf(i + 1);
                 }
                 xAxis.setValueFormatter(new IndexAxisValueFormatter((label)));
                 break;
             case 4:
             case 6:
-            case 8:
-            case 10:
-            case 12:
-                for (int i = 1; i <= 30; i++) {
-                    label[i-1] = String.valueOf(i);
+            case 9:
+            case 11:
+                for (int i = 0; i < 31; i++) {
+                    label[i] = String.valueOf(i + 1);
                 }
                 xAxis.setValueFormatter(new IndexAxisValueFormatter((label)));
                 break;
         }
-
-
-
 
 
         xAxis.setPosition(XAxisPosition.BOTTOM);
@@ -179,9 +157,9 @@ public class GraphMonthActivity extends AppCompatActivity {
         final List<Data> data = new ArrayList<>();
 
 
-
-        Integer y = getMonths();
-        data.add(new Data(y, 2, "12-30"));
+        //TODO ここにDBから1ヶ月分の回数を挿入していく
+        //y軸の値を格納する　→　
+        Integer y = Integer.parseInt(MONTH);
         switch (y) {
             case 1:
             case 3:
@@ -189,13 +167,14 @@ public class GraphMonthActivity extends AppCompatActivity {
             case 7:
             case 9:
             case 11:
-                for (int i = 1; i <= 31; i++) {
-                    data.add(new Data(y,2,"12-30"));
+                for (int i = 0; i <= 31; i++) {
+                    //0 -> 月の1日から格納していく
+                    data.add(new Data(i, 2, "12-30"));
                 }
                 break;
             case 2:
                 for (int i = 0; i <= 28; i++) {
-                    data.add(new Data(i,2,"12-30"));
+                    data.add(new Data(i, 2, "12-30"));
                 }
                 break;
             case 4:
@@ -203,22 +182,11 @@ public class GraphMonthActivity extends AppCompatActivity {
             case 8:
             case 10:
             case 12:
-                for (int i = 0; i <30; i++) {
-                    data.add(new Data(i,2,"12-30"));
+                for (int i = 0; i < 30; i++) {
+                    data.add(new Data(i, 2, "12-30"));
                 }
                 break;
         }
-
-
-
-
-//        xAxis.setValueFormatter(new IAxisValueFormatter() {
-//            @Override
-//            public String getFormattedValue(int value, AxisBase axis) {
-//                return data.get(Math.min(Math.max((int) value, 0), data.size()-1)).xAxisValue;
-//            }
-//        });
-
 
         setData(data);
     }
@@ -271,7 +239,7 @@ public class GraphMonthActivity extends AppCompatActivity {
     /**
      * Demo class representing data.
      */
-    private class Data {
+    private static class Data {
 
         final String xAxisValue;
         final int yValue;
@@ -284,7 +252,7 @@ public class GraphMonthActivity extends AppCompatActivity {
         }
     }
 
-    private class ValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
+    private static class ValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
 
         @Override
         public String getFormattedValue(float value) {
