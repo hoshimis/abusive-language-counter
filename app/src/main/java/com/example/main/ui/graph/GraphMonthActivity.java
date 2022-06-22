@@ -37,7 +37,7 @@ public class GraphMonthActivity extends AppCompatActivity {
     private LineChart mChart;
     final long DAY = -86400000;
 
-    //private DashboardViewModel dashboardViewModel;
+    //TODO getDayメソッドが冗長なので簡潔にしたい　→　インターフェースしたい
     protected String getYear() {
         DateFormat df = new SimpleDateFormat("yyyy");
         //DateFormat df2 = new SimpleDateFormat("MM");
@@ -160,8 +160,6 @@ public class GraphMonthActivity extends AppCompatActivity {
         xAxis.setLabelCount(31);
         xAxis.setCenterAxisLabels(false);
         xAxis.setGranularity(1);
-        //TODO*数値を整数にする　https://www.web-dev-qa-db-ja.com/ja/android/%E6%A3%92%E3%82%B0%E3%83%A9%E3%83%95%E3%81%AEy%E8%BB%B8%E3%83%A9%E3%83%99%E3%83%AB%E3%82%92%E6%95%B4%E6%95%B0%E3%81%AB%E5%BC%B7%E5%88%B6%E3%81%97%E3%81%BE%E3%81%99%E3%81%8B%EF%BC%9F/1050831784/
-
 
         YAxis left = mchart.getAxisLeft();
         left.setDrawLabels(false); //格子の横線

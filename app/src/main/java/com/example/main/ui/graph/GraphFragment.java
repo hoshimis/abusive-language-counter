@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.main.R;
+import com.example.main.db.dayscount.CountDatabase;
+import com.example.main.db.dayscount.CountDatabaseSingleton;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -30,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 public class GraphFragment extends Fragment {
 
     private GraphViewModel dashboardViewModel;
@@ -37,7 +42,13 @@ public class GraphFragment extends Fragment {
     private Typeface tfRegular;
     private LineChart mChart;
     final long DAY = -86400000;
+    private CountDatabase countDatabase;
 
+    //この配列に一週間分のカウント数を格納する
+   public static int[] Count = new int[7];
+
+
+   //TODO getDayメソッドが冗長なので簡潔にしたい　→　インターフェースしたい
     //今日の年月日を取得する
     protected String getToday(int days) {
         DateFormat df = new SimpleDateFormat("yyyy/ MM/ dd");
@@ -55,15 +66,21 @@ public class GraphFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel = new ViewModelProvider(this).get(GraphViewModel.class);
         View root = inflater.inflate(R.layout.fragment_graph, container, false);
-        //final TextView textView = root.findViewById(R.id.text_dashboard);
+//        final TextView textView = root.findViewById(R.id.text_dashboard);
 //        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
 //            @Override
 //            public void onChanged(@Nullable String s) {
 //                textView.setText(s);
 //            }
 //        });
-        //super.onCreate(savedInstanceState);
-        //setContentView(R.layout.fragment_graph);
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.fragment_graph);
+
+
+        //グラフに表示するカウント数をここで挿入しておく
+        countDatabase = CountDatabaseSingleton.getInstance(getActivity().getApplicationContext());
+        new GetDayCountAsyncTask(getActivity(), countDatabase).execute();
+
         root.findViewById(R.id.gekkan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,38 +101,6 @@ public class GraphFragment extends Fragment {
         );
         final TextView hiduke = (TextView) root.findViewById(R.id.gurahusyuukan);//結びつけ
         hiduke.setText(getToday(6) + "～" + getToday(0));
-        //*日付計算方法
-        // まず、一日の秒数を求める
-        // oncreate（プログラムが始まる）の外に日付関係のメソッド(関数)を作る
-        // その中で日にちの形を作るやつと日にちを求める計算をする
-        // 計算は、コンピュータの人生の秒数から24時間の秒数を引いた数
-        //　それがdf.format(data),つまり、dataを○○月○○日って形にフォーマットにしたデータを
-        // settextでやっている*//
-
-
-//        //勉強時間を共有プリファレンスから取ってくる。
-//        private int getStudyTimeToday() {
-//            //整形00:00にする
-//            final SimpleDateFormat dataFormat = new SimpleDateFormat("HH:mm:ss", Locale.JAPANESE);
-//            //今日の日付の共有プリファレンスを取ってきて、時間を切り取り数字に変換する。
-//            long tmp = pref.getLong(getToday(), RESET_TIME);
-//            String test = dataFormat.format(tmp);
-//            int extractionTime = Integer.parseInt(test.substring(0, 2));
-//
-//
-//            return checkExceed30minutes() ? extractionTime + 1 : extractionTime;
-//        }
-
-//        private boolean checkExceed30minutes(){
-//            //整形00:00にする
-//            final SimpleDateFormat dataFormat = new SimpleDateFormat("HH:mm:ss", Locale.JAPANESE);
-//            //今日の日付の共有プリファレンスを取ってきて、時間を切り取り数字に変換する。
-//           // long tmp = pref.getLong(getToday(), RESET_TIME);
-//           // String test = dataFormat.format(tmp);
-//           // int checkExceed = Integer.parseInt(test.substring(3, 4));
-//
-//            return checkExceed >= 30;
-
 
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -175,24 +160,19 @@ public class GraphFragment extends Fragment {
         mchart.getAxisRight().setEnabled(false);
         mchart.getLegend().setEnabled(false);
 
-
         // THIS IS THE ORIGINAL DATA YOU WANT TO PLOT
         //データの設定
         final List<Data> data = new ArrayList<>();
-//        String label[] = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
-//                "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
-//                "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
-//        xAxis.setValueFormatter(new IndexAxisValueFormatter((label)));
 
+        Log.d(TAG, "onCreateView: " + Count[0]);
 
-//TODO 日付設定
-        data.add(new Data(0, 0, "1"));
-        data.add(new Data(1, 2, "1"));
-        data.add(new Data(2, 1, "1"));
-        data.add(new Data(3, 4, "1"));
-        data.add(new Data(4, 2, "1"));
-        data.add(new Data(5, 2, "1"));
-        data.add(new Data(6, 5, "1"));
+        data.add(new Data(0, Count[6], "1"));
+        data.add(new Data(1, Count[5], "1"));
+        data.add(new Data(2, Count[4], "1"));
+        data.add(new Data(3, Count[3], "1"));
+        data.add(new Data(4, Count[2], "1"));
+        data.add(new Data(5, Count[1], "1"));
+        data.add(new Data(6, Count[0], "1"));
 
 //        xAxis.setValueFormatter(new IAxisValueFormatter(){
 //            @Override
@@ -200,7 +180,6 @@ public class GraphFragment extends Fragment {
 //                return data.get(Math.min(Math.max((int) value, 0), data.size()-1)).xAxisValue;
 //            }
 //        });
-
 
         setData(data);
         return root;
@@ -251,9 +230,7 @@ public class GraphFragment extends Fragment {
         }
     }
 
-    /**
-     * Demo class representing data.
-     */
+    //Demo class representing data.
     private class Data {
 
         final String xAxisValue;
@@ -273,8 +250,5 @@ public class GraphFragment extends Fragment {
         public String getFormattedValue(float value) {
             return String.valueOf((int) value);
         }
-
-
-        //return root;　謎のエラーにより消去
     }
 }

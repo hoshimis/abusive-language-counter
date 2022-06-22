@@ -1,34 +1,33 @@
-package com.example.main.ui.recognition;
+package com.example.main.ui.graph;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.widget.TextView;
+import android.util.Log;
 
 import com.example.main.db.dayscount.CountDatabase;
-import com.example.main.db.dayscount.DaysCount;
 import com.example.main.db.dayscount.DaysCountDao;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
-public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
+import static android.content.ContentValues.TAG;
+
+public class GetDayCountAsyncTask extends AsyncTask<Void, Void, Integer> {
     private WeakReference<Activity> weakReference;
     //データベースとの紐づけ（回数カウント用　→　CountDataBase）
     private CountDatabase countDatabase;
 
-    TextView textView;
+    int Count[] = new int[7];
 
     //1日 = 86400000ms
     //日付取得の時に使う
-    final long DAY = 86400000;
+    final long DAY = -86400000;
 
-    public GetCountAsyncTask(Activity activity, CountDatabase countDatabase, TextView textView) {
+    public GetDayCountAsyncTask(Activity activity, CountDatabase countDatabase) {
         weakReference = new WeakReference<>(activity);
         this.countDatabase = countDatabase;
-        this.textView = textView;
 
     }
 
@@ -46,7 +45,11 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
     @Override
     protected Integer doInBackground(Void... aVoid) {
         DaysCountDao daysCountDao = countDatabase.daysCountDao();
-        RecognitionFragment.count = daysCountDao.getCount("%" + getDay(0, "yyyy/ MM/ dd") + "%");
+
+        for (int i = 6; i > -1; i--) {
+            GraphFragment.Count[i] = daysCountDao.getCount("%" + getDay(i, "yyyy/ MM/ dd") + "%");
+            Log.d(TAG, "doInBackground:ここが回数を入れてるところ！！ " + GraphFragment.Count[i] + i);
+        }
 
         return 0;
     }
@@ -59,7 +62,6 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
             return;
         }
 
-        textView.setText(String.valueOf(RecognitionFragment.count));
-
+        return;
     }
 }

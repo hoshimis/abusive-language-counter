@@ -28,8 +28,6 @@ import java.util.List;
 
 public class GraphYearActivity extends AppCompatActivity {
     //maker Ryo Kamizato feat シュトゥーデューム
-    //TODO:エラーなくす,メモ帳みくらべる
-
 
     private BarChart mchart;
     private Typeface tfRegular;
@@ -41,8 +39,6 @@ public class GraphYearActivity extends AppCompatActivity {
         Date date = new Date(System.currentTimeMillis());
         return df.format(date);
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +105,6 @@ public class GraphYearActivity extends AppCompatActivity {
         xAxis.setLabelCount(12);
         xAxis.setCenterAxisLabels(false);
         xAxis.setGranularity(1);
-        //TODO*数値を整数にする　https://www.web-dev-qa-db-ja.com/ja/android/%E6%A3%92%E3%82%B0%E3%83%A9%E3%83%95%E3%81%AEy%E8%BB%B8%E3%83%A9%E3%83%99%E3%83%AB%E3%82%92%E6%95%B4%E6%95%B0%E3%81%AB%E5%BC%B7%E5%88%B6%E3%81%97%E3%81%BE%E3%81%99%E3%81%8B%EF%BC%9F/1050831784/
-
 
         YAxis left = mchart.getAxisLeft();
         left.setDrawLabels(false); //格子の横線
@@ -123,7 +117,6 @@ public class GraphYearActivity extends AppCompatActivity {
         left.setZeroLineWidth(0.7f);
         mchart.getAxisRight().setEnabled(false);
         mchart.getLegend().setEnabled(false);
-
 
 
         // THIS IS THE ORIGINAL DATA YOU WANT TO PLOT
@@ -142,14 +135,6 @@ public class GraphYearActivity extends AppCompatActivity {
         data.add(new Data(10, 5, "01-02"));
         data.add(new Data(11, 8, "01-02"));
         data.add(new Data(12, 1, "01-02"));
-
-//        xAxis.setValueFormatter(new IAxisValueFormatter() {
-//            @Override
-//            public String getFormattedValue(int value, AxisBase axis) {
-//                return data.get(Math.min(Math.max((int) value, 0), data.size()-1)).xAxisValue;
-//            }
-//        });
-
 
         setData(data);
     }

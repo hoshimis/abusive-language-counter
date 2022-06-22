@@ -110,5 +110,7 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
         //DBから今日の日付分の回数を取得してテキスト
         Log.d(TAG, "onPostExecute: " + RecognitionFragment.count);
         countText.setText(String.valueOf(RecognitionFragment.count));
+
+
     }
 }

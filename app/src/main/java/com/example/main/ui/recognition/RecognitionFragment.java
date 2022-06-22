@@ -139,7 +139,7 @@ public class RecognitionFragment extends Fragment {
         //暴言と認識された言葉を日時とともにリストビューに追加していく
         new InsertListViewAsyncTask(getActivity(), countDatabase, data).execute();
         //ビュー作成時にデータベースから回数を取得してきて、画面に表示する
-        new GetCountAsyncTask(getActivity(), countDatabase, countText).execute();
+        new GetTodayCountAsyncTask(getActivity(), countDatabase, countText).execute();
 
         return root;
     }
@@ -312,8 +312,6 @@ public class RecognitionFragment extends Fragment {
         @Override
         public void onResults(Bundle bundle) {
             Log.d(TAG, "onResults:");
-            new InsertListViewAsyncTask(getActivity(), countDatabase, data).execute();
-
         }
 
         //ここに認識した結果がかえってくる部分的な認識結果が利用可能な時に呼び出される。
