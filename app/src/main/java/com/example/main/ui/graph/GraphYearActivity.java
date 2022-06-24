@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -12,6 +13,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.main.R;
+import com.example.main.db.dayscount.CountDatabase;
+import com.example.main.db.dayscount.CountDatabaseSingleton;
 import com.example.main.util.GetDay;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -25,6 +28,8 @@ import com.github.mikephil.charting.data.BarEntry;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 public class GraphYearActivity extends AppCompatActivity {
     /*フィールド*/
     //maker Ryo Kamizato feat シュトゥーデューム
@@ -32,6 +37,10 @@ public class GraphYearActivity extends AppCompatActivity {
     private BarChart mchart;
     private Typeface tfRegular;
     private LineChart mChart;
+    //DB接続用に宣言
+    private CountDatabase countDatabase;
+    //年間の回数を格納する配列を宣言
+    public static int[] yearCount = new int[12];
 
     //日付取得機能の準備
     GetDay gt = new GetDay();
@@ -41,6 +50,11 @@ public class GraphYearActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
+
+        //ここで年間の回数を挿入する
+        countDatabase = CountDatabaseSingleton.getInstance(this.getApplicationContext());
+        Log.d(TAG, "onCreate: ここで年間の値を挿入するよ！！");
+        new GetCountAsyncTask(this, countDatabase, GetCountAsyncTask.GET_YEAR).execute();
 
         findViewById(R.id.syuukan).setOnClickListener(
                 new View.OnClickListener() {
@@ -114,18 +128,18 @@ public class GraphYearActivity extends AppCompatActivity {
         //データの設定
         final List<Data> data = new ArrayList<>();
 
-        data.add(new Data(1, 1, "12-29"));
-        data.add(new Data(2, 1, "12-30"));
-        data.add(new Data(3, 4, "12-31"));
-        data.add(new Data(4, 5, "01-01"));
-        data.add(new Data(5, 1, "01-02"));
-        data.add(new Data(6, 4, "01-02"));
-        data.add(new Data(7, 4, "01-02"));
-        data.add(new Data(8, 5, "01-02"));
-        data.add(new Data(9, 4, "01-02"));
-        data.add(new Data(10, 5, "01-02"));
-        data.add(new Data(11, 8, "01-02"));
-        data.add(new Data(12, 1, "01-02"));
+        data.add(new Data(1, yearCount[0], "12-29"));
+        data.add(new Data(2, yearCount[1], "12-30"));
+        data.add(new Data(3, yearCount[2], "12-31"));
+        data.add(new Data(4, yearCount[3], "01-01"));
+        data.add(new Data(5, yearCount[4], "01-02"));
+        data.add(new Data(6, yearCount[5], "01-02"));
+        data.add(new Data(7, yearCount[6], "01-02"));
+        data.add(new Data(8, yearCount[7], "01-02"));
+        data.add(new Data(9, yearCount[8], "01-02"));
+        data.add(new Data(10, yearCount[9], "01-02"));
+        data.add(new Data(11, yearCount[10], "01-02"));
+        data.add(new Data(12, yearCount[11], "01-02"));
 
         setData(data);
     }

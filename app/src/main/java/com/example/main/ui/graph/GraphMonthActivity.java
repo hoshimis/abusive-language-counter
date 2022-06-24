@@ -11,7 +11,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.main.MainActivity;
 import com.example.main.R;
+import com.example.main.db.dayscount.CountDatabase;
+import com.example.main.db.dayscount.CountDatabaseSingleton;
 import com.example.main.util.GetDay;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -39,6 +42,8 @@ public class GraphMonthActivity extends AppCompatActivity {
     final String YEAR = gt.getDate(GetDay.TODAY, "yyyy");
     final String MONTH = gt.getDate(GetDay.TODAY, "MM");
 
+    //DB接続用に宣言
+    private CountDatabase countDatabase;
     //1ヶ月分の回数を格納する配列を宣言
     public static int []monthCount = new int[31];
 
@@ -46,6 +51,10 @@ public class GraphMonthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+        //ここで月間の回数を挿入する
+        countDatabase = CountDatabaseSingleton.getInstance(this.getApplicationContext());
+        new GetCountAsyncTask(this, countDatabase, GetCountAsyncTask.GET_MONTH).execute();
 
         findViewById(R.id.syuukan).setOnClickListener(
                 new View.OnClickListener() {
@@ -169,12 +178,12 @@ public class GraphMonthActivity extends AppCompatActivity {
             case 11:
                 for (int i = 0; i <= 31; i++) {
                     //0 -> 月の1日から格納していく
-                    data.add(new Data(i, 2, "12-30"));
+                    data.add(new Data(i, monthCount[i], "12-30"));
                 }
                 break;
             case 2:
                 for (int i = 0; i <= 28; i++) {
-                    data.add(new Data(i, 2, "12-30"));
+                    data.add(new Data(i, monthCount[i], "12-30"));
                 }
                 break;
             case 4:
@@ -183,7 +192,7 @@ public class GraphMonthActivity extends AppCompatActivity {
             case 10:
             case 12:
                 for (int i = 0; i < 30; i++) {
-                    data.add(new Data(i, 2, "12-30"));
+                    data.add(new Data(i, monthCount[i], "12-30"));
                 }
                 break;
         }

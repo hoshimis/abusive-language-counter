@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
+
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
         // ステータスバーを消す
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 

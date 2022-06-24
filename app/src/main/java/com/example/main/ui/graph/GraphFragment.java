@@ -1,12 +1,9 @@
 package com.example.main.ui.graph;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +36,9 @@ public class GraphFragment extends Fragment {
     private BarChart mchart;
     private Typeface tfRegular;
     private LineChart mChart;
+    //DB接続用に宣言
     private CountDatabase countDatabase;
-    //この配列に一週間分のカウント数を格納する
+    //週間の回数を格納する配列を宣言
     public static int[] weekCount = new int[7];
     //日付取得機能の準備
     GetDay gt = new GetDay();
@@ -51,7 +49,7 @@ public class GraphFragment extends Fragment {
 
         //グラフに表示するカウント数をここで挿入しておく
         countDatabase = CountDatabaseSingleton.getInstance(getActivity().getApplicationContext());
-        new GetDayCountAsyncTask(getActivity(), countDatabase, GetDayCountAsyncTask.GET_WEEK).execute();
+        new GetCountAsyncTask(getActivity(), countDatabase, GetCountAsyncTask.GET_WEEK).execute();
 
         root.findViewById(R.id.gekkan).setOnClickListener(new View.OnClickListener() {
             @Override

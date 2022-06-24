@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#FFFFDD"
     tools:context=".ui.recognition.RecognitionFragment">
 
     <!--    現在の音声認識状態を表示する（開発用）-->
