@@ -43,6 +43,13 @@ public class GraphFragment extends Fragment {
     //日付取得機能の準備
     GetDay gt = new GetDay();
 
+    //xmlとの紐づけ
+    TextView todaySum;
+    TextView comparedYesterday;
+    TextView weekSum;
+
+    int weekSumCount;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel = new ViewModelProvider(this).get(GraphViewModel.class);
         View root = inflater.inflate(R.layout.fragment_graph, container, false);
@@ -71,6 +78,11 @@ public class GraphFragment extends Fragment {
         );
         final TextView hiduke = (TextView) root.findViewById(R.id.gurahusyuukan);//結びつけ
         hiduke.setText(gt.getDate(GetDay.SIX_DAYS_AGO, "MM/ dd") + "～" + gt.getDate(GetDay.TODAY, "MM/ dd"));
+
+        //今日の回数を表示する
+        todaySum = root.findViewById(R.id.todaySum);
+        comparedYesterday = root.findViewById(R.id.comparedYesterday);
+        weekSum = root.findViewById(R.id.weekSum);
 
         mchart = root.findViewById(R.id.chart1);
         mchart.setBackgroundColor(-35);
@@ -135,12 +147,15 @@ public class GraphFragment extends Fragment {
         data.add(new Data(5, weekCount[1], "1"));
         data.add(new Data(6, weekCount[0], "1"));
 
-//        xAxis.setValueFormatter(new IAxisValueFormatter(){
-//            @Override
-//            public String getFormattedValue(int value, AxisBase axis) {
-//                return data.get(Math.min(Math.max((int) value, 0), data.size()-1)).xAxisValue;
-//            }
-//        });
+        for (int tmp : weekCount) {
+            weekSumCount += tmp;
+        }
+
+        //今日の回数を表示する
+        todaySum.setText(String.valueOf(weekCount[0]) + "回");
+        comparedYesterday.setText(String.valueOf(weekCount[1] - weekCount[0]) + "回");
+        weekSum.setText(String.valueOf(weekSumCount) + "回");
+
 
         setData(data);
         return root;

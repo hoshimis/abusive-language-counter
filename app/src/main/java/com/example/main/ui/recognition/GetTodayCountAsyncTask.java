@@ -5,15 +5,10 @@ import android.os.AsyncTask;
 import android.widget.TextView;
 
 import com.example.main.db.dayscount.CountDatabase;
-import com.example.main.db.dayscount.DaysCount;
 import com.example.main.db.dayscount.DaysCountDao;
 import com.example.main.util.GetDay;
 
 import java.lang.ref.WeakReference;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 public class GetTodayCountAsyncTask extends AsyncTask<Void, Void, Integer> {
     /*フィールド*/

@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase;
 /**
  * データベースの作成
  * RoomDatabaseを継承したabstractクラス
- *・wordTable　→　単語データベース
+ * ・wordTable　→　単語データベース
  */
 
 @Database(entities = {WordTable.class}, version = 1, exportSchema = false)

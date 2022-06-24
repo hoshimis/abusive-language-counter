@@ -91,6 +91,7 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
             case 9:
             case 11:
                 for (int i = 0; i < 30; i++) {
+                    Log.d(TAG, "getMonthCount: データを入れるよ！！");
                     GraphMonthActivity.monthCount[i] =
                             daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ MM/ ") + String.format("%02d", i + 1) + "%");
                 }
@@ -104,7 +105,7 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
         for (int i = 0; i < 12; i++) {
             GraphYearActivity.yearCount[i] =
                     daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ ") + String.format("%02d", i + 1) + "%");
-            Log.d(TAG, "getYearCount: " +  gt.getDate(GetDay.TODAY, "yyyy/ ") + String.format("%02d", i + 1));
+            Log.d(TAG, "getYearCount: " + gt.getDate(GetDay.TODAY, "yyyy/ ") + String.format("%02d", i + 1));
         }
         return 0;
     }

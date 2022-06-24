@@ -10,6 +10,7 @@ import android.view.View;
 
 public class CircleView extends View {
     private Paint paint;
+
     public CircleView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         paint = new Paint();

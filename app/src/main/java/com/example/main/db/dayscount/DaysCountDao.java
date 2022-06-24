@@ -5,7 +5,6 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 //カウントした値を挿入するデータベースを操作するメソッドを定義する

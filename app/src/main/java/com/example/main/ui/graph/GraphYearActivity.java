@@ -46,10 +46,22 @@ public class GraphYearActivity extends AppCompatActivity {
     GetDay gt = new GetDay();
     final String YEAR = gt.getDate(GetDay.TODAY, "yyyy");
 
+    int yearSumCount;
+    int yearMaxCount = 0;
+    int yearMinCount = 10000000;
+
+    TextView yearSum;
+    TextView yearMax;
+    TextView yearAverage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main3);
+        setContentView(R.layout.activity_graph_year);
+
+        yearSum = findViewById(R.id.yearSum);
+        yearMax = findViewById(R.id.yearMax);
+        yearAverage = findViewById(R.id.yearAverage);
 
         //ここで年間の回数を挿入する
         countDatabase = CountDatabaseSingleton.getInstance(this.getApplicationContext());
@@ -140,6 +152,17 @@ public class GraphYearActivity extends AppCompatActivity {
         data.add(new Data(10, yearCount[9], "01-02"));
         data.add(new Data(11, yearCount[10], "01-02"));
         data.add(new Data(12, yearCount[11], "01-02"));
+
+        for (int tmp : yearCount) {
+            yearSumCount += tmp;
+            if (yearMaxCount < tmp) {
+                yearMaxCount = tmp;
+            }
+        }
+
+        yearSum.setText(String.valueOf(yearSumCount) + "回");
+        yearMax.setText(String.valueOf(yearMaxCount) + "回");
+        yearAverage.setText(String.valueOf(yearSumCount / 12) + "回");
 
         setData(data);
     }

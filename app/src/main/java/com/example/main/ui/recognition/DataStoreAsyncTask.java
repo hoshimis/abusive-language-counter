@@ -1,7 +1,5 @@
 package com.example.main.ui.recognition;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -19,6 +17,8 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static android.content.ContentValues.TAG;
 
 //以下からデータベース接続などの非同期処理
 //メソッドとして、doInBackgroundを実装している

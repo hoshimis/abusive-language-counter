@@ -23,6 +23,7 @@ public class DaysCount {
         this.date = date;
         this.word = word;
     }
+
     /***
      *以下セッター、ゲッターメソッド
      */

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.main.MainActivity;
 import com.example.main.R;
 import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.CountDatabaseSingleton;
@@ -28,6 +28,8 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 public class GraphMonthActivity extends AppCompatActivity {
     /*フィールド*/
     //maker Ryo Kamizato feat シュトゥーデューム
@@ -41,16 +43,24 @@ public class GraphMonthActivity extends AppCompatActivity {
     //年、月をそれぞれ定義しておく
     final String YEAR = gt.getDate(GetDay.TODAY, "yyyy");
     final String MONTH = gt.getDate(GetDay.TODAY, "MM");
+    int thisMonth = Integer.parseInt(gt.getDate(GetDay.TODAY, "MM"));
 
     //DB接続用に宣言
     private CountDatabase countDatabase;
     //1ヶ月分の回数を格納する配列を宣言
-    public static int []monthCount = new int[31];
+    public static int[] monthCount = new int[31];
+
+    TextView monthSum;
+    TextView comparedBeforeMonth;
+    TextView monthAverage;
+
+
+    int monthSumCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_graph_month);
 
         //ここで月間の回数を挿入する
         countDatabase = CountDatabaseSingleton.getInstance(this.getApplicationContext());
@@ -69,7 +79,6 @@ public class GraphMonthActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent toYear = new Intent(GraphMonthActivity.this, GraphYearActivity.class);
-                        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(toYear);
                         finish();
                     }
@@ -78,6 +87,10 @@ public class GraphMonthActivity extends AppCompatActivity {
 
         final TextView hiduke = findViewById(R.id.gurahugekkan);//結びつけ
         hiduke.setText(YEAR + "年" + MONTH + "月");
+
+        monthSum = findViewById(R.id.monthSum);
+        comparedBeforeMonth = findViewById(R.id.comparedBeforeMonth);
+        monthAverage = findViewById(R.id.monthAverage);
 
         //上部のアクションバーを非表示にする
         ActionBar actionBar = getSupportActionBar();
@@ -166,7 +179,6 @@ public class GraphMonthActivity extends AppCompatActivity {
         final List<Data> data = new ArrayList<>();
 
 
-        //TODO ここにDBから1ヶ月分の回数を挿入していく
         //y軸の値を格納する　→　
         Integer y = Integer.parseInt(MONTH);
         switch (y) {
@@ -197,7 +209,17 @@ public class GraphMonthActivity extends AppCompatActivity {
                 break;
         }
 
+        for (int tmp : monthCount) {
+            monthSumCount += tmp;
+        }
+
+        //先月比を計算する
+        int diff = GraphYearActivity.yearCount[thisMonth - 2] - GraphYearActivity.yearCount[thisMonth - 1];
+        monthSum.setText(String.valueOf(monthSumCount) + "回");
+        comparedBeforeMonth.setText(String.valueOf(diff) + "回");
+        monthAverage.setText(String.valueOf(monthSumCount / getLastDay(thisMonth)) + "回");
         setData(data);
+        Log.d(TAG, "onCreate: ここでデータをセットしているよ！！");
     }
 
     private void setData(List<Data> dataList) {
@@ -245,11 +267,18 @@ public class GraphMonthActivity extends AppCompatActivity {
         }
     }
 
+    private int getLastDay(int month) {
+        if (month == 2 || month == 4 || month == 6 || month == 9 || month == 11) {
+            return 30;
+        } else {
+            return 31;
+        }
+    }
+
     /**
      * Demo class representing data.
      */
     private static class Data {
-
         final String xAxisValue;
         final int yValue;
         final int xValue;
@@ -262,40 +291,9 @@ public class GraphMonthActivity extends AppCompatActivity {
     }
 
     private static class ValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
-
         @Override
         public String getFormattedValue(float value) {
             return String.valueOf((int) value);
         }
     }
 }
-
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.only_github, menu);
-//        return true;
-//    }
-//    //メニュー関連のこと？だから一応消した
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        switch (item.getItemId()) {
-//            case R.id.viewGithub: {
-//                Intent i = new Intent(Intent.ACTION_VIEW);
-//                i.setData(Uri.parse("https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/com/xxmassdeveloper/mpchartexample/BarChartPositiveNegative.java"));
-//                startActivity(i);
-//                break;
-//            }
-//        }
-//
-//        return true;
-//    }
-//    //https://developer.android.com/guide/topics/ui/menus?hl=ja#java ここのサイト参照　なんとなくいらなそう
-//
-//
-//    @Override
-//    public void saveToGallery() { /* Intentionally left empty */ }
-//
-//}

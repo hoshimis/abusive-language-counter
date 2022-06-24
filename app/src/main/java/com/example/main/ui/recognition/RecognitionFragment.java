@@ -1,7 +1,5 @@
 package com.example.main.ui.recognition;
 
-import static android.Manifest.permission.RECORD_AUDIO;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,6 +28,8 @@ import com.example.main.db.wordtable.WordDatabaseSingleton;
 import com.example.main.util.CircleView;
 
 import java.util.ArrayList;
+
+import static android.Manifest.permission.RECORD_AUDIO;
 
 public class RecognitionFragment extends Fragment {
 
@@ -293,7 +293,7 @@ public class RecognitionFragment extends Fragment {
         @Override
         public void onError(int error) {
             Log.d(TAG, "onError=" + error);
-            if ((error == SpeechRecognizer.ERROR_NO_MATCH) || (error == SpeechRecognizer.ERROR_NETWORK_TIMEOUT)){
+            if ((error == SpeechRecognizer.ERROR_NO_MATCH) || (error == SpeechRecognizer.ERROR_NETWORK_TIMEOUT)) {
                 startRecording();
                 return;
             }
