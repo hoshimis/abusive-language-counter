@@ -1,8 +1,11 @@
 package com.example.main.ui.graph;
 
+import static android.content.ContentValues.TAG;
+
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +21,6 @@ import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.CountDatabaseSingleton;
 import com.example.main.util.GetDay;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.components.YAxis;
@@ -33,28 +35,47 @@ import java.util.List;
 public class GraphWeekFragment extends Fragment {
     private BarChart mchart;
     private Typeface tfRegular;
-    private LineChart mChart;
+
     //週間の回数を格納する配列を宣言
-    public static int[] weekCount = new int[7];
+    static int[] weekCount = new int[7];
+
+    //データの設定
+    static final List<Data> data = new ArrayList<>();
     //日付取得機能の準備
     GetDay gt = new GetDay();
+    CountDatabase countDatabase;
 
-    //xmlとの紐づけ
-    TextView todaySum;
-    TextView comparedYesterday;
-    TextView weekSum;
-
-    int weekSumCount;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        /*フィールド*/
         GraphViewModel dashboardViewModel = new ViewModelProvider(this).get(GraphViewModel.class);
         View root = inflater.inflate(R.layout.fragment_graph_week, container, false);
 
-        //グラフに表示するカウント数をここで挿入しておく
-        //DB接続用に宣言
-        CountDatabase countDatabase = CountDatabaseSingleton.getInstance(requireActivity().getApplicationContext());
-        new GetCountAsyncTask(countDatabase, GetCountAsyncTask.GET_WEEK).execute();
+        //XMLとの紐づけ
+        TextView dateTitle = root.findViewById(R.id.gurahusyuukan);
+        TextView todaySum = root.findViewById(R.id.todaySum);
+        TextView comparedYesterday = root.findViewById(R.id.comparedYesterday);
+        TextView weekSum = root.findViewById(R.id.weekSum);
+        mchart = root.findViewById(R.id.chart1);
+
+        //今週の合計値を格納する為の変数
+        int weekSumCount = 0;
+
+        //グラフに表示するカウント数をここでDBに接続して挿入しておく
+        countDatabase = CountDatabaseSingleton.getInstance(requireActivity().getApplicationContext());
+        new GetCountAsyncTask(countDatabase, GetCountAsyncTask.GET_WEEK, 0).execute();
+
+        //DBからデータを取得してくる前にグラフの描画が終わってしまうのですこしだけメインスレッドを止める
+        //もっと格好いいやり方なかったかなぁ
+        //→await, promiseみたいな感じで、非同期処理が終了したらメインスレッドを始めるみたいな
+        //逐次処理的なことをしたかった
+        try {
+            Thread.sleep(20);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //グラフの描画
+        setGraph(mchart);
 
         root.findViewById(R.id.gekkan).setOnClickListener(
                 view -> {
@@ -63,7 +84,8 @@ public class GraphWeekFragment extends Fragment {
                     transaction.replace(R.id.nav_host_fragment, toMonth);
                     transaction.addToBackStack(null);
                     transaction.commit();
-                });
+                }
+        );
         root.findViewById(R.id.nenkan).setOnClickListener(
                 view -> {
                     Fragment toYear = new GraphYearFragment();
@@ -73,15 +95,23 @@ public class GraphWeekFragment extends Fragment {
                     transaction.commit();
                 }
         );
-        final TextView dateTitle = root.findViewById(R.id.gurahusyuukan);//結びつけ
+
+        for (int tmp : weekCount) {
+            weekSumCount += tmp;
+        }
+
+        //今日の回数と日付を表示する
         dateTitle.setText(getResources().getString(R.string.week_title, gt.getDate(GetDay.SIX_DAYS_AGO, "MM/ dd"), gt.getDate(GetDay.TODAY, "MM/ dd")));
+        todaySum.setText(getResources().getString(R.string.week_count_text, weekCount[0]));
+        comparedYesterday.setText(getResources().getString(R.string.week_count_text, weekCount[0] - weekCount[1]));
+        weekSum.setText(getResources().getString(R.string.week_count_text, weekSumCount));
 
-        //今日の回数を表示する
-        todaySum = root.findViewById(R.id.todaySum);
-        comparedYesterday = root.findViewById(R.id.comparedYesterday);
-        weekSum = root.findViewById(R.id.weekSum);
+        setData(data);
+        return root;
+    }
 
-        mchart = root.findViewById(R.id.chart1);
+    //グラフを描画する処理
+    private void setGraph(BarChart mchart) {
         mchart.setBackgroundColor(-35);
         mchart.setExtraTopOffset(0);
         mchart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
@@ -97,7 +127,7 @@ public class GraphWeekFragment extends Fragment {
 
         //横線の値を設定する
         //一番右端を今日として、左に向かって一日前ずつ表示していく
-        String []label = new String[]{
+        String[] label = new String[]{
                 gt.getDate(GetDay.SIX_DAYS_AGO, "dd"),
                 gt.getDate(GetDay.FIVE_DAYS_AGO, "dd"),
                 gt.getDate(GetDay.FOUR_DAYS_AGO, "dd"),
@@ -129,35 +159,9 @@ public class GraphWeekFragment extends Fragment {
         left.setZeroLineWidth(0.7f);
         mchart.getAxisRight().setEnabled(false);
         mchart.getLegend().setEnabled(false);
-
-        // THIS IS THE ORIGINAL DATA YOU WANT TO PLOT
-        //データの設定
-        final List<Data> data = new ArrayList<>();
-
-        //xValue -> 6が右端 右端に今日のデータが入っている
-        data.add(new Data(0, weekCount[6], "1"));
-        data.add(new Data(1, weekCount[5], "1"));
-        data.add(new Data(2, weekCount[4], "1"));
-        data.add(new Data(3, weekCount[3], "1"));
-        data.add(new Data(4, weekCount[2], "1"));
-        data.add(new Data(5, weekCount[1], "1"));
-        data.add(new Data(6, weekCount[0], "1"));
-
-        for (int tmp : weekCount) {
-            weekSumCount += tmp;
-        }
-
-        //今日の回数を表示する
-        todaySum.setText(getResources().getString(R.string.week_count_text, weekCount[0]));
-        comparedYesterday.setText(getResources().getString(R.string.week_count_text, weekCount[1] - weekCount[0]));
-        weekSum.setText(getResources().getString(R.string.week_count_text, weekSumCount));
-
-
-        setData(data);
-        return root;
     }
 
-    private void setData(List<Data> dataList) {
+    public void setData(List<Data> dataList) {
 
         ArrayList<BarEntry> values = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
@@ -202,24 +206,11 @@ public class GraphWeekFragment extends Fragment {
         }
     }
 
-    //データを表現するデモクラス
-    private static class Data {
-
-        final String xAxisValue;
-        final float yValue;
-        final float xValue;
-
-        Data(float xValue, float yValue, String xAxisValue) {
-            this.xAxisValue = xAxisValue;
-            this.yValue = yValue;
-            this.xValue = xValue;
-        }
-    }
-
     private static class ValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
         @Override
         public String getFormattedValue(float value) {
             return String.valueOf((int) value);
         }
     }
+
 }

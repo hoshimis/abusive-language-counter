@@ -13,7 +13,7 @@
     <string name="speech_not_granted">マイクの使用を許可してください</string>
     <string name="prepare_speech">準備中…</string>
     <string name="ready_speech">スピーチできます</string>
-    <string name="speech_error">音声認識中にエラーが発生しました</string>
+    <string name="speech_error">音声認識中にエラーが発生しました\nエラーコード：%1$d</string>
     <!--  週間画面に挿入するテキスト -->
     <string name="week_title">%1$s ～ %2$s</string>
     <string name="week_count_text">%1$d回</string>
@@ -24,5 +24,6 @@
 
     <!--  年間画面に挿入するテキスト -->
     <string name="year_title">%1$s年</string>
-    <string name="year_count_text">%1$d回</string>
+    <string name="year_count_text">%1$d回\</string>
+    <string name="year_count_min_max_text">%1$d回\n%2$d回</string>
 </resources>

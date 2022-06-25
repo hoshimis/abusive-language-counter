@@ -1,5 +1,7 @@
 package com.example.main.ui.graph;
 
+import static android.content.ContentValues.TAG;
+
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -28,9 +30,6 @@ import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import static android.content.ContentValues.TAG;
 
 public class GraphYearFragment extends Fragment {
     /*フィールド*/
@@ -40,7 +39,10 @@ public class GraphYearFragment extends Fragment {
     private Typeface tfRegular;
     private LineChart mChart;
     //年間の回数を格納する配列を宣言
-    public static int[] yearCount = new int[12];
+    static int[] yearCount = new int[12];
+
+    //データの設定
+    static List<Data> data = new ArrayList<>();
 
     //日付取得機能の準備
     GetDay gt = new GetDay();
@@ -50,24 +52,31 @@ public class GraphYearFragment extends Fragment {
     int yearMaxCount = 0;
     int yearMinCount = 10000000;
 
-    TextView yearSum;
-    TextView yearMax;
-    TextView yearAverage;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_graph_year, container, false);
 
-        yearSum = root.findViewById(R.id.yearSumCount);
-        yearMax = root.findViewById(R.id.yearMax);
-        yearAverage = root.findViewById(R.id.yearAverage);
+        //XMLとの紐づけ
+        TextView dateTitle = root.findViewById(R.id.gurahunenkan);
+        TextView yearSum = root.findViewById(R.id.yearSumCount);
+        TextView yearMax = root.findViewById(R.id.yearMax);
+        TextView yearAverage = root.findViewById(R.id.yearAverage);
+        mchart = root.findViewById(R.id.chart2);
 
-        //ここで年間の回数を挿入する
-        //DB接続用に宣言
+        //グラフの描画
+        setGraph(mchart);
+
+        //グラフに表示するカウント数をここでDBに接続して挿入しておく
         CountDatabase countDatabase = CountDatabaseSingleton.getInstance(requireActivity().getApplicationContext());
-        Log.d(TAG, "onCreate: ここで年間の値を挿入するよ！！");
-        new GetCountAsyncTask(countDatabase, GetCountAsyncTask.GET_YEAR).execute();
+        new GetCountAsyncTask(countDatabase, GetCountAsyncTask.GET_YEAR, 0).execute();
+
+        //DBからデータを取得してくる前にグラフの描画が終わってしまうのですこしだけメインスレッドを止める
+        try {
+            Thread.sleep(25);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         root.findViewById(R.id.syuukan).setOnClickListener(
                 view -> {
@@ -87,73 +96,23 @@ public class GraphYearFragment extends Fragment {
                     transaction.commit();
                 }
         );
-        final TextView dateTitle = root.findViewById(R.id.gurahunenkan);//結びつけ
-        dateTitle.setText(getResources().getString(R.string.year_title, YEAR));
-
-
-        mchart = root.findViewById(R.id.chart2);
-        mchart.setBackgroundColor(-35);
-        mchart.setExtraTopOffset(0);
-        mchart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
-        mchart.setExtraLeftOffset(0);
-        mchart.setExtraRightOffset(0);
-        mchart.setDrawBarShadow(false);
-        mchart.setDrawValueAboveBar(true);
-        mchart.getDescription().setEnabled(false);
-        // scaling can now only be done on x- and y-axis separately
-        mchart.setPinchZoom(true);
-        mchart.setDrawGridBackground(false);
-
-        XAxis xAxis = mchart.getXAxis();
-        xAxis.setPosition(XAxisPosition.BOTTOM);
-        xAxis.setTypeface(tfRegular);
-        xAxis.setDrawGridLines(false); //グラフ上の縦線
-        xAxis.setDrawAxisLine(true);//グラフの○○日のところの線
-        xAxis.setTextColor(-16777216);
-        xAxis.setTextSize(13f);
-        xAxis.setLabelCount(12);
-        xAxis.setCenterAxisLabels(false);
-        xAxis.setGranularity(1);
-
-        YAxis left = mchart.getAxisLeft();
-        left.setDrawLabels(false); //格子の横線
-        left.setSpaceTop(25f);
-        left.setSpaceBottom(0);//値が０でもx軸から離れないようにするために０にする
-        left.setDrawAxisLine(true);//y軸の数値のすぐ横の線
-        left.setDrawGridLines(false); //なんか
-        left.setDrawZeroLine(true); // draw a zero line
-        left.setZeroLineColor(-16777216);
-        left.setZeroLineWidth(0.7f);
-        mchart.getAxisRight().setEnabled(false);
-        mchart.getLegend().setEnabled(false);
-
-        // THIS IS THE ORIGINAL DATA YOU WANT TO PLOT
-        //データの設定
-        final List<Data> data = new ArrayList<>();
-
-        data.add(new Data(1, yearCount[0], "12-29"));
-        data.add(new Data(2, yearCount[1], "12-30"));
-        data.add(new Data(3, yearCount[2], "12-31"));
-        data.add(new Data(4, yearCount[3], "01-01"));
-        data.add(new Data(5, yearCount[4], "01-02"));
-        data.add(new Data(6, yearCount[5], "01-02"));
-        data.add(new Data(7, yearCount[6], "01-02"));
-        data.add(new Data(8, yearCount[7], "01-02"));
-        data.add(new Data(9, yearCount[8], "01-02"));
-        data.add(new Data(10, yearCount[9], "01-02"));
-        data.add(new Data(11, yearCount[10], "01-02"));
-        data.add(new Data(12, yearCount[11], "01-02"));
 
         for (int tmp : yearCount) {
             yearSumCount += tmp;
             if (yearMaxCount < tmp) {
                 yearMaxCount = tmp;
             }
+
+            if (yearMinCount > tmp) {
+                yearMinCount = tmp;
+            }
         }
 
+        //年間の情報と日付を表示する
+        dateTitle.setText(getResources().getString(R.string.year_title, YEAR));
         yearSum.setText(getResources().getString(R.string.year_count_text, yearSumCount));
-        yearSum.setText(getResources().getString(R.string.year_count_text, yearMaxCount));
-        yearSum.setText(getResources().getString(R.string.year_count_text, yearSumCount/12));
+        yearMax.setText(getResources().getString(R.string.year_count_min_max_text, yearMaxCount, yearMinCount));
+        yearAverage.setText(getResources().getString(R.string.year_count_text, (yearSumCount / 12)));
 
         setData(data);
         return root;
@@ -204,20 +163,41 @@ public class GraphYearFragment extends Fragment {
         }
     }
 
-    /**
-     * Demo class representing data.
-     */
-    private static class Data {
+    private void setGraph(BarChart mchart) {
+        mchart.setBackgroundColor(-35);
+        mchart.setExtraTopOffset(0);
+        mchart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
+        mchart.setExtraLeftOffset(0);
+        mchart.setExtraRightOffset(0);
+        mchart.setDrawBarShadow(false);
+        mchart.setDrawValueAboveBar(true);
+        mchart.getDescription().setEnabled(false);
+        // scaling can now only be done on x- and y-axis separately
+        mchart.setPinchZoom(true);
+        mchart.setDrawGridBackground(false);
 
-        final String xAxisValue;
-        final int yValue;
-        final int xValue;
+        XAxis xAxis = mchart.getXAxis();
+        xAxis.setPosition(XAxisPosition.BOTTOM);
+        xAxis.setTypeface(tfRegular);
+        xAxis.setDrawGridLines(false); //グラフ上の縦線
+        xAxis.setDrawAxisLine(true);//グラフの○○日のところの線
+        xAxis.setTextColor(-16777216);
+        xAxis.setTextSize(13f);
+        xAxis.setLabelCount(12);
+        xAxis.setCenterAxisLabels(false);
+        xAxis.setGranularity(1);
 
-        Data(int xValue, int yValue, String xAxisValue) {
-            this.xAxisValue = xAxisValue;
-            this.yValue = yValue;
-            this.xValue = xValue;
-        }
+        YAxis left = mchart.getAxisLeft();
+        left.setDrawLabels(false); //格子の横線
+        left.setSpaceTop(25f);
+        left.setSpaceBottom(0);//値が０でもx軸から離れないようにするために０にする
+        left.setDrawAxisLine(true);//y軸の数値のすぐ横の線
+        left.setDrawGridLines(false); //なんか
+        left.setDrawZeroLine(true); // draw a zero line
+        left.setZeroLineColor(-16777216);
+        left.setZeroLineWidth(0.7f);
+        mchart.getAxisRight().setEnabled(false);
+        mchart.getLegend().setEnabled(false);
     }
 
     private static class ValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {

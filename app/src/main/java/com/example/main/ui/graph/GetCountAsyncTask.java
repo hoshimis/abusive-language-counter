@@ -23,26 +23,34 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
     //1週間分、1ヶ月分、年間のどの回数を取得するか区別するための変数を宣言
     int distinction;
 
+    //月間のデータを格納するための変数を宣言
+    //現在が何月かを格納する
+    int month;
+
     //コンストラクター
-    public GetCountAsyncTask(CountDatabase countDatabase, int distinction) {
+    public GetCountAsyncTask(CountDatabase countDatabase, int distinction, int month) {
         this.countDatabase = countDatabase;
         this.distinction = distinction;
+        this.month = month;
     }
 
-    //非同期処理が行われる場所
+
+    //非同期処理より前に処理される
     @Override
     protected Integer doInBackground(Void... aVoid) {
-        DaysCountDao daysCountDao = countDatabase.daysCountDao();
         Log.d(TAG, "doInBackground: 非同期処理が始まるよ！！");
-
+        DaysCountDao daysCountDao = countDatabase.daysCountDao();
         switch (distinction) {
             case GET_WEEK:
                 //今日から一週間前までの回数をDBから取得して、それぞれ配列に格納していく
                 for (int i = 0; i < 7; i++) {
                     //o -> 今日
                     //1 -> 昨日 ...
-                    GraphWeekFragment.weekCount[i] = daysCountDao.getCount("%" + gt.getDate(i * -1, "yyyy/ MM/ dd") + "%");
-                    Log.d(TAG, "doInBackground:ここが回数を入れてるところ！！ " + GraphWeekFragment.weekCount[i] + i);
+                    GraphWeekFragment.weekCount[i]
+                            = daysCountDao.getCount("%" + gt.getDate(i * -1, "yyyy/ MM/ dd") + "%");
+
+                    GraphWeekFragment.data.add(new Data(6 - i, GraphWeekFragment.weekCount[i], "1"));
+
                 }
                 break;
 
@@ -70,12 +78,16 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
                 for (int i = 0; i < 31; i++) {
                     GraphMonthFragment.monthCount[i] =
                             daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ MM/ ") + String.format("%02d", i + 1) + "%");
+                    GraphMonthFragment.data.add(new Data(i, GraphMonthFragment.monthCount[i], "1"));
+
                 }
                 break;
             case 2:
                 for (int i = 0; i < 28; i++) {
                     GraphMonthFragment.monthCount[i] =
                             daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ MM/ ") + String.format("%02d", i + 1) + "%");
+                    GraphMonthFragment.data.add(new Data(i, GraphMonthFragment.monthCount[i], "1"));
+
                 }
                 break;
             case 4:
@@ -83,9 +95,10 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
             case 9:
             case 11:
                 for (int i = 0; i < 30; i++) {
-                    Log.d(TAG, "getMonthCount: データを入れるよ！！");
                     GraphMonthFragment.monthCount[i] =
                             daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ MM/ ") + String.format("%02d", i + 1) + "%");
+                    GraphMonthFragment.data.add(new Data(i, GraphMonthFragment.monthCount[i], "1"));
+
                 }
                 break;
         }
@@ -95,12 +108,13 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
 
     private void getYearCount(DaysCountDao daysCountDao) {
         for (int i = 0; i < 12; i++) {
+            Log.d(TAG, "getYearCount: 年間のデータを入れるよ！！");
             GraphYearFragment.yearCount[i] =
                     daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ ") + String.format("%02d", i + 1) + "%");
-            Log.d(TAG, "getYearCount: " + gt.getDate(GetDay.TODAY, "yyyy/ ") + String.format("%02d", i + 1));
+            GraphYearFragment.data.add(new Data(i + 1, GraphYearFragment.yearCount[i], "01-02"));
+
         }
         return;
     }
-
 
 }
