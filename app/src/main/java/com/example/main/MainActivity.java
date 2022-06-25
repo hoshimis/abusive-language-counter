@@ -1,7 +1,3 @@
-/**
- * Author:Koike
- */
-
 package com.example.main;
 
 import android.os.Bundle;
@@ -45,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-        getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
         // ステータスバーを消す
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 

@@ -1,16 +1,19 @@
 package com.example.main.ui.graph;
 
-import android.content.Intent;
+import static android.content.ContentValues.TAG;
+
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.main.R;
 import com.example.main.db.dayscount.CountDatabase;
@@ -28,9 +31,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
-
-public class GraphMonthActivity extends AppCompatActivity {
+public class GraphMonthFragment extends Fragment {
     /*フィールド*/
     //maker Ryo Kamizato feat シュトゥーデューム
 
@@ -45,8 +46,6 @@ public class GraphMonthActivity extends AppCompatActivity {
     final String MONTH = gt.getDate(GetDay.TODAY, "MM");
     int thisMonth = Integer.parseInt(gt.getDate(GetDay.TODAY, "MM"));
 
-    //DB接続用に宣言
-    private CountDatabase countDatabase;
     //1ヶ月分の回数を格納する配列を宣言
     public static int[] monthCount = new int[31];
 
@@ -57,52 +56,43 @@ public class GraphMonthActivity extends AppCompatActivity {
 
     int monthSumCount;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_graph_month);
+        View root = inflater.inflate(R.layout.fragment_graph_month, container, false);
 
         //ここで月間の回数を挿入する
-        countDatabase = CountDatabaseSingleton.getInstance(this.getApplicationContext());
-        new GetCountAsyncTask(this, countDatabase, GetCountAsyncTask.GET_MONTH).execute();
+        //DB接続用に宣言
+        CountDatabase countDatabase = CountDatabaseSingleton.getInstance(requireActivity().getApplicationContext());
+        new GetCountAsyncTask(countDatabase, GetCountAsyncTask.GET_MONTH).execute();
 
-        findViewById(R.id.syuukan).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        finish();
-                    }
+        root.findViewById(R.id.syuukan).setOnClickListener(
+                view -> {
+                    Fragment toWeek = new GraphWeekFragment();
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment, toWeek);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
         );
-        findViewById(R.id.nenkan).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent toYear = new Intent(GraphMonthActivity.this, GraphYearActivity.class);
-                        startActivity(toYear);
-                        finish();
-                    }
+        root.findViewById(R.id.nenkan).setOnClickListener(
+                view -> {
+                    Fragment toYear = new GraphYearFragment();
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment, toYear);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
         );
 
-        final TextView hiduke = findViewById(R.id.gurahugekkan);//結びつけ
-        hiduke.setText(YEAR + "年" + MONTH + "月");
+        final TextView dateTitle = root.findViewById(R.id.gurahugekkan);//結びつけ
+        dateTitle.setText(getResources().getString(R.string.month_title, YEAR, MONTH));
 
-        monthSum = findViewById(R.id.monthSum);
-        comparedBeforeMonth = findViewById(R.id.comparedBeforeMonth);
-        monthAverage = findViewById(R.id.monthAverage);
+        monthSum = root.findViewById(R.id.monthSum);
+        comparedBeforeMonth = root.findViewById(R.id.comparedBeforeMonth);
+        monthAverage = root.findViewById(R.id.monthAverage);
 
-        //上部のアクションバーを非表示にする
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setTitle("BarChartPositiveNegative");
-
-        mchart = findViewById(R.id.chart2);
+        mchart = root.findViewById(R.id.chart2);
         mchart.setBackgroundColor(-35);
         mchart.setExtraTopOffset(0);
         mchart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
@@ -180,7 +170,7 @@ public class GraphMonthActivity extends AppCompatActivity {
 
 
         //y軸の値を格納する　→　
-        Integer y = Integer.parseInt(MONTH);
+        int y = Integer.parseInt(MONTH);
         switch (y) {
             case 1:
             case 3:
@@ -214,12 +204,14 @@ public class GraphMonthActivity extends AppCompatActivity {
         }
 
         //先月比を計算する
-        int diff = GraphYearActivity.yearCount[thisMonth - 2] - GraphYearActivity.yearCount[thisMonth - 1];
-        monthSum.setText(String.valueOf(monthSumCount) + "回");
-        comparedBeforeMonth.setText(String.valueOf(diff) + "回");
-        monthAverage.setText(String.valueOf(monthSumCount / getLastDay(thisMonth)) + "回");
+        int diff = GraphYearFragment.yearCount[thisMonth - 2] - GraphYearFragment.yearCount[thisMonth - 1];
+        monthSum.setText(getResources().getString(R.string.month_count_text, monthSumCount));
+        comparedBeforeMonth.setText(getResources().getString(R.string.month_count_text, diff));
+        monthAverage.setText(getResources().getString(R.string.month_count_text, monthSumCount / getLastDay(thisMonth)));
         setData(data);
         Log.d(TAG, "onCreate: ここでデータをセットしているよ！！");
+
+        return root;
     }
 
     private void setData(List<Data> dataList) {
