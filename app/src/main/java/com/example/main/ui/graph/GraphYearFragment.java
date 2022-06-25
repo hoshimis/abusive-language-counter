@@ -1,16 +1,17 @@
 package com.example.main.ui.graph;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.main.R;
 import com.example.main.db.dayscount.CountDatabase;
@@ -27,18 +28,17 @@ import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
 
-public class GraphYearActivity extends AppCompatActivity {
+public class GraphYearFragment extends Fragment {
     /*フィールド*/
     //maker Ryo Kamizato feat シュトゥーデューム
 
     private BarChart mchart;
     private Typeface tfRegular;
     private LineChart mChart;
-    //DB接続用に宣言
-    private CountDatabase countDatabase;
     //年間の回数を格納する配列を宣言
     public static int[] yearCount = new int[12];
 
@@ -55,51 +55,43 @@ public class GraphYearActivity extends AppCompatActivity {
     TextView yearAverage;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_graph_year);
+        View root = inflater.inflate(R.layout.fragment_graph_year, container, false);
 
-        yearSum = findViewById(R.id.yearSum);
-        yearMax = findViewById(R.id.yearMax);
-        yearAverage = findViewById(R.id.yearAverage);
+        yearSum = root.findViewById(R.id.yearSumCount);
+        yearMax = root.findViewById(R.id.yearMax);
+        yearAverage = root.findViewById(R.id.yearAverage);
 
         //ここで年間の回数を挿入する
-        countDatabase = CountDatabaseSingleton.getInstance(this.getApplicationContext());
+        //DB接続用に宣言
+        CountDatabase countDatabase = CountDatabaseSingleton.getInstance(requireActivity().getApplicationContext());
         Log.d(TAG, "onCreate: ここで年間の値を挿入するよ！！");
-        new GetCountAsyncTask(this, countDatabase, GetCountAsyncTask.GET_YEAR).execute();
+        new GetCountAsyncTask(countDatabase, GetCountAsyncTask.GET_YEAR).execute();
 
-        findViewById(R.id.syuukan).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        finish();
-                    }
+        root.findViewById(R.id.syuukan).setOnClickListener(
+                view -> {
+                    Fragment toWeek = new GraphWeekFragment();
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment, toWeek);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
         );
-        findViewById(R.id.gekkan).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent toMonth = new Intent(GraphYearActivity.this, GraphMonthActivity.class);
-                        startActivity(toMonth);
-                        finish();
-                    }
+        root.findViewById(R.id.gekkan).setOnClickListener(
+                view -> {
+                    Fragment toMonth = new GraphMonthFragment();
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment, toMonth);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
         );
-        final TextView hiduke = (TextView) findViewById(R.id.gurahunenkan);//結びつけ
-        hiduke.setText(YEAR + "年");
+        final TextView dateTitle = root.findViewById(R.id.gurahunenkan);//結びつけ
+        dateTitle.setText(getResources().getString(R.string.year_title, YEAR));
 
-        //上部のアクションバーを非表示にする
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setTitle("BarChartPositiveNegative");
-
-        mchart = findViewById(R.id.chart2);
+        mchart = root.findViewById(R.id.chart2);
         mchart.setBackgroundColor(-35);
         mchart.setExtraTopOffset(0);
         mchart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
@@ -136,7 +128,6 @@ public class GraphYearActivity extends AppCompatActivity {
         mchart.getLegend().setEnabled(false);
 
         // THIS IS THE ORIGINAL DATA YOU WANT TO PLOT
-        //TODO ここに月ごとの回数を挿入していく
         //データの設定
         final List<Data> data = new ArrayList<>();
 
@@ -160,11 +151,12 @@ public class GraphYearActivity extends AppCompatActivity {
             }
         }
 
-        yearSum.setText(String.valueOf(yearSumCount) + "回");
-        yearMax.setText(String.valueOf(yearMaxCount) + "回");
-        yearAverage.setText(String.valueOf(yearSumCount / 12) + "回");
+        yearSum.setText(getResources().getString(R.string.year_count_text, yearSumCount));
+        yearSum.setText(getResources().getString(R.string.year_count_text, yearMaxCount));
+        yearSum.setText(getResources().getString(R.string.year_count_text, yearSumCount/12));
 
         setData(data);
+        return root;
     }
 
     private void setData(List<Data> dataList) {
@@ -215,7 +207,7 @@ public class GraphYearActivity extends AppCompatActivity {
     /**
      * Demo class representing data.
      */
-    private class Data {
+    private static class Data {
 
         final String xAxisValue;
         final int yValue;
@@ -228,7 +220,7 @@ public class GraphYearActivity extends AppCompatActivity {
         }
     }
 
-    private class ValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
+    private static class ValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
 
         @Override
         public String getFormattedValue(float value) {
@@ -236,32 +228,3 @@ public class GraphYearActivity extends AppCompatActivity {
         }
     }
 }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.only_github, menu);
-//        return true;
-//    }
-//    //メニュー関連のこと？だから一応消した
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        switch (item.getItemId()) {
-//            case R.id.viewGithub: {
-//                Intent i = new Intent(Intent.ACTION_VIEW);
-//                i.setData(Uri.parse("https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/com/xxmassdeveloper/mpchartexample/BarChartPositiveNegative.java"));
-//                startActivity(i);
-//                break;
-//            }
-//        }
-//
-//        return true;
-//    }
-//    //https://developer.android.com/guide/topics/ui/menus?hl=ja#java ここのサイト参照　なんとなくいらなそう
-//
-//
-//    @Override
-//    public void saveToGallery() { /* Intentionally left empty */ }
-//
-//}

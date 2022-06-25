@@ -1,66 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="0dp"
-    android:layout_marginTop="0px"
-    android:layout_marginLeft="0px"
-    android:layout_marginRight="0px"
-    tools:context=".ui.graph.GraphFragment"
-    android:gravity="center"
     android:background="#FFFFDD"
-    android:layout_marginBottom="40dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".ui.graph.GraphYearFragment"
+    android:layout_marginBottom="60dp"
     >
     <!--    idは全て日本語をローマ字で打っています-->
-    //週間画面
+    //年間画面
 
     <TextView
         android:id="@+id/tikutikukaisuu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25dp"
         android:text="ちくちく回数"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black"
+        android:textSize="25dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/syuukan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="週間"
-            android:layout_weight="1"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
-            />
+            android:layout_weight="1"
+            android:text="週間" />
+
         <Button
             android:id="@+id/gekkan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="月間"
-            android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            />
+            android:layout_weight="1"
+            android:text="月間" />
+
         <Button
             android:id="@+id/nenkan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="年間"
-            android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:text="年間"
 
             />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/gurahusyuukan"
+        android:id="@+id/gurahunenkan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
@@ -68,106 +64,111 @@
         android:textSize="30dp" />
 
     <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/chart1"
+        android:id="@+id/chart2"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="300dp"
+
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_weight="0.5"
-        >
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/goukei"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:text="今日の合計"
-            android:layout_weight="1"
-            android:textSize="25dp"
-            android:textColor="@color/black"
-            android:gravity="center"
-            />
-        <TextView
-            android:id="@+id/todaySum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="4回"
-            android:textColor="@color/black"
-            android:layout_weight="1"
-            android:textSize="25dp"/>
-        <ImageView
-            android:layout_height="match_parent"
-            android:src="@drawable/level_0"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
-
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="0.5"
-        >
-
-
-        <TextView
-            android:id="@+id/zenzituhi"
+            android:id="@+id/nenkangoukei"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="前日比"
+            android:text="年間合計"
             android:textColor="@color/black"
             android:textSize="25dp" />
+
         <TextView
-            android:id="@+id/comparedYesterday"
+            android:id="@+id/yearSumCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4回"
+            android:layout_weight="1"
+            android:text="取得中"
             android:textColor="@color/black"
-            android:layout_weight="1"
-            android:textSize="25dp"
-            android:layout_gravity="center"/>
+            android:textSize="25dp" />
+
         <ImageView
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/level_15"
             android:layout_weight="1"
-            android:layout_width="0dp" />
+            android:src="@drawable/level_0" />
+
+
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_weight="0.5"
-        >
+        android:orientation="horizontal">
+
 
         <TextView
-            android:id="@+id/syuukangoukei"
+            android:id="@+id/sengetuhi"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:text="週間合計"
             android:layout_weight="1"
-            android:textColor="@color/black"
-            android:textSize="25dp"
             android:gravity="center"
-            />
+            android:text="最大月回数\n最小月回数"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
         <TextView
-            android:id="@+id/weekSum"
+            android:id="@+id/yearMax"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
             android:text="4回"
-            android:layout_weight="1"
             android:textColor="@color/black"
-            android:textSize="25dp"
-            android:layout_gravity="center"/>
+            android:textSize="25dp" />
+
         <ImageView
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/level_15"
             android:layout_weight="1"
-            android:layout_width="0dp" />
+            android:src="@drawable/level_15" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/heikinkaisuu"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="年間平均回数"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/yearAverage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="4回"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/level_15" />
     </LinearLayout>
 
 </LinearLayout>
