@@ -1,11 +1,8 @@
 package com.example.main.ui.graph;
 
-import static android.content.ContentValues.TAG;
-
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +31,6 @@ import java.util.List;
 public class GraphMonthFragment extends Fragment {
     /*フィールド*/
     //maker Ryo Kamizato feat シュトゥーデューム
-
-    //月間画面
     private BarChart mchart;
     private Typeface tfRegular;
 
@@ -49,21 +44,36 @@ public class GraphMonthFragment extends Fragment {
     //1ヶ月分の回数を格納する配列を宣言
     public static int[] monthCount = new int[31];
 
-    TextView monthSum;
-    TextView comparedBeforeMonth;
-    TextView monthAverage;
-
-
-    int monthSumCount;
+    //データの設定
+    static List<Data> data = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_graph_month, container, false);
 
-        //ここで月間の回数を挿入する
-        //DB接続用に宣言
+        //XMLとの紐づけ
+        TextView dateTitle = root.findViewById(R.id.gurahugekkan);
+        TextView monthSum = root.findViewById(R.id.monthSum);
+        TextView comparedBeforeMonth = root.findViewById(R.id.comparedBeforeMonth);
+        TextView monthAverage = root.findViewById(R.id.monthAverage);
+        mchart = root.findViewById(R.id.chart2);
+
+        //今月の合計値を格納する為の変数
+        int monthSumCount = 0;
+
+        //グラフの描画
+        setGraph(mchart);
+
+        //グラフに表示するカウント数をここでDBに接続して挿入しておく
         CountDatabase countDatabase = CountDatabaseSingleton.getInstance(requireActivity().getApplicationContext());
-        new GetCountAsyncTask(countDatabase, GetCountAsyncTask.GET_MONTH).execute();
+        new GetCountAsyncTask(countDatabase, GetCountAsyncTask.GET_MONTH, Integer.parseInt(MONTH)).execute();
+
+        //DBからデータを取得してくる前にグラフの描画が終わってしまうのですこしだけメインスレッドを止める
+        try {
+            Thread.sleep(55);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         root.findViewById(R.id.syuukan).setOnClickListener(
                 view -> {
@@ -84,15 +94,68 @@ public class GraphMonthFragment extends Fragment {
                 }
         );
 
-        final TextView dateTitle = root.findViewById(R.id.gurahugekkan);//結びつけ
+        for (int tmp : monthCount) {
+            monthSumCount += tmp;
+        }
+
+        //先月比と日付を表示する
+        int diff = GraphYearFragment.yearCount[thisMonth - 1] - GraphYearFragment.yearCount[thisMonth - 2];
         dateTitle.setText(getResources().getString(R.string.month_title, YEAR, MONTH));
+        monthSum.setText(getResources().getString(R.string.month_count_text, monthSumCount));
+        comparedBeforeMonth.setText(getResources().getString(R.string.month_count_text, diff));
+        monthAverage.setText(getResources().getString(R.string.month_count_text, monthSumCount / getLastDay(thisMonth)));
 
-        monthSum = root.findViewById(R.id.monthSum);
-        comparedBeforeMonth = root.findViewById(R.id.comparedBeforeMonth);
-        monthAverage = root.findViewById(R.id.monthAverage);
+        setData(data);
 
+        return root;
+    }
 
-        mchart = root.findViewById(R.id.chart2);
+    private void setData(List<Data> dataList) {
+
+        ArrayList<BarEntry> values = new ArrayList<>();
+        List<Integer> colors = new ArrayList<>();
+
+        int green = Color.rgb(110, 190, 102);
+        int red = Color.rgb(211, 74, 88);
+
+        for (int i = 0; i < dataList.size(); i++) {
+
+            Data d = dataList.get(i);
+            BarEntry entry = new BarEntry(d.xValue, d.yValue);
+            values.add(entry);
+
+            // specific colors
+            if (d.yValue >= 0)
+                colors.add(red);
+            else
+                colors.add(green);
+        }
+
+        BarDataSet set;
+
+        if (mchart.getData() != null &&
+                mchart.getData().getDataSetCount() > 0) {
+            set = (BarDataSet) mchart.getData().getDataSetByIndex(0);
+            set.setValues(values);
+            mchart.getData().notifyDataChanged();
+            mchart.notifyDataSetChanged();
+        } else {
+            set = new BarDataSet(values, "Values");
+            set.setColors(colors);
+            set.setValueTextColors(colors);
+
+            BarData data = new BarData(set);
+            data.setValueTextSize(13f);
+            data.setValueTypeface(tfRegular);
+            data.setValueFormatter(new ValueFormatter());
+            data.setBarWidth(0.8f);
+
+            mchart.setData(data);
+            mchart.invalidate();
+        }
+    }
+
+    private void setGraph(BarChart mchart) {
         mchart.setBackgroundColor(-35);
         mchart.setExtraTopOffset(0);
         mchart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
@@ -162,101 +225,6 @@ public class GraphMonthFragment extends Fragment {
         left.setZeroLineWidth(0.7f);
         mchart.getAxisRight().setEnabled(false);
         mchart.getLegend().setEnabled(false);
-
-
-        // THIS IS THE ORIGINAL DATA YOU WANT TO PLOT
-        //データの設定
-        final List<Data> data = new ArrayList<>();
-
-
-        //y軸の値を格納する　→　
-        int y = Integer.parseInt(MONTH);
-        switch (y) {
-            case 1:
-            case 3:
-            case 5:
-            case 7:
-            case 9:
-            case 11:
-                for (int i = 0; i <= 31; i++) {
-                    //0 -> 月の1日から格納していく
-                    data.add(new Data(i, monthCount[i], "12-30"));
-                }
-                break;
-            case 2:
-                for (int i = 0; i <= 28; i++) {
-                    data.add(new Data(i, monthCount[i], "12-30"));
-                }
-                break;
-            case 4:
-            case 6:
-            case 8:
-            case 10:
-            case 12:
-                for (int i = 0; i < 30; i++) {
-                    data.add(new Data(i, monthCount[i], "12-30"));
-                }
-                break;
-        }
-
-        for (int tmp : monthCount) {
-            monthSumCount += tmp;
-        }
-
-        //先月比を計算する
-        int diff = GraphYearFragment.yearCount[thisMonth - 2] - GraphYearFragment.yearCount[thisMonth - 1];
-        monthSum.setText(getResources().getString(R.string.month_count_text, monthSumCount));
-        comparedBeforeMonth.setText(getResources().getString(R.string.month_count_text, diff));
-        monthAverage.setText(getResources().getString(R.string.month_count_text, monthSumCount / getLastDay(thisMonth)));
-        setData(data);
-        Log.d(TAG, "onCreate: ここでデータをセットしているよ！！");
-
-        return root;
-    }
-
-    private void setData(List<Data> dataList) {
-
-        ArrayList<BarEntry> values = new ArrayList<>();
-        List<Integer> colors = new ArrayList<>();
-
-        int green = Color.rgb(110, 190, 102);
-        int red = Color.rgb(211, 74, 88);
-
-        for (int i = 0; i < dataList.size(); i++) {
-
-            Data d = dataList.get(i);
-            BarEntry entry = new BarEntry(d.xValue, d.yValue);
-            values.add(entry);
-
-            // specific colors
-            if (d.yValue >= 0)
-                colors.add(red);
-            else
-                colors.add(green);
-        }
-
-        BarDataSet set;
-
-        if (mchart.getData() != null &&
-                mchart.getData().getDataSetCount() > 0) {
-            set = (BarDataSet) mchart.getData().getDataSetByIndex(0);
-            set.setValues(values);
-            mchart.getData().notifyDataChanged();
-            mchart.notifyDataSetChanged();
-        } else {
-            set = new BarDataSet(values, "Values");
-            set.setColors(colors);
-            set.setValueTextColors(colors);
-
-            BarData data = new BarData(set);
-            data.setValueTextSize(13f);
-            data.setValueTypeface(tfRegular);
-            data.setValueFormatter(new ValueFormatter());
-            data.setBarWidth(0.8f);
-
-            mchart.setData(data);
-            mchart.invalidate();
-        }
     }
 
     private int getLastDay(int month) {
@@ -267,20 +235,6 @@ public class GraphMonthFragment extends Fragment {
         }
     }
 
-    /**
-     * Demo class representing data.
-     */
-    private static class Data {
-        final String xAxisValue;
-        final int yValue;
-        final int xValue;
-
-        Data(int xValue, int yValue, String xAxisValue) {
-            this.xAxisValue = xAxisValue;
-            this.yValue = yValue;
-            this.xValue = xValue;
-        }
-    }
 
     private static class ValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
         @Override

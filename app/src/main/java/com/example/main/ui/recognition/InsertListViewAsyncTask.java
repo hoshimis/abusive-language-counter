@@ -1,7 +1,10 @@
 package com.example.main.ui.recognition;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.DaysCount;
@@ -37,9 +40,10 @@ public class InsertListViewAsyncTask extends AsyncTask<Void, Void, Integer> {
         DaysCountDao daysCountDao = countDatabase.daysCountDao();
         List<DaysCount> atList = daysCountDao.getDayAll("%" + gt.getDate(GetDay.TODAY, "yyy/ MM/ dd") + "%");
         for (DaysCount at : atList) {
-            //日付もリストに格納するのは少し冗長になりすぎると思うので、時間だけを切り取って格納する
+            //日付もリストに格納するのは長くなりすぎると思うので、時間だけを切り取って格納する
             arrayList.add(at.getDate().substring(12, 18) + "     " + at.getWord());
         }
+        Log.d(TAG, "doInBackground: リストビューにデータを挿入しているよ！！");
         return 0;
     }
 
@@ -50,5 +54,7 @@ public class InsertListViewAsyncTask extends AsyncTask<Void, Void, Integer> {
         if (activity == null) {
             return;
         }
+
+
     }
 }
