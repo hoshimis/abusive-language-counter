@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -52,7 +53,7 @@ public class GraphMonthFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_graph_month, container, false);
 
         //XMLとの紐づけ
-        TextView dateTitle = root.findViewById(R.id.gurahugekkan);
+        TextView dateTitle = root.findViewById(R.id.graph_month);
         TextView monthSum = root.findViewById(R.id.monthSum);
         TextView comparedBeforeMonth = root.findViewById(R.id.comparedBeforeMonth);
         TextView monthAverage = root.findViewById(R.id.monthAverage);
@@ -75,7 +76,7 @@ public class GraphMonthFragment extends Fragment {
             e.printStackTrace();
         }
 
-        root.findViewById(R.id.syuukan).setOnClickListener(
+        root.findViewById(R.id.week).setOnClickListener(
                 view -> {
                     Fragment toWeek = new GraphWeekFragment();
                     FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -84,7 +85,7 @@ public class GraphMonthFragment extends Fragment {
                     transaction.commit();
                 }
         );
-        root.findViewById(R.id.nenkan).setOnClickListener(
+        root.findViewById(R.id.year).setOnClickListener(
                 view -> {
                     Fragment toYear = new GraphYearFragment();
                     FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -98,17 +99,55 @@ public class GraphMonthFragment extends Fragment {
             monthSumCount += tmp;
         }
 
-        //先月比と日付を表示する
+        //前月比と日付を表示する
+        //diffは前月比のやつ
         int diff = GraphYearFragment.yearCount[thisMonth - 1] - GraphYearFragment.yearCount[thisMonth - 2];
         dateTitle.setText(getResources().getString(R.string.month_title, YEAR, MONTH));
         monthSum.setText(getResources().getString(R.string.month_count_text, monthSumCount));
         comparedBeforeMonth.setText(getResources().getString(R.string.month_count_text, diff));
         monthAverage.setText(getResources().getString(R.string.month_count_text, monthSumCount / getLastDay(thisMonth)));
-
         setData(data);
+        //月間合計の表情画像表示
+        ImageView sum_month= root.findViewById(R.id.month_sum_face);
+        if(monthSumCount==0){
+            sum_month.setImageResource(R.drawable.level_0);
+        }else if(monthSumCount<=10){
+            sum_month.setImageResource(R.drawable.level_15);
+        }else if(monthSumCount<=20){
+            sum_month.setImageResource(R.drawable.level_510);
+        }else{
+            sum_month.setImageResource(R.drawable.level_max);
+        }
+        //前月比の表情画像表示
+        ImageView  last_month= root.findViewById(R.id.last_month_face);
+        if(diff==0){
+            last_month.setImageResource(R.drawable.level_0);
+        }else if(diff<=10){
+            last_month.setImageResource(R.drawable.level_15);
+        }else if(diff<=20){
+            last_month.setImageResource(R.drawable.level_510);
+        }else{
+            last_month.setImageResource(R.drawable.level_max);
+        }
+        //月間平均の表情画像表示
+        ImageView  ave_month= root.findViewById(R.id.month_ave_face);
+        if(monthSumCount / getLastDay(thisMonth)==0){
+            ave_month.setImageResource(R.drawable.level_0);
+        }else if(monthSumCount / getLastDay(thisMonth)<=10){
+            ave_month.setImageResource(R.drawable.level_15);
+        }else if(monthSumCount / getLastDay(thisMonth)<=20){
+            ave_month.setImageResource(R.drawable.level_510);
+        }else{
+            ave_month.setImageResource(R.drawable.level_max);
+        }
+
+
 
         return root;
     }
+
+
+
 
     private void setData(List<Data> dataList) {
 

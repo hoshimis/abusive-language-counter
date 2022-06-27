@@ -12,7 +12,7 @@
     <!--月間画面-->
 
     <TextView
-        android:id="@+id/tikutikukaisuu"
+        android:id="@+id/tikutiku_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ちくちく回数"
@@ -25,7 +25,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/syuukan"
+            android:id="@+id/week"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -34,7 +34,7 @@
             android:text="週間" />
 
         <Button
-            android:id="@+id/gekkan"
+            android:id="@+id/month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -43,7 +43,7 @@
             android:text="月間" />
 
         <Button
-            android:id="@+id/nenkan"
+            android:id="@+id/year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -55,7 +55,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/gurahugekkan"
+        android:id="@+id/graph_month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
@@ -76,7 +76,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/gekkangoukei"
+            android:id="@+id/month_sum_title"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -95,10 +95,11 @@
             android:textSize="25dp" />
 
         <ImageView
+            android:id="@+id/month_sum_face"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/level_0" />
+            />
 
 
     </LinearLayout>
@@ -111,12 +112,12 @@
 
 
         <TextView
-            android:id="@+id/sengetuhi"
+            android:id="@+id/last_month_title"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="先月比"
+            android:text="前月比"
             android:textColor="@color/black"
             android:textSize="25dp" />
 
@@ -131,10 +132,11 @@
             android:textSize="25dp" />
 
         <ImageView
+            android:id="@+id/last_month_face"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/level_15" />
+             />
     </LinearLayout>
 
     <LinearLayout
@@ -144,7 +146,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/heikinkaisuu"
+            android:id="@+id/month_ave_title"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -164,10 +166,11 @@
             android:textSize="25dp" />
 
         <ImageView
+            android:id="@+id/month_ave_face"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/level_15" />
+            />
     </LinearLayout>
 
 </LinearLayout>

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,6 +48,7 @@ public class GraphYearFragment extends Fragment {
     //日付取得機能の準備
     GetDay gt = new GetDay();
     final String YEAR = gt.getDate(GetDay.TODAY, "yyyy");
+    final int MONTH=Integer.parseInt(gt.getDate(GetDay.TODAY,"MM"));
 
     int yearSumCount;
     int yearMaxCount = 0;
@@ -58,9 +60,9 @@ public class GraphYearFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_graph_year, container, false);
 
         //XMLとの紐づけ
-        TextView dateTitle = root.findViewById(R.id.gurahunenkan);
+        TextView dateTitle = root.findViewById(R.id.graph_year);
         TextView yearSum = root.findViewById(R.id.yearSumCount);
-        TextView yearMax = root.findViewById(R.id.yearMax);
+        TextView yearMax = root.findViewById(R.id.monthMinMax);
         TextView yearAverage = root.findViewById(R.id.yearAverage);
         mchart = root.findViewById(R.id.chart2);
 
@@ -78,7 +80,7 @@ public class GraphYearFragment extends Fragment {
             e.printStackTrace();
         }
 
-        root.findViewById(R.id.syuukan).setOnClickListener(
+        root.findViewById(R.id.week).setOnClickListener(
                 view -> {
                     Fragment toWeek = new GraphWeekFragment();
                     FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -87,7 +89,7 @@ public class GraphYearFragment extends Fragment {
                     transaction.commit();
                 }
         );
-        root.findViewById(R.id.gekkan).setOnClickListener(
+        root.findViewById(R.id.month).setOnClickListener(
                 view -> {
                     Fragment toMonth = new GraphMonthFragment();
                     FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -115,6 +117,40 @@ public class GraphYearFragment extends Fragment {
         yearAverage.setText(getResources().getString(R.string.year_count_text, (yearSumCount / 12)));
 
         setData(data);
+
+        //年間合計の表情画像表示
+        ImageView sum_year = root.findViewById(R.id.year_sum_face);
+        if (yearSumCount == 0) {
+            sum_year.setImageResource(R.drawable.level_0);
+        } else if (yearSumCount <= 10) {
+            sum_year.setImageResource(R.drawable.level_15);
+        } else if (yearSumCount <= 20) {
+            sum_year.setImageResource(R.drawable.level_510);
+        } else {
+            sum_year.setImageResource(R.drawable.level_max);
+        }
+        //最大最小の表情画像表示
+        ImageView min_mux = root.findViewById(R.id.min_max_face);
+        if (yearMaxCount == 0 || yearMinCount == 0) {
+            min_mux.setImageResource(R.drawable.level_0);
+        } else if (yearMaxCount <= 10 || yearMinCount <= 10) {
+            min_mux.setImageResource(R.drawable.level_15);
+        } else if (yearMaxCount <= 20 || yearMinCount <= 20) {
+            min_mux.setImageResource(R.drawable.level_510);
+        } else {
+            min_mux.setImageResource(R.drawable.level_max);
+        }
+        //年間平均の表情画像表示
+        ImageView ave_month = root.findViewById(R.id.year_ave_face);
+        if ((yearSumCount /MONTH) == 0) {
+            ave_month.setImageResource(R.drawable.level_0);
+        } else if ((yearSumCount / MONTH) <= 10) {
+            ave_month.setImageResource(R.drawable.level_15);
+        } else if ((yearSumCount / MONTH) <= 20) {
+            ave_month.setImageResource(R.drawable.level_510);
+        } else {
+            ave_month.setImageResource(R.drawable.level_max);
+        }
         return root;
     }
 
