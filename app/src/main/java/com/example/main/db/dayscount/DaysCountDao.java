@@ -27,6 +27,10 @@ public interface DaysCountDao {
     @Query("select count(*) from dayscount where date like :date")
     int getCount(String date);
 
+    //(開発用)DBの要素をすべて削除する
+    @Query("delete from dayscount")
+    void deleteAll();
+
     //デフォルト：要素を挿入
     @Insert
     void insertAll(DaysCount... daysCount);

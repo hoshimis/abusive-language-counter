@@ -32,8 +32,6 @@ import com.example.main.util.CircleView;
 import java.util.ArrayList;
 
 public class RecognitionFragment extends Fragment {
-
-
     //以下フィールド
     //以下音声認識に使う変数
     private final int PERMISSIONS_RECORD_AUDIO = 1000;
@@ -41,6 +39,7 @@ public class RecognitionFragment extends Fragment {
     private TextView mText;
     private TextView titleView;
     private TextView countText;
+    private ListView listView;
     //log.dで使う文字列
     private final String TAG = "MainActivity";
     //DBの宣言
@@ -52,6 +51,7 @@ public class RecognitionFragment extends Fragment {
 
     //リスト構造を宣言
     ArrayList<String> data = new ArrayList<>();
+    ArrayAdapter<String> adapter;
 
     /**
      * ActivityのようにFragmentにもライフサイクルがある
@@ -80,7 +80,8 @@ public class RecognitionFragment extends Fragment {
         mText = root.findViewById(R.id.recognize_text_view);
         titleView = root.findViewById(R.id.text_Recognition);
         countText = root.findViewById(R.id.count_text);
-        ListView listView = root.findViewById(R.id.listView);
+        listView = root.findViewById(R.id.listView);
+
 
         //データベースとの紐づけ
         wordDatabase = WordDatabaseSingleton.getInstance(requireActivity().getApplicationContext());
@@ -88,7 +89,6 @@ public class RecognitionFragment extends Fragment {
 
         //speechRecognizerにnullを代入
         speechRecognizer = null;
-
 
         //音声機能についてパーミッションを明示的にユーザにリクエストする処理
         if (ContextCompat.checkSelfPermission(requireActivity().getApplicationContext(), RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -105,12 +105,12 @@ public class RecognitionFragment extends Fragment {
         if (checkSpeechRecognizer()) {
             startRecording();
         }
-        // Adapterとリスト構造の結びつけ
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, data);
-        listView.setAdapter(adapter);
 
+        //adapterの設定
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, data);
+        listView.setAdapter(adapter);
         //暴言と認識された言葉を日時とともにリストビューに追加していく
-        new InsertListViewAsyncTask(getActivity(), countDatabase, data).execute();
+        new InsertListViewAsyncTask(getActivity(), countDatabase, data, adapter).execute();
         //ビュー作成時にデータベースから回数を取得してきて、画面に表示する
         new GetTodayCountAsyncTask(getActivity(), countDatabase, countText).execute();
 
@@ -210,7 +210,6 @@ public class RecognitionFragment extends Fragment {
     public void onPause() {
         super.onPause();
         speechRecognizer.destroy();
-
     }
 
     /**
@@ -295,11 +294,7 @@ public class RecognitionFragment extends Fragment {
                 mText.setText(str);
                 //ここで、認識した言葉を非同期処理に渡して、マッチするかを確認する
                 new DataStoreAsyncTask(getActivity(), countDatabase, wordDatabase, str, CountTextView).execute();
-                Log.d(TAG, "onPartialResults: データを認識しているよ！！");
-
-                Log.d(TAG, "onPartialResults: リストビューに挿入するよ！");
-                new InsertListViewAsyncTask(getActivity(), countDatabase, data).execute();
-                Log.d(TAG, "onPartialResults: 書き込みのためにすこしだけ待つよ！！");
+                new InsertListViewAsyncTask(getActivity(), countDatabase, data, adapter).execute();
             }
         }
 
@@ -307,7 +302,6 @@ public class RecognitionFragment extends Fragment {
         @Override
         public void onEvent(int i, Bundle bundle) {
             Log.d(TAG, "onEvent: eventType=" + i);
-
         }
     }
 

@@ -63,6 +63,9 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
 //            wordTableDao.insert(new WordTable("ハゲ"));
 //            wordTableDao.insert(new WordTable("おはよう"));
 //            wordTableDao.insert(new WordTable("ばーか"));
+//            wordTableDao.insert(new WordTable("今日は"));
+
+
 
         //単語DBからすべてのワードを取得してリストに代入する。
         List<WordTable> atList = wordTableDao.getAll();

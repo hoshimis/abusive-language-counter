@@ -69,7 +69,7 @@ public class GraphWeekFragment extends Fragment {
         //→await, promiseみたいな感じで、非同期処理が終了したらメインスレッドを始めるみたいな
         //逐次処理的なことをしたかった
         try {
-            Thread.sleep(20);
+            Thread.sleep(30);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

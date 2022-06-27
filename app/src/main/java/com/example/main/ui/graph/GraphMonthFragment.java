@@ -31,7 +31,7 @@ import java.util.List;
 public class GraphMonthFragment extends Fragment {
     /*フィールド*/
     //maker Ryo Kamizato feat シュトゥーデューム
-    private BarChart mchart;
+    private BarChart mChart;
     private Typeface tfRegular;
 
     //日付取得機能の準備
@@ -56,13 +56,13 @@ public class GraphMonthFragment extends Fragment {
         TextView monthSum = root.findViewById(R.id.monthSum);
         TextView comparedBeforeMonth = root.findViewById(R.id.comparedBeforeMonth);
         TextView monthAverage = root.findViewById(R.id.monthAverage);
-        mchart = root.findViewById(R.id.chart2);
+        mChart = root.findViewById(R.id.chart2);
 
         //今月の合計値を格納する為の変数
         int monthSumCount = 0;
 
         //グラフの描画
-        setGraph(mchart);
+        setGraph(mChart);
 
         //グラフに表示するカウント数をここでDBに接続して挿入しておく
         CountDatabase countDatabase = CountDatabaseSingleton.getInstance(requireActivity().getApplicationContext());
@@ -70,7 +70,7 @@ public class GraphMonthFragment extends Fragment {
 
         //DBからデータを取得してくる前にグラフの描画が終わってしまうのですこしだけメインスレッドを止める
         try {
-            Thread.sleep(55);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -133,12 +133,12 @@ public class GraphMonthFragment extends Fragment {
 
         BarDataSet set;
 
-        if (mchart.getData() != null &&
-                mchart.getData().getDataSetCount() > 0) {
-            set = (BarDataSet) mchart.getData().getDataSetByIndex(0);
+        if (mChart.getData() != null &&
+                mChart.getData().getDataSetCount() > 0) {
+            set = (BarDataSet) mChart.getData().getDataSetByIndex(0);
             set.setValues(values);
-            mchart.getData().notifyDataChanged();
-            mchart.notifyDataSetChanged();
+            mChart.getData().notifyDataChanged();
+            mChart.notifyDataSetChanged();
         } else {
             set = new BarDataSet(values, "Values");
             set.setColors(colors);
@@ -150,25 +150,25 @@ public class GraphMonthFragment extends Fragment {
             data.setValueFormatter(new ValueFormatter());
             data.setBarWidth(0.8f);
 
-            mchart.setData(data);
-            mchart.invalidate();
+            mChart.setData(data);
+            mChart.invalidate();
         }
     }
 
-    private void setGraph(BarChart mchart) {
-        mchart.setBackgroundColor(-35);
-        mchart.setExtraTopOffset(0);
-        mchart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
-        mchart.setExtraLeftOffset(0);
-        mchart.setExtraRightOffset(0);
-        mchart.setDrawBarShadow(false);
-        mchart.setDrawValueAboveBar(true);
-        mchart.getDescription().setEnabled(false);
+    private void setGraph(BarChart mChart) {
+        mChart.setBackgroundColor(-35);
+        mChart.setExtraTopOffset(0);
+        mChart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
+        mChart.setExtraLeftOffset(0);
+        mChart.setExtraRightOffset(0);
+        mChart.setDrawBarShadow(false);
+        mChart.setDrawValueAboveBar(true);
+        mChart.getDescription().setEnabled(false);
         // scaling can now only be done on x- and y-axis separately
-        mchart.setPinchZoom(true);
-        mchart.setDrawGridBackground(false);
+        mChart.setPinchZoom(true);
+        mChart.setDrawGridBackground(false);
 
-        XAxis xAxis = mchart.getXAxis();
+        XAxis xAxis = mChart.getXAxis();
 
         //x軸の値を格納する　→　日付
         int x = Integer.parseInt(MONTH);
@@ -214,7 +214,7 @@ public class GraphMonthFragment extends Fragment {
         xAxis.setCenterAxisLabels(false);
         xAxis.setGranularity(1);
 
-        YAxis left = mchart.getAxisLeft();
+        YAxis left = mChart.getAxisLeft();
         left.setDrawLabels(false); //格子の横線
         left.setSpaceTop(25f);
         left.setSpaceBottom(0);//値が０でもx軸から離れないようにするために０にする
@@ -223,8 +223,8 @@ public class GraphMonthFragment extends Fragment {
         left.setDrawZeroLine(true); // draw a zero line
         left.setZeroLineColor(Color.GRAY);
         left.setZeroLineWidth(0.7f);
-        mchart.getAxisRight().setEnabled(false);
-        mchart.getLegend().setEnabled(false);
+        mChart.getAxisRight().setEnabled(false);
+        mChart.getLegend().setEnabled(false);
     }
 
     private int getLastDay(int month) {
