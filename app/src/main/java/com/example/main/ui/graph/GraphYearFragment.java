@@ -30,6 +30,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GraphYearFragment extends Fragment {
@@ -159,6 +160,7 @@ public class GraphYearFragment extends Fragment {
         ArrayList<BarEntry> values = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
 
+        int origin=Color.rgb(184,90,78);
         int green = Color.rgb(110, 190, 102);
         int red = Color.rgb(211, 74, 88);
 
@@ -185,8 +187,8 @@ public class GraphYearFragment extends Fragment {
             mchart.notifyDataSetChanged();
         } else {
             set = new BarDataSet(values, "Values");
-            set.setColors(colors);
-            set.setValueTextColors(colors);
+            set.setColors(origin);//棒グラフの色
+            set.setValueTextColors(Collections.singletonList(origin));//グラフ上の文字の色
 
             BarData data = new BarData(set);
             data.setValueTextSize(13f);

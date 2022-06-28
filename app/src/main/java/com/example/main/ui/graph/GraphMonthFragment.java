@@ -27,6 +27,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GraphMonthFragment extends Fragment {
@@ -154,13 +155,14 @@ public class GraphMonthFragment extends Fragment {
         ArrayList<BarEntry> values = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
 
+        int origin=Color.rgb(184,90,78);
         int green = Color.rgb(110, 190, 102);
         int red = Color.rgb(211, 74, 88);
 
         for (int i = 0; i < dataList.size(); i++) {
 
             Data d = dataList.get(i);
-            BarEntry entry = new BarEntry(d.xValue, d.yValue);
+                BarEntry entry = new BarEntry(d.xValue, d.yValue);
             values.add(entry);
 
             // specific colors
@@ -180,8 +182,8 @@ public class GraphMonthFragment extends Fragment {
             mChart.notifyDataSetChanged();
         } else {
             set = new BarDataSet(values, "Values");
-            set.setColors(colors);
-            set.setValueTextColors(colors);
+            set.setColors(origin);//棒グラフの色
+            set.setValueTextColors(Collections.singletonList(origin));//グラフ上の文字の色
 
             BarData data = new BarData(set);
             data.setValueTextSize(13f);

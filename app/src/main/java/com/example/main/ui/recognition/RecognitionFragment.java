@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -96,8 +97,20 @@ public class RecognitionFragment extends Fragment {
         }
 
         //画面に正円を描画するための処理
-        CircleView circleView = root.findViewById(R.id.circle_view);
-        circleView.setColor(R.color.teal_200);
+//        CircleView circleView = root.findViewById(R.id.circle_view);
+//        circleView.setColor(R.color.teal_200);
+
+        //ちくちくの画像がカウント回数によって変化する処理
+        ImageView gizagiza_image= root.findViewById(R.id.count_image);
+        if(count==0){
+            gizagiza_image.setImageResource(R.drawable.count_level_1);
+        }else if(count<=10){
+            gizagiza_image.setImageResource(R.drawable.count_level_2);
+        }else if(count<=20){
+            gizagiza_image.setImageResource(R.drawable.count_level_3);
+        }else{
+            gizagiza_image.setImageResource(R.drawable.count_level_4);
+        }
 
         //SpeechRecognizerを使用することができるか確認する
         checkSpeechRecognizer();
