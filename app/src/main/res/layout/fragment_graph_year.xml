@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".ui.graph.GraphYearFragment"
-    android:layout_marginBottom="60dp"
+    android:layout_marginBottom="45dp"
     >
     <!--    idは全て日本語をローマ字で打っています-->
     //年間画面
