@@ -3,8 +3,10 @@ package com.example.main.ui.recognition;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.main.R;
 import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.DaysCount;
 import com.example.main.db.dayscount.DaysCountDao;
@@ -30,19 +32,21 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
     private WordDatabase wordDatabase;
     //音声認識した言葉をここに入力する
     private String speechText;
+    private  ImageView gizagiza;
     //マッチした回数を表示するテキストビュー
     private TextView countText;
     //日付取得機能の準備
     GetDay gt = new GetDay();
 
     //コンストラクタ―
-    public DataStoreAsyncTask(Activity activity, CountDatabase countDatabase, WordDatabase wordDatabase, String speechText, TextView countText) {
+    public DataStoreAsyncTask(Activity activity, CountDatabase countDatabase, WordDatabase wordDatabase, String speechText, TextView countText, ImageView gizagiza) {
         //ここで、インスタンス化した時に渡された引数の値をフィールドの値に代入する
         weakReference = new WeakReference<>(activity);
         this.countDatabase = countDatabase;
         this.wordDatabase = wordDatabase;
         this.speechText = speechText;
         this.countText = countText;
+        this.gizagiza=gizagiza;
     }
 
     //AsyncTaskの実装
@@ -99,5 +103,17 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
         //DBから今日の日付分の回数を取得してテキスト
         Log.d(TAG, "onPostExecute: " + RecognitionFragment.count);
         countText.setText(String.valueOf(RecognitionFragment.count));
+        //ちくちくの画像がカウント回数によって変化する処理
+        if(RecognitionFragment.count==0){
+            gizagiza.setImageResource(R.drawable.count_level_1);
+        }else if(RecognitionFragment.count<=10){
+            gizagiza.setImageResource(R.drawable.count_level_2);
+        }else if(RecognitionFragment.count<=20){
+            gizagiza.setImageResource(R.drawable.count_level_3);
+        }else if(RecognitionFragment.count<=30){
+            gizagiza.setImageResource(R.drawable.count_level_4);
+        }else{
+            gizagiza.setImageResource(R.drawable.count_level_5);
+        }
     }
 }

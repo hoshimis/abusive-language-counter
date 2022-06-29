@@ -41,6 +41,7 @@ public class RecognitionFragment extends Fragment {
     private TextView titleView;
     private TextView countText;
     private ListView listView;
+    private ImageView gizagiza_image;
     //log.dで使う文字列
     private final String TAG = "MainActivity";
     //DBの宣言
@@ -82,6 +83,7 @@ public class RecognitionFragment extends Fragment {
         titleView = root.findViewById(R.id.text_Recognition);
         countText = root.findViewById(R.id.count_text);
         listView = root.findViewById(R.id.listView);
+        gizagiza_image=root.findViewById(R.id.count_image);
 
 
         //データベースとの紐づけ
@@ -100,17 +102,7 @@ public class RecognitionFragment extends Fragment {
 //        CircleView circleView = root.findViewById(R.id.circle_view);
 //        circleView.setColor(R.color.teal_200);
 
-        //ちくちくの画像がカウント回数によって変化する処理
-        ImageView gizagiza_image= root.findViewById(R.id.count_image);
-        if(count==0){
-            gizagiza_image.setImageResource(R.drawable.count_level_1);
-        }else if(count<=10){
-            gizagiza_image.setImageResource(R.drawable.count_level_2);
-        }else if(count<=20){
-            gizagiza_image.setImageResource(R.drawable.count_level_3);
-        }else{
-            gizagiza_image.setImageResource(R.drawable.count_level_4);
-        }
+
 
         //SpeechRecognizerを使用することができるか確認する
         checkSpeechRecognizer();
@@ -306,7 +298,7 @@ public class RecognitionFragment extends Fragment {
             if (str.length() > 0) {
                 mText.setText(str);
                 //ここで、認識した言葉を非同期処理に渡して、マッチするかを確認する
-                new DataStoreAsyncTask(getActivity(), countDatabase, wordDatabase, str, CountTextView).execute();
+                new DataStoreAsyncTask(getActivity(), countDatabase, wordDatabase, str, CountTextView,gizagiza_image).execute();
                 new InsertListViewAsyncTask(getActivity(), countDatabase, data, adapter).execute();
             }
         }
