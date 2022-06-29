@@ -1,11 +1,8 @@
 package com.example.main.ui.graph;
 
-import static android.content.ContentValues.TAG;
-
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.main.R;
 import com.example.main.db.dayscount.CountDatabase;
@@ -49,7 +45,7 @@ public class GraphWeekFragment extends Fragment {
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        GraphViewModel dashboardViewModel = new ViewModelProvider(this).get(GraphViewModel.class);
+//        GraphViewModel dashboardViewModel = new ViewModelProvider(this).get(GraphViewModel.class);
         View root = inflater.inflate(R.layout.fragment_graph_week, container, false);
 
         //XMLとの紐づけ
@@ -71,7 +67,7 @@ public class GraphWeekFragment extends Fragment {
         //→await, promiseみたいな感じで、非同期処理が終了したらメインスレッドを始めるみたいな
         //逐次処理的なことをしたかった
         try {
-            Thread.sleep(30);
+            Thread.sleep(60);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -111,36 +107,36 @@ public class GraphWeekFragment extends Fragment {
         setData(data);
 
         //合計の表情画像表示
-        ImageView sum_today= root.findViewById(R.id.today_sum_face);
-        if(weekCount[0]==0){
+        ImageView sum_today = root.findViewById(R.id.today_sum_face);
+        if (weekCount[0] == 0) {
             sum_today.setImageResource(R.drawable.level_0);
-        }else if(weekCount[0]<=10){
+        } else if (weekCount[0] <= 10) {
             sum_today.setImageResource(R.drawable.level_15);
-        }else if(weekCount[0]<=20){
+        } else if (weekCount[0] <= 20) {
             sum_today.setImageResource(R.drawable.level_510);
-        }else{
+        } else {
             sum_today.setImageResource(R.drawable.level_max);
         }
         //前日比の表情画像表示
-        ImageView  compared_yesterday= root.findViewById(R.id.comparedYesterday_face);
-        if(weekCount[0] - weekCount[1]==0){
+        ImageView compared_yesterday = root.findViewById(R.id.comparedYesterday_face);
+        if (weekCount[0] - weekCount[1] == 0) {
             compared_yesterday.setImageResource(R.drawable.level_0);
-        }else if(weekCount[0] - weekCount[1]<=10){
+        } else if (weekCount[0] - weekCount[1] <= 10) {
             compared_yesterday.setImageResource(R.drawable.level_15);
-        }else if(weekCount[0] - weekCount[1]<=20){
+        } else if (weekCount[0] - weekCount[1] <= 20) {
             compared_yesterday.setImageResource(R.drawable.level_510);
-        }else{
+        } else {
             compared_yesterday.setImageResource(R.drawable.level_max);
         }
         //週間合計の表情画像表示
-        ImageView  sum_week= root.findViewById(R.id.week_sum_face);
-        if(weekSumCount==0){
+        ImageView sum_week = root.findViewById(R.id.week_sum_face);
+        if (weekSumCount == 0) {
             sum_week.setImageResource(R.drawable.level_0);
-        }else if(weekSumCount<=10){
+        } else if (weekSumCount <= 10) {
             sum_week.setImageResource(R.drawable.level_15);
-        }else if(weekSumCount<=20){
+        } else if (weekSumCount <= 20) {
             sum_week.setImageResource(R.drawable.level_510);
-        }else{
+        } else {
             sum_week.setImageResource(R.drawable.level_max);
         }
 
@@ -203,7 +199,7 @@ public class GraphWeekFragment extends Fragment {
         ArrayList<BarEntry> values = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
 
-        int origin=Color.rgb(184,90,78);
+        int origin = Color.rgb(184, 90, 78);
         int green = Color.rgb(110, 190, 102);
         int red = Color.rgb(211, 74, 88);
 

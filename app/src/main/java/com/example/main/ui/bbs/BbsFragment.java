@@ -31,11 +31,10 @@ public class BbsFragment extends Fragment implements AdapterView.OnItemLongClick
     private BbsViewModel notificationsViewModel;
 
     //Realtime Databaseを使った掲示板の作成
-    //最初は、Firestoreを使おうとしたけど分かりずらかったからRealtimeDatabaseを使うことにします。
+    //最初は、FireStoreを使おうとしたけど分かりずらかったからRealtimeDatabaseを使うことにします。
 
     private FirebaseDatabase db;
     private DatabaseReference reference;
-
 
     private CustomAdapter mCustomAdapter;
     private ListView mListView;

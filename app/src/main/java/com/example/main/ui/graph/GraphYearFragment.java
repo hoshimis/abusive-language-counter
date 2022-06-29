@@ -76,7 +76,7 @@ public class GraphYearFragment extends Fragment {
 
         //DBからデータを取得してくる前にグラフの描画が終わってしまうのですこしだけメインスレッドを止める
         try {
-            Thread.sleep(75);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

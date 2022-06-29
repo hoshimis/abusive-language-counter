@@ -1,7 +1,5 @@
 package com.example.main.ui.recognition;
 
-import static android.Manifest.permission.RECORD_AUDIO;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -28,9 +26,10 @@ import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.CountDatabaseSingleton;
 import com.example.main.db.wordtable.WordDatabase;
 import com.example.main.db.wordtable.WordDatabaseSingleton;
-import com.example.main.util.CircleView;
 
 import java.util.ArrayList;
+
+import static android.Manifest.permission.RECORD_AUDIO;
 
 public class RecognitionFragment extends Fragment {
     //以下フィールド
@@ -79,11 +78,11 @@ public class RecognitionFragment extends Fragment {
         //titleView -> 音声認識の状態を表示する部分のテキストビューを紐づけ
         //countText -> 単語DBと何回マッチしたかを表示するテキストビューの紐づけ
         //listView -> その日になんの言葉を話したか表示するListViewの紐づけ
-        mText = root.findViewById(R.id.recognize_text_view);
-        titleView = root.findViewById(R.id.text_Recognition);
+//        mText = root.findViewById(R.id.recognize_text_view);
+//        titleView = root.findViewById(R.id.text_Recognition);
         countText = root.findViewById(R.id.count_text);
         listView = root.findViewById(R.id.listView);
-        gizagiza_image=root.findViewById(R.id.count_image);
+        gizagiza_image = root.findViewById(R.id.count_image);
 
 
         //データベースとの紐づけ
@@ -103,7 +102,6 @@ public class RecognitionFragment extends Fragment {
 //        circleView.setColor(R.color.teal_200);
 
 
-
         //SpeechRecognizerを使用することができるか確認する
         checkSpeechRecognizer();
         //使用できるならば、レコーディングを開始する
@@ -117,7 +115,7 @@ public class RecognitionFragment extends Fragment {
         //暴言と認識された言葉を日時とともにリストビューに追加していく
         new InsertListViewAsyncTask(getActivity(), countDatabase, data, adapter).execute();
         //ビュー作成時にデータベースから回数を取得してきて、画面に表示する
-        new GetTodayCountAsyncTask(getActivity(), countDatabase, countText).execute();
+        new GetTodayCountAsyncTask(getActivity(), countDatabase, countText, gizagiza_image).execute();
 
         return root;
     }
@@ -163,7 +161,7 @@ public class RecognitionFragment extends Fragment {
 
         if (requestCode == PERMISSIONS_RECORD_AUDIO) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                mText.setText("");
+//                mText.setText("");
             }
         }
     }
@@ -175,12 +173,13 @@ public class RecognitionFragment extends Fragment {
      */
     public void startRecording() {
         if (speechRecognizer == null && checkSpeechRecognizer()) {
-            titleView.setText(getString(R.string.prepare_speech));
+//            titleView.setText(getString(R.string.prepare_speech));
             speechRecognizer = SpeechRecognizer.createSpeechRecognizer(getActivity());
             speechRecognizer.setRecognitionListener(new listener(countDatabase, wordDatabase, countText));
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
             intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, requireActivity().getPackageName());
+            intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
             //以下指定で途中の認識を拾う
             intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
             speechRecognizer.startListening(intent);
@@ -189,7 +188,7 @@ public class RecognitionFragment extends Fragment {
 
     //SpeechRecognizerをキャンセルして破棄
     public void stopRecording() {
-        titleView.setText("停止中");
+//        titleView.setText("停止中");
         if (speechRecognizer != null && checkSpeechRecognizer()) {
             speechRecognizer.stopListening();
             speechRecognizer.cancel();
@@ -244,8 +243,8 @@ public class RecognitionFragment extends Fragment {
         @Override
         public void onBeginningOfSpeech() {
             Log.d(TAG, "onBeginningOfSpeech");
-            titleView.setText("開始");
-            mText.setText("");
+//            titleView.setText("開始");
+//            mText.setText("");
         }
 
         //音声レベルの変化されたら、呼び出される
@@ -264,10 +263,10 @@ public class RecognitionFragment extends Fragment {
         //一度入力が終わったら停止したのちに音声入力を再開する
         @Override
         public void onEndOfSpeech() {
-            titleView.setText("停止");
+//            titleView.setText("停止");
             Log.d(TAG, "onEndOfSpeech");
             stopRecording();
-            continuationRecording();
+            startRecording();
         }
 
         //ネットワークエラー、音声入力に関するエラーが発生したら呼び出される
@@ -280,8 +279,10 @@ public class RecognitionFragment extends Fragment {
                 startRecording();
                 return;
             }
-            mText.setText(getString(R.string.speech_error, error));
+            //mText.setText(getString(R.string.speech_error, error));
+            mText.setText("エラーが発生しました。");
             stopRecording();
+
         }
 
         //音声入力が終わり、結果が準備できたら呼び出される
@@ -296,9 +297,9 @@ public class RecognitionFragment extends Fragment {
             Log.d(TAG, "onPartialResults");
             String str = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).get(0);
             if (str.length() > 0) {
-                mText.setText(str);
+                //mText.setText(str);
                 //ここで、認識した言葉を非同期処理に渡して、マッチするかを確認する
-                new DataStoreAsyncTask(getActivity(), countDatabase, wordDatabase, str, CountTextView,gizagiza_image).execute();
+                new DataStoreAsyncTask(getActivity(), countDatabase, wordDatabase, str, CountTextView, gizagiza_image).execute();
                 new InsertListViewAsyncTask(getActivity(), countDatabase, data, adapter).execute();
             }
         }

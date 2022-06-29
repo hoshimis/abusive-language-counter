@@ -24,9 +24,12 @@ public interface WordTableDao {
     @Query("select * from wordtable where id in (:ids)")
     List<WordTable> loadAllByIds(int[] ids);
 
-    //オートインクリメントのリセット
+    //（開発用）オートインクリメントのリセット
     @Query("delete from sqlite_sequence where name='wordtable'")
     void autoIncrementReset();
+
+    @Query("insert into wordtable (word, other) values ('ブス','暴言')")
+    void insertValue();
 
     //デフォルト：データを挿入
     @Insert

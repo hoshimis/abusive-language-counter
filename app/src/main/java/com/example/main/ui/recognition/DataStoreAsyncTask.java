@@ -103,6 +103,7 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
         //DBから今日の日付分の回数を取得してテキスト
         Log.d(TAG, "onPostExecute: " + RecognitionFragment.count);
         countText.setText(String.valueOf(RecognitionFragment.count));
+
         //ちくちくの画像がカウント回数によって変化する処理
         if(RecognitionFragment.count==0){
             gizagiza.setImageResource(R.drawable.count_level_1);

@@ -32,7 +32,7 @@ import java.util.List;
 
 public class GraphMonthFragment extends Fragment {
     /*フィールド*/
-    //maker Ryo Kamizato feat シュトゥーデューム
+    /* maker Ryo Kamizato feat シュトゥーデューム */
     private BarChart mChart;
     private Typeface tfRegular;
 
@@ -72,7 +72,7 @@ public class GraphMonthFragment extends Fragment {
 
         //DBからデータを取得してくる前にグラフの描画が終わってしまうのですこしだけメインスレッドを止める
         try {
-            Thread.sleep(100);
+            Thread.sleep(150);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -141,13 +141,8 @@ public class GraphMonthFragment extends Fragment {
         }else{
             ave_month.setImageResource(R.drawable.level_max);
         }
-
-
-
         return root;
     }
-
-
 
 
     private void setData(List<Data> dataList) {
@@ -275,7 +270,6 @@ public class GraphMonthFragment extends Fragment {
             return 31;
         }
     }
-
 
     private static class ValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
         @Override
