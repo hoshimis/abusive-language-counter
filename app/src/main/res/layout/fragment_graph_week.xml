@@ -12,7 +12,7 @@
     tools:context=".ui.graph.GraphWeekFragment"
     android:gravity="center"
     android:background="#FFFFDD"
-    android:layout_marginBottom="60dp"
+    android:layout_marginBottom="45dp"
     >
     <!--    idは全て日本語をローマ字で打っています-->
     //週間画面
