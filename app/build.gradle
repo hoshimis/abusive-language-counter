@@ -54,7 +54,7 @@ dependencies {
     //MPAndroidChart:v3.1.0の追加
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
-    //firebaseAとの連携
+    //firebaseとの連携
     implementation platform('com.google.firebase:firebase-bom:29.3.1')
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-analytics'

@@ -17,13 +17,13 @@
 <!--        android:textSize="32sp" />-->
 
     <!--    以下が音声入力された物を表示＆音声入力開始＆音声入力停止（開発用）-->
-<!--    <TextView-->
-<!--        android:id="@+id/recognize_text_view"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:gravity="center"-->
-<!--        android:text=""-->
-<!--        android:textSize="32sp" />-->
+    <TextView
+        android:id="@+id/recognize_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text=""
+        android:textSize="32sp" />
 
     <!--    以下が音声入力された物を表示＆音声入力開始＆音声入力停止-->
 
