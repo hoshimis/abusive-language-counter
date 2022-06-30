@@ -37,9 +37,8 @@ public class GraphYearFragment extends Fragment {
     /*フィールド*/
     //maker Ryo Kamizato feat シュトゥーデューム
 
-    private BarChart mchart;
+    private BarChart mChart;
     private Typeface tfRegular;
-    private LineChart mChart;
     //年間の回数を格納する配列を宣言
     static int[] yearCount = new int[12];
 
@@ -65,10 +64,10 @@ public class GraphYearFragment extends Fragment {
         TextView yearSum = root.findViewById(R.id.yearSumCount);
         TextView yearMax = root.findViewById(R.id.monthMinMax);
         TextView yearAverage = root.findViewById(R.id.yearAverage);
-        mchart = root.findViewById(R.id.chart2);
+        mChart = root.findViewById(R.id.chart2);
 
         //グラフの描画
-        setGraph(mchart);
+        setGraph(mChart);
 
         //グラフに表示するカウント数をここでDBに接続して挿入しておく
         CountDatabase countDatabase = CountDatabaseSingleton.getInstance(requireActivity().getApplicationContext());
@@ -81,6 +80,7 @@ public class GraphYearFragment extends Fragment {
             e.printStackTrace();
         }
 
+        //画面遷移するためのボタン
         root.findViewById(R.id.week).setOnClickListener(
                 view -> {
                     Fragment toWeek = new GraphWeekFragment();
@@ -179,12 +179,12 @@ public class GraphYearFragment extends Fragment {
 
         BarDataSet set;
 
-        if (mchart.getData() != null &&
-                mchart.getData().getDataSetCount() > 0) {
-            set = (BarDataSet) mchart.getData().getDataSetByIndex(0);
+        if (mChart.getData() != null &&
+                mChart.getData().getDataSetCount() > 0) {
+            set = (BarDataSet) mChart.getData().getDataSetByIndex(0);
             set.setValues(values);
-            mchart.getData().notifyDataChanged();
-            mchart.notifyDataSetChanged();
+            mChart.getData().notifyDataChanged();
+            mChart.notifyDataSetChanged();
         } else {
             set = new BarDataSet(values, "Values");
             set.setColors(origin);//棒グラフの色
@@ -196,25 +196,25 @@ public class GraphYearFragment extends Fragment {
             data.setValueFormatter(new ValueFormatter());
             data.setBarWidth(0.8f);
 
-            mchart.setData(data);
-            mchart.invalidate();
+            mChart.setData(data);
+            mChart.invalidate();
         }
     }
 
-    private void setGraph(BarChart mchart) {
-        mchart.setBackgroundColor(-35);
-        mchart.setExtraTopOffset(0);
-        mchart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
-        mchart.setExtraLeftOffset(0);
-        mchart.setExtraRightOffset(0);
-        mchart.setDrawBarShadow(false);
-        mchart.setDrawValueAboveBar(true);
-        mchart.getDescription().setEnabled(false);
+    private void setGraph(BarChart mChart) {
+        mChart.setBackgroundColor(-35);
+        mChart.setExtraTopOffset(0);
+        mChart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
+        mChart.setExtraLeftOffset(0);
+        mChart.setExtraRightOffset(0);
+        mChart.setDrawBarShadow(false);
+        mChart.setDrawValueAboveBar(true);
+        mChart.getDescription().setEnabled(false);
         // scaling can now only be done on x- and y-axis separately
-        mchart.setPinchZoom(true);
-        mchart.setDrawGridBackground(false);
+        mChart.setPinchZoom(true);
+        mChart.setDrawGridBackground(false);
 
-        XAxis xAxis = mchart.getXAxis();
+        XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxisPosition.BOTTOM);
         xAxis.setTypeface(tfRegular);
         xAxis.setDrawGridLines(false); //グラフ上の縦線
@@ -225,7 +225,7 @@ public class GraphYearFragment extends Fragment {
         xAxis.setCenterAxisLabels(false);
         xAxis.setGranularity(1);
 
-        YAxis left = mchart.getAxisLeft();
+        YAxis left = mChart.getAxisLeft();
         left.setDrawLabels(false); //格子の横線
         left.setSpaceTop(25f);
         left.setSpaceBottom(0);//値が０でもx軸から離れないようにするために０にする
@@ -234,8 +234,8 @@ public class GraphYearFragment extends Fragment {
         left.setDrawZeroLine(true); // draw a zero line
         left.setZeroLineColor(-16777216);
         left.setZeroLineWidth(0.7f);
-        mchart.getAxisRight().setEnabled(false);
-        mchart.getLegend().setEnabled(false);
+        mChart.getAxisRight().setEnabled(false);
+        mChart.getLegend().setEnabled(false);
     }
 
     private static class ValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
