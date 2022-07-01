@@ -208,7 +208,7 @@ public class GraphMonthFragment extends Fragment {
 
         //x軸の値を格納する　→　日付
         int x = Integer.parseInt(MONTH);
-        String[] label = new String[31];
+        String[] label = new String[32];
         switch (x) {
             case 1:
             case 3:
