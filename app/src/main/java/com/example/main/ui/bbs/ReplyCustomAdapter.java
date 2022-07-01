@@ -14,13 +14,13 @@ import com.example.main.R;
 
 import java.util.List;
 
-public class CustomAdapter extends ArrayAdapter<BbsData> {
-    private List<BbsData> mCards;
+public class ReplyCustomAdapter extends ArrayAdapter<ReplyData> {
+    private List<ReplyData> mCards;
 
-    public CustomAdapter(Context context, int layoutResourceId, List<BbsData> BBSData) {
-        super(context, layoutResourceId, BBSData);
+    public ReplyCustomAdapter(Context context, int layoutResourceId, List<ReplyData> ReplyData) {
+        super(context, layoutResourceId, ReplyData);
 
-        this.mCards = BBSData;
+        this.mCards = ReplyData;
     }
 
     @Override
@@ -30,41 +30,39 @@ public class CustomAdapter extends ArrayAdapter<BbsData> {
 
     @Nullable
     @Override
-    public BbsData getItem(int position) {
+    public ReplyData getItem(int position) {
         return mCards.get(position);
     }
 
     @NonNull
     @Override
     public android.view.View getView(final int position, @Nullable View convertView, @NonNull final ViewGroup parent) {
-        final ViewHolder viewHolder;
+        final ReplyCustomAdapter.ViewHolder viewHolder;
 
         if (convertView != null) {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (ReplyCustomAdapter.ViewHolder) convertView.getTag();
 
         } else {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.card_view, null);
-            viewHolder = new ViewHolder();
+            viewHolder = new ReplyCustomAdapter.ViewHolder();
 
             viewHolder.titleTextView = (TextView) convertView.findViewById(R.id.title_text_view);
-            viewHolder.contentTextView = (TextView) convertView.findViewById(R.id.content_text_view);
             convertView.setTag(viewHolder);
 
         }
 
-        BbsData BBSData = mCards.get(position);
+        ReplyData replyData = mCards.get(position);
 
-        viewHolder.titleTextView.setText(BBSData.getTitle());
-        viewHolder.contentTextView.setText(BBSData.getContent());
+        viewHolder.titleTextView.setText(replyData.getComment());
 
         return convertView;
     }
 
 
-    public BbsData getBBSDataKey(String key) {
-        for (BbsData BBSData : mCards) {
-            if (BBSData.getFirebaseKey().equals(key)) {
-                return BBSData;
+    public ReplyData getReplyDataKey(String key) {
+        for (ReplyData ReplyData : mCards) {
+            if (ReplyData.getReplyKey().equals(key)) {
+                return ReplyData;
             }
         }
 
@@ -73,7 +71,6 @@ public class CustomAdapter extends ArrayAdapter<BbsData> {
 
     static class ViewHolder {
         TextView titleTextView;
-        TextView contentTextView;
     }
 
 }

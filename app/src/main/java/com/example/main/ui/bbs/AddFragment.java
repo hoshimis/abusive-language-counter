@@ -21,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class AddFragment extends Fragment {
 
     FirebaseDatabase db = FirebaseDatabase.getInstance();
-    DatabaseReference reference = db.getReference();;
+    DatabaseReference reference = db.getReference();
 
     //xmlとの紐づけ用の変数
     private EditText titleEditText, contentEditText;
