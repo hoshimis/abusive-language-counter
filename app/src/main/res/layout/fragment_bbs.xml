@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
 
     android:layout_marginBottom="60dp"
-    android:orientation="vertical"
     android:background="#FFFFDD"
     android:orientation="vertical"
     tools:context=".ui.bbs.BbsFragment">
