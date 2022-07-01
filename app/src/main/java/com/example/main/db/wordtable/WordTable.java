@@ -4,12 +4,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-
-/**
- * Entity
- * 主キーやカラムを示すためのアノテーションをつける
- */
-
 /**
  * 単語データベース
  * 暴言とか言い換えの言葉とかのテーブルを定義する
@@ -21,7 +15,7 @@ public class WordTable {
 
     //カラム　認識する言葉
     @ColumnInfo(name = "word")
-    private String word;
+    private final String word;
 
     //実際に動かせてはいないけど、認識する言葉に対応した言い換えの言葉とかを入れれたらいいなぁ
     @ColumnInfo(name = "other")
@@ -40,9 +34,6 @@ public class WordTable {
         return id;
     }
 
-    public void setWord(String word) {
-        this.word = word;
-    }
 
     public void setOther(String other) {
         this.other = other;
