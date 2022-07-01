@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="60dp"
-    android:orientation="vertical"
     android:background="#FFFFDD"
+    android:orientation="vertical"
     tools:context=".ui.bbs.BbsFragment">
 
     <LinearLayout
@@ -25,14 +25,13 @@
             android:orientation="horizontal">
 
 
-
             <Button
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
                 android:id="@+id/add_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="スレッドを作成する"  />
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:text="スレッドを作成する" />
         </LinearLayout>
 
     </LinearLayout>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFDD"
+    tools:context=".ui.bbs.ReplyActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="もどる" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textVIew3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="本文"
+                android:textSize="45sp" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/list_view2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <EditText
+                android:id="@+id/comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:hint="コメントを入力"
+                android:singleLine="true"
+                android:textSize="32sp"/>
+            <Button
+                android:id="@+id/add_button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="saveQuote2"
+                android:text="返信"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>
