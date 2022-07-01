@@ -21,7 +21,7 @@
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Appnav">
-        <activity android:name=".ui.bbs.ReplyActivity"></activity>
+        <activity android:name=".ui.bbs.ReplyFragment"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"

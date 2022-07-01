@@ -12,11 +12,11 @@ public class DaysCount {
 
     //カラム　日付
     @ColumnInfo(name = "date")
-    private String date;
+    private final String date;
 
     //カラム　日付
     @ColumnInfo(name = "word")
-    private String word;
+    private final String word;
 
     //コンストラクタ―
     public DaysCount(String date, String word) {

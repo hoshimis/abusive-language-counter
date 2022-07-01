@@ -4,7 +4,6 @@ import static android.content.ContentValues.TAG;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -184,9 +183,22 @@ public class BbsFragment extends Fragment implements AdapterView.OnItemLongClick
 
 //        BbsData item = mCustomAdapter.getBBSDataKey(result.getFirebaseKey());
 //        String str = bbsData.getFirebaseKey();
-        Intent intent = new Intent(requireActivity().getApplicationContext(),ReplyActivity.class);
-        intent.putExtra("FirebaseKey", firebaseKey);
-        intent.putExtra("Title", title);
-        startActivity(intent);
+
+        //遷移先のフラグメントに情報を渡す処理
+        Fragment toReply = new ReplyFragment();
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putString("FirebaseKey", firebaseKey);
+        bundle.putString("Title", title);
+        toReply.setArguments(bundle);
+        transaction.replace(R.id.nav_host_fragment, toReply);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+        //遷移先のアクティビティに情報を渡す処理
+//        Intent intent = new Intent(requireActivity().getApplicationContext(),ReplyActivity.class);
+//        intent.putExtra("FirebaseKey", firebaseKey);
+//        intent.putExtra("Title", title);
+//        startActivity(intent);
     }
 }
