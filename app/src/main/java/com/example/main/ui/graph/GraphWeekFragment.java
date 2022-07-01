@@ -1,20 +1,17 @@
 package com.example.main.ui.graph;
 
-import static android.content.ContentValues.TAG;
-
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.main.R;
 import com.example.main.db.dayscount.CountDatabase;
@@ -30,6 +27,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GraphWeekFragment extends Fragment {
@@ -47,11 +45,11 @@ public class GraphWeekFragment extends Fragment {
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        GraphViewModel dashboardViewModel = new ViewModelProvider(this).get(GraphViewModel.class);
+//        GraphViewModel dashboardViewModel = new ViewModelProvider(this).get(GraphViewModel.class);
         View root = inflater.inflate(R.layout.fragment_graph_week, container, false);
 
         //XMLとの紐づけ
-        TextView dateTitle = root.findViewById(R.id.gurahusyuukan);
+        TextView dateTitle = root.findViewById(R.id.graph_week);
         TextView todaySum = root.findViewById(R.id.todaySum);
         TextView comparedYesterday = root.findViewById(R.id.comparedYesterday);
         TextView weekSum = root.findViewById(R.id.weekSum);
@@ -69,7 +67,7 @@ public class GraphWeekFragment extends Fragment {
         //→await, promiseみたいな感じで、非同期処理が終了したらメインスレッドを始めるみたいな
         //逐次処理的なことをしたかった
         try {
-            Thread.sleep(20);
+            Thread.sleep(60);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -77,7 +75,7 @@ public class GraphWeekFragment extends Fragment {
         //グラフの描画
         setGraph(mchart);
 
-        root.findViewById(R.id.gekkan).setOnClickListener(
+        root.findViewById(R.id.month).setOnClickListener(
                 view -> {
                     Fragment toMonth = new GraphMonthFragment();
                     FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -86,7 +84,7 @@ public class GraphWeekFragment extends Fragment {
                     transaction.commit();
                 }
         );
-        root.findViewById(R.id.nenkan).setOnClickListener(
+        root.findViewById(R.id.year).setOnClickListener(
                 view -> {
                     Fragment toYear = new GraphYearFragment();
                     FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -107,6 +105,41 @@ public class GraphWeekFragment extends Fragment {
         weekSum.setText(getResources().getString(R.string.week_count_text, weekSumCount));
 
         setData(data);
+
+        //合計の表情画像表示
+        ImageView sum_today = root.findViewById(R.id.today_sum_face);
+        if (weekCount[0] == 0) {
+            sum_today.setImageResource(R.drawable.level_0);
+        } else if (weekCount[0] <= 10) {
+            sum_today.setImageResource(R.drawable.level_15);
+        } else if (weekCount[0] <= 20) {
+            sum_today.setImageResource(R.drawable.level_510);
+        } else {
+            sum_today.setImageResource(R.drawable.level_max);
+        }
+        //前日比の表情画像表示
+        ImageView compared_yesterday = root.findViewById(R.id.comparedYesterday_face);
+        if (weekCount[0] - weekCount[1] <= 0) {
+            compared_yesterday.setImageResource(R.drawable.level_0);
+        } else if (weekCount[0] - weekCount[1] >= 10) {
+            compared_yesterday.setImageResource(R.drawable.level_15);
+        } else if (weekCount[0] - weekCount[1] >= 20) {
+            compared_yesterday.setImageResource(R.drawable.level_510);
+        } else {
+            compared_yesterday.setImageResource(R.drawable.level_max);
+        }
+        //週間合計の表情画像表示
+        ImageView sum_week = root.findViewById(R.id.week_sum_face);
+        if (weekSumCount == 0) {
+            sum_week.setImageResource(R.drawable.level_0);
+        } else if (weekSumCount <= 70) {
+            sum_week.setImageResource(R.drawable.level_15);
+        } else if (weekSumCount <= 140) {
+            sum_week.setImageResource(R.drawable.level_510);
+        } else {
+            sum_week.setImageResource(R.drawable.level_max);
+        }
+
         return root;
     }
 
@@ -166,6 +199,7 @@ public class GraphWeekFragment extends Fragment {
         ArrayList<BarEntry> values = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
 
+        int origin = Color.rgb(184, 90, 78);
         int green = Color.rgb(110, 190, 102);
         int red = Color.rgb(211, 74, 88);
 
@@ -192,8 +226,8 @@ public class GraphWeekFragment extends Fragment {
             mchart.notifyDataSetChanged();
         } else {
             set = new BarDataSet(values, "Values");
-            set.setColors(colors);
-            set.setValueTextColors(colors);
+            set.setColors(origin);//棒グラフの色
+            set.setValueTextColors(Collections.singletonList(origin));//グラフ上の文字の色
 
             BarData data = new BarData(set);
             data.setValueTextSize(13f);

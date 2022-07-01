@@ -12,13 +12,13 @@
     tools:context=".ui.graph.GraphWeekFragment"
     android:gravity="center"
     android:background="#FFFFDD"
-    android:layout_marginBottom="60dp"
+    android:layout_marginBottom="45dp"
     >
     <!--    idは全て日本語をローマ字で打っています-->
     //週間画面
 
     <TextView
-        android:id="@+id/tikutikukaisuu"
+        android:id="@+id/tikutiku_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25dp"
@@ -30,7 +30,7 @@
         android:orientation="horizontal"
         >
         <Button
-            android:id="@+id/syuukan"
+            android:id="@+id/week"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="週間"
@@ -39,7 +39,7 @@
             android:layout_marginRight="10dp"
             />
         <Button
-            android:id="@+id/gekkan"
+            android:id="@+id/month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="月間"
@@ -48,7 +48,7 @@
             android:layout_marginRight="10dp"
             />
         <Button
-            android:id="@+id/nenkan"
+            android:id="@+id/year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="年間"
@@ -60,7 +60,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/gurahusyuukan"
+        android:id="@+id/graph_week"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
@@ -80,7 +80,7 @@
         >
 
         <TextView
-            android:id="@+id/goukei"
+            android:id="@+id/today_sum_title"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:text="今日の合計"
@@ -98,8 +98,8 @@
             android:layout_weight="1"
             android:textSize="25dp"/>
         <ImageView
+            android:id="@+id/today_sum_face"
             android:layout_height="match_parent"
-            android:src="@drawable/level_0"
             android:layout_weight="1"
             android:layout_width="0dp" />
 
@@ -114,7 +114,7 @@
 
 
         <TextView
-            android:id="@+id/zenzituhi"
+            android:id="@+id/comparedYesterday_title"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -131,11 +131,12 @@
             android:layout_weight="1"
             android:textSize="25dp"
             android:layout_gravity="center"/>
+
         <ImageView
+            android:id="@+id/comparedYesterday_face"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/level_15"
-            android:layout_weight="1"
-            android:layout_width="0dp" />
+            android:layout_weight="1" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -145,7 +146,7 @@
         >
 
         <TextView
-            android:id="@+id/syuukangoukei"
+            android:id="@+id/week_sum_title"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:text="週間合計"
@@ -164,8 +165,8 @@
             android:textSize="25dp"
             android:layout_gravity="center"/>
         <ImageView
+            android:id="@+id/week_sum_face"
             android:layout_height="match_parent"
-            android:src="@drawable/level_15"
             android:layout_weight="1"
             android:layout_width="0dp" />
     </LinearLayout>

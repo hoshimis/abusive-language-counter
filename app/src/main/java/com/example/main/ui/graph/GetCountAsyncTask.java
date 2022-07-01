@@ -50,7 +50,6 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
                             = daysCountDao.getCount("%" + gt.getDate(i * -1, "yyyy/ MM/ dd") + "%");
 
                     GraphWeekFragment.data.add(new Data(6 - i, GraphWeekFragment.weekCount[i], "1"));
-
                 }
                 break;
 

@@ -1,5 +1,7 @@
 package com.example.main;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.WindowManager;
 
@@ -13,6 +15,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    //音声をミュートにする為の変数を宣言する
+    private AudioManager mAudioManager;
+    private int mStreamVolume = 0;
 
     //アクティビティが作られるときに最初に実行されるメソッド
     @Override
@@ -43,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
         // ステータスバーを消す
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //音声をミュートにする
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mStreamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
 
 
         //下部のナビゲーションバー諸々・変更の必要なし

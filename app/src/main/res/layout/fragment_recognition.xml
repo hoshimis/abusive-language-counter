@@ -8,13 +8,13 @@
     tools:context=".ui.recognition.RecognitionFragment">
 
     <!--    現在の音声認識状態を表示する（開発用）-->
-    <TextView
-        android:id="@+id/text_Recognition"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="準備中"
-        android:textAlignment="center"
-        android:textSize="32sp" />
+<!--    <TextView-->
+<!--        android:id="@+id/text_Recognition"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text=""-->
+<!--        android:textAlignment="center"-->
+<!--        android:textSize="32sp" />-->
 
     <!--    以下が音声入力された物を表示＆音声入力開始＆音声入力停止（開発用）-->
     <TextView
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Default"
+        android:text=""
         android:textSize="32sp" />
 
     <!--    以下が音声入力された物を表示＆音声入力開始＆音声入力停止-->
@@ -31,13 +31,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.example.main.util.CircleView
-            android:id="@+id/circle_view"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+<!--        <com.example.main.util.CircleView-->
+<!--            android:id="@+id/circle_view"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="200dp"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:text="0" />-->
+        <ImageView
+            android:id="@+id/count_image"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_centerHorizontal="true"
-            android:text="0" />
-
+            />
         <TextView
             android:id="@+id/count_text"
             android:layout_width="wrap_content"

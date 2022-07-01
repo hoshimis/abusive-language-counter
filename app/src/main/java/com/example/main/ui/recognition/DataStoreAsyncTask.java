@@ -1,10 +1,15 @@
 package com.example.main.ui.recognition;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.main.R;
 import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.DaysCount;
 import com.example.main.db.dayscount.DaysCountDao;
@@ -14,35 +19,43 @@ import com.example.main.db.wordtable.WordTableDao;
 import com.example.main.util.GetDay;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static android.content.ContentValues.TAG;
 
 //以下からデータベース接続などの非同期処理
 //メソッドとして、doInBackgroundを実装している
 public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
     /*フィールド*/
-    private WeakReference<Activity> weakReference;
+    private final WeakReference<Activity> weakReference;
     //データベース二つとの紐づけ
-    private CountDatabase countDatabase;
-    private WordDatabase wordDatabase;
+    private final CountDatabase countDatabase;
+    private final WordDatabase wordDatabase;
     //音声認識した言葉をここに入力する
-    private String speechText;
+    private final String speechText;
+    //カウント画面の画像を宣言
+    private final ImageView jagged;
     //マッチした回数を表示するテキストビュー
-    private TextView countText;
+    private final TextView countText;
     //日付取得機能の準備
     GetDay gt = new GetDay();
 
     //コンストラクタ―
-    public DataStoreAsyncTask(Activity activity, CountDatabase countDatabase, WordDatabase wordDatabase, String speechText, TextView countText) {
+    public DataStoreAsyncTask(
+            Activity activity,
+            CountDatabase countDatabase,
+            WordDatabase wordDatabase, String speechText,
+            TextView countText,
+            ImageView jagged) {
+
         //ここで、インスタンス化した時に渡された引数の値をフィールドの値に代入する
         weakReference = new WeakReference<>(activity);
         this.countDatabase = countDatabase;
         this.wordDatabase = wordDatabase;
         this.speechText = speechText;
         this.countText = countText;
+        this.jagged = jagged;
     }
 
     //AsyncTaskの実装
@@ -63,6 +76,8 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
 //            wordTableDao.insert(new WordTable("ハゲ"));
 //            wordTableDao.insert(new WordTable("おはよう"));
 //            wordTableDao.insert(new WordTable("ばーか"));
+//            wordTableDao.insert(new WordTable("今日は"));
+
 
         //単語DBからすべてのワードを取得してリストに代入する。
         List<WordTable> atList = wordTableDao.getAll();
@@ -89,6 +104,7 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
     //非同期処理が実行し終わった後に実行されるメソッド
     @Override
     protected void onPostExecute(Integer code) {
+        //実行されるときに、呼び出し元のActivityが存在しなかったら何もしない
         Activity activity = weakReference.get();
         if (activity == null) {
             return;
@@ -96,5 +112,19 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
         //DBから今日の日付分の回数を取得してテキスト
         Log.d(TAG, "onPostExecute: " + RecognitionFragment.count);
         countText.setText(String.valueOf(RecognitionFragment.count));
+
+        //ちくちくの画像がカウント回数によって変化する処理
+        if (RecognitionFragment.count == 0) {
+            jagged.setImageResource(R.drawable.count_level_1);
+        } else if (RecognitionFragment.count <= 10) {
+            jagged.setImageResource(R.drawable.count_level_2);
+        } else if (RecognitionFragment.count <= 20) {
+            jagged.setImageResource(R.drawable.count_level_3);
+        } else if (RecognitionFragment.count <= 30) {
+            jagged.setImageResource(R.drawable.count_level_4);
+        } else {
+            jagged.setImageResource(R.drawable.count_level_5);
+        }
+
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,12 +27,13 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GraphMonthFragment extends Fragment {
     /*フィールド*/
-    //maker Ryo Kamizato feat シュトゥーデューム
-    private BarChart mchart;
+    /* maker Ryo Kamizato feat シュトゥーデューム */
+    private BarChart mChart;
     private Typeface tfRegular;
 
     //日付取得機能の準備
@@ -52,17 +54,17 @@ public class GraphMonthFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_graph_month, container, false);
 
         //XMLとの紐づけ
-        TextView dateTitle = root.findViewById(R.id.gurahugekkan);
+        TextView dateTitle = root.findViewById(R.id.graph_month);
         TextView monthSum = root.findViewById(R.id.monthSum);
         TextView comparedBeforeMonth = root.findViewById(R.id.comparedBeforeMonth);
         TextView monthAverage = root.findViewById(R.id.monthAverage);
-        mchart = root.findViewById(R.id.chart2);
+        mChart = root.findViewById(R.id.chart2);
 
         //今月の合計値を格納する為の変数
         int monthSumCount = 0;
 
         //グラフの描画
-        setGraph(mchart);
+        setGraph(mChart);
 
         //グラフに表示するカウント数をここでDBに接続して挿入しておく
         CountDatabase countDatabase = CountDatabaseSingleton.getInstance(requireActivity().getApplicationContext());
@@ -70,12 +72,12 @@ public class GraphMonthFragment extends Fragment {
 
         //DBからデータを取得してくる前にグラフの描画が終わってしまうのですこしだけメインスレッドを止める
         try {
-            Thread.sleep(55);
+            Thread.sleep(150);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        root.findViewById(R.id.syuukan).setOnClickListener(
+        root.findViewById(R.id.week).setOnClickListener(
                 view -> {
                     Fragment toWeek = new GraphWeekFragment();
                     FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -84,7 +86,7 @@ public class GraphMonthFragment extends Fragment {
                     transaction.commit();
                 }
         );
-        root.findViewById(R.id.nenkan).setOnClickListener(
+        root.findViewById(R.id.year).setOnClickListener(
                 view -> {
                     Fragment toYear = new GraphYearFragment();
                     FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -98,30 +100,64 @@ public class GraphMonthFragment extends Fragment {
             monthSumCount += tmp;
         }
 
-        //先月比と日付を表示する
+        //前月比と日付を表示する
+        //diffは前月比のやつ
         int diff = GraphYearFragment.yearCount[thisMonth - 1] - GraphYearFragment.yearCount[thisMonth - 2];
         dateTitle.setText(getResources().getString(R.string.month_title, YEAR, MONTH));
         monthSum.setText(getResources().getString(R.string.month_count_text, monthSumCount));
         comparedBeforeMonth.setText(getResources().getString(R.string.month_count_text, diff));
         monthAverage.setText(getResources().getString(R.string.month_count_text, monthSumCount / getLastDay(thisMonth)));
-
         setData(data);
-
+        //月間合計の表情画像表示
+        ImageView sum_month= root.findViewById(R.id.month_sum_face);
+        if(monthSumCount==0){
+            sum_month.setImageResource(R.drawable.level_0);
+        }else if(monthSumCount<=300){
+            sum_month.setImageResource(R.drawable.level_15);
+        }else if(monthSumCount<=600){
+            sum_month.setImageResource(R.drawable.level_510);
+        }else{
+            sum_month.setImageResource(R.drawable.level_max);
+        }
+        //前月比の表情画像表示
+        ImageView  last_month= root.findViewById(R.id.last_month_face);
+        if(diff<=0){
+            last_month.setImageResource(R.drawable.level_0);
+        }else if(diff<=300){
+            last_month.setImageResource(R.drawable.level_15);
+        }else if(diff<=600){
+            last_month.setImageResource(R.drawable.level_510);
+        }else{
+            last_month.setImageResource(R.drawable.level_max);
+        }
+        //月間平均の表情画像表示
+        ImageView  ave_month= root.findViewById(R.id.month_ave_face);
+        if(monthSumCount / getLastDay(thisMonth)==0){
+            ave_month.setImageResource(R.drawable.level_0);
+        }else if(monthSumCount / getLastDay(thisMonth)<=10){
+            ave_month.setImageResource(R.drawable.level_15);
+        }else if(monthSumCount / getLastDay(thisMonth)<=20){
+            ave_month.setImageResource(R.drawable.level_510);
+        }else{
+            ave_month.setImageResource(R.drawable.level_max);
+        }
         return root;
     }
+
 
     private void setData(List<Data> dataList) {
 
         ArrayList<BarEntry> values = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
 
+        int origin=Color.rgb(184,90,78);
         int green = Color.rgb(110, 190, 102);
         int red = Color.rgb(211, 74, 88);
 
         for (int i = 0; i < dataList.size(); i++) {
 
             Data d = dataList.get(i);
-            BarEntry entry = new BarEntry(d.xValue, d.yValue);
+                BarEntry entry = new BarEntry(d.xValue, d.yValue);
             values.add(entry);
 
             // specific colors
@@ -133,16 +169,16 @@ public class GraphMonthFragment extends Fragment {
 
         BarDataSet set;
 
-        if (mchart.getData() != null &&
-                mchart.getData().getDataSetCount() > 0) {
-            set = (BarDataSet) mchart.getData().getDataSetByIndex(0);
+        if (mChart.getData() != null &&
+                mChart.getData().getDataSetCount() > 0) {
+            set = (BarDataSet) mChart.getData().getDataSetByIndex(0);
             set.setValues(values);
-            mchart.getData().notifyDataChanged();
-            mchart.notifyDataSetChanged();
+            mChart.getData().notifyDataChanged();
+            mChart.notifyDataSetChanged();
         } else {
             set = new BarDataSet(values, "Values");
-            set.setColors(colors);
-            set.setValueTextColors(colors);
+            set.setColors(origin);//棒グラフの色
+            set.setValueTextColors(Collections.singletonList(origin));//グラフ上の文字の色
 
             BarData data = new BarData(set);
             data.setValueTextSize(13f);
@@ -150,29 +186,29 @@ public class GraphMonthFragment extends Fragment {
             data.setValueFormatter(new ValueFormatter());
             data.setBarWidth(0.8f);
 
-            mchart.setData(data);
-            mchart.invalidate();
+            mChart.setData(data);
+            mChart.invalidate();
         }
     }
 
-    private void setGraph(BarChart mchart) {
-        mchart.setBackgroundColor(-35);
-        mchart.setExtraTopOffset(0);
-        mchart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
-        mchart.setExtraLeftOffset(0);
-        mchart.setExtraRightOffset(0);
-        mchart.setDrawBarShadow(false);
-        mchart.setDrawValueAboveBar(true);
-        mchart.getDescription().setEnabled(false);
+    private void setGraph(BarChart mChart) {
+        mChart.setBackgroundColor(-35);
+        mChart.setExtraTopOffset(0);
+        mChart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
+        mChart.setExtraLeftOffset(0);
+        mChart.setExtraRightOffset(0);
+        mChart.setDrawBarShadow(false);
+        mChart.setDrawValueAboveBar(true);
+        mChart.getDescription().setEnabled(false);
         // scaling can now only be done on x- and y-axis separately
-        mchart.setPinchZoom(true);
-        mchart.setDrawGridBackground(false);
+        mChart.setPinchZoom(true);
+        mChart.setDrawGridBackground(false);
 
-        XAxis xAxis = mchart.getXAxis();
+        XAxis xAxis = mChart.getXAxis();
 
         //x軸の値を格納する　→　日付
         int x = Integer.parseInt(MONTH);
-        String[] label = new String[31];
+        String[] label = new String[32];
         switch (x) {
             case 1:
             case 3:
@@ -214,7 +250,7 @@ public class GraphMonthFragment extends Fragment {
         xAxis.setCenterAxisLabels(false);
         xAxis.setGranularity(1);
 
-        YAxis left = mchart.getAxisLeft();
+        YAxis left = mChart.getAxisLeft();
         left.setDrawLabels(false); //格子の横線
         left.setSpaceTop(25f);
         left.setSpaceBottom(0);//値が０でもx軸から離れないようにするために０にする
@@ -223,8 +259,8 @@ public class GraphMonthFragment extends Fragment {
         left.setDrawZeroLine(true); // draw a zero line
         left.setZeroLineColor(Color.GRAY);
         left.setZeroLineWidth(0.7f);
-        mchart.getAxisRight().setEnabled(false);
-        mchart.getLegend().setEnabled(false);
+        mChart.getAxisRight().setEnabled(false);
+        mChart.getLegend().setEnabled(false);
     }
 
     private int getLastDay(int month) {
@@ -234,7 +270,6 @@ public class GraphMonthFragment extends Fragment {
             return 31;
         }
     }
-
 
     private static class ValueFormatter extends com.github.mikephil.charting.formatter.ValueFormatter {
         @Override
