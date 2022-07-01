@@ -119,11 +119,11 @@ public class GraphWeekFragment extends Fragment {
         }
         //前日比の表情画像表示
         ImageView compared_yesterday = root.findViewById(R.id.comparedYesterday_face);
-        if (weekCount[0] - weekCount[1] == 0) {
+        if (weekCount[0] - weekCount[1] <= 0) {
             compared_yesterday.setImageResource(R.drawable.level_0);
-        } else if (weekCount[0] - weekCount[1] <= 10) {
+        } else if (weekCount[0] - weekCount[1] >= 10) {
             compared_yesterday.setImageResource(R.drawable.level_15);
-        } else if (weekCount[0] - weekCount[1] <= 20) {
+        } else if (weekCount[0] - weekCount[1] >= 20) {
             compared_yesterday.setImageResource(R.drawable.level_510);
         } else {
             compared_yesterday.setImageResource(R.drawable.level_max);
@@ -132,9 +132,9 @@ public class GraphWeekFragment extends Fragment {
         ImageView sum_week = root.findViewById(R.id.week_sum_face);
         if (weekSumCount == 0) {
             sum_week.setImageResource(R.drawable.level_0);
-        } else if (weekSumCount <= 10) {
+        } else if (weekSumCount <= 70) {
             sum_week.setImageResource(R.drawable.level_15);
-        } else if (weekSumCount <= 20) {
+        } else if (weekSumCount <= 140) {
             sum_week.setImageResource(R.drawable.level_510);
         } else {
             sum_week.setImageResource(R.drawable.level_max);

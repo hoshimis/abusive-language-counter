@@ -123,9 +123,9 @@ public class GraphYearFragment extends Fragment {
         ImageView sum_year = root.findViewById(R.id.year_sum_face);
         if (yearSumCount == 0) {
             sum_year.setImageResource(R.drawable.level_0);
-        } else if (yearSumCount <= 10) {
+        } else if (yearSumCount <= 3650) {
             sum_year.setImageResource(R.drawable.level_15);
-        } else if (yearSumCount <= 20) {
+        } else if (yearSumCount <= 7300) {
             sum_year.setImageResource(R.drawable.level_510);
         } else {
             sum_year.setImageResource(R.drawable.level_max);
@@ -134,9 +134,9 @@ public class GraphYearFragment extends Fragment {
         ImageView min_mux = root.findViewById(R.id.min_max_face);
         if (yearMaxCount == 0 || yearMinCount == 0) {
             min_mux.setImageResource(R.drawable.level_0);
-        } else if (yearMaxCount <= 10 || yearMinCount <= 10) {
+        } else if (yearMaxCount <= 300 || yearMinCount <= 300) {
             min_mux.setImageResource(R.drawable.level_15);
-        } else if (yearMaxCount <= 20 || yearMinCount <= 20) {
+        } else if (yearMaxCount <= 600 || yearMinCount <= 600) {
             min_mux.setImageResource(R.drawable.level_510);
         } else {
             min_mux.setImageResource(R.drawable.level_max);
@@ -145,9 +145,9 @@ public class GraphYearFragment extends Fragment {
         ImageView ave_month = root.findViewById(R.id.year_ave_face);
         if ((yearSumCount /MONTH) == 0) {
             ave_month.setImageResource(R.drawable.level_0);
-        } else if ((yearSumCount / MONTH) <= 10) {
+        } else if ((yearSumCount / MONTH) <= 120) {
             ave_month.setImageResource(R.drawable.level_15);
-        } else if ((yearSumCount / MONTH) <= 20) {
+        } else if ((yearSumCount / MONTH) <= 240) {
             ave_month.setImageResource(R.drawable.level_510);
         } else {
             ave_month.setImageResource(R.drawable.level_max);

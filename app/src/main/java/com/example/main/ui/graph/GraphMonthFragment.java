@@ -112,20 +112,20 @@ public class GraphMonthFragment extends Fragment {
         ImageView sum_month= root.findViewById(R.id.month_sum_face);
         if(monthSumCount==0){
             sum_month.setImageResource(R.drawable.level_0);
-        }else if(monthSumCount<=10){
+        }else if(monthSumCount<=300){
             sum_month.setImageResource(R.drawable.level_15);
-        }else if(monthSumCount<=20){
+        }else if(monthSumCount<=600){
             sum_month.setImageResource(R.drawable.level_510);
         }else{
             sum_month.setImageResource(R.drawable.level_max);
         }
         //前月比の表情画像表示
         ImageView  last_month= root.findViewById(R.id.last_month_face);
-        if(diff==0){
+        if(diff<=0){
             last_month.setImageResource(R.drawable.level_0);
-        }else if(diff<=10){
+        }else if(diff<=300){
             last_month.setImageResource(R.drawable.level_15);
-        }else if(diff<=20){
+        }else if(diff<=600){
             last_month.setImageResource(R.drawable.level_510);
         }else{
             last_month.setImageResource(R.drawable.level_max);
