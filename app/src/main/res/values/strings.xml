@@ -26,4 +26,10 @@
     <string name="year_title">%1$s年</string>
     <string name="year_count_text">%1$d回\</string>
     <string name="year_count_min_max_text">%1$d回\n%2$d回</string>
+
+    <!-- アラームで使う文字列 -->
+    <string name="start">Start</string>
+    <string name="cancel">Cancel</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
