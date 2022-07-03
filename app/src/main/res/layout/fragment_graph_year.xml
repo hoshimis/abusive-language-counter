@@ -3,14 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="45dp"
     android:background="#FFFFDD"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".ui.graph.GraphYearFragment"
-    android:layout_marginBottom="45dp"
-    >
-    <!--    idは全て日本語をローマ字で打っています-->
-    //年間画面
+    tools:context=".ui.graph.GraphYearFragment">
 
     <TextView
         android:id="@+id/tikutiku_count"
@@ -99,8 +96,7 @@
             android:id="@+id/year_sum_face"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1" />
 
 
     </LinearLayout>
@@ -136,8 +132,7 @@
             android:id="@+id/min_max_face"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1" />
     </LinearLayout>
 
     <LinearLayout
@@ -170,8 +165,7 @@
             android:id="@+id/year_ave_face"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1" />
     </LinearLayout>
 
 </LinearLayout>
