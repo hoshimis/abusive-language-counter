@@ -3,11 +3,10 @@
     package="com.example.main">
     <!-- 音声入力を許可する -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <!--
-    Speech Recognizerでは温帯んでの音声入力とオフラインでの音声入力両方に対応している
-        オンラインで音声入力できるようにするために以下のパーミッションも許可しておく
-    -->
+
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Speech Recognizerを使うための記述ここから -->
+    <!-- アラームを用いるための権限 -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <queries>
         <intent>
             <action android:name="android.speech.RecognitionService" />
@@ -21,7 +20,6 @@
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Appnav">
-        <activity android:name=".ui.bbs.ReplyFragment"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"

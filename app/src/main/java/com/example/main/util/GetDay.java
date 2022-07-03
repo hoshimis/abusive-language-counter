@@ -8,7 +8,6 @@ public class GetDay implements GetDayInterface {
     final public static int FOUR_DAYS_AGO = -4;
     final public static int FIVE_DAYS_AGO = -5;
     final public static int SIX_DAYS_AGO = -6;
-    final public static int ONE_WEEK_AGO = -7;
 
     @Override
     public String getDate(int day, String format) {

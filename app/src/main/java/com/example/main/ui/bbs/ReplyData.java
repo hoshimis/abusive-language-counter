@@ -10,7 +10,7 @@ public class ReplyData {
         this.comment = comment;
     }
 
-    public ReplyData(){
+    public ReplyData() {
 
     }
 
@@ -18,7 +18,7 @@ public class ReplyData {
         return replyKey;
     }
 
-    public  String getComment() {
+    public String getComment() {
         return comment;
     }
 

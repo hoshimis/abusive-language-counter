@@ -9,7 +9,7 @@ import android.view.View;
 //レイアウトで正円を描くための処理
 
 public class CircleView extends View {
-    private Paint paint;
+    private final Paint paint;
 
     public CircleView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);

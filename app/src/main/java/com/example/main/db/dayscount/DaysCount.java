@@ -13,7 +13,6 @@ public class DaysCount {
     //カラム　日付
     @ColumnInfo(name = "date")
     private final String date;
-
     //カラム　日付
     @ColumnInfo(name = "word")
     private final String word;
@@ -31,14 +30,13 @@ public class DaysCount {
         this.id = id;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public String getDate() {
         return date;
     }
 
+    public int getId() {
+        return id;
+    }
     public String getWord() {
         return word;
     }

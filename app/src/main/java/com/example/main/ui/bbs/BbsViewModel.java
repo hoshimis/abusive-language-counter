@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 public class BbsViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private final MutableLiveData<String> mText;
 
     public BbsViewModel() {
         mText = new MutableLiveData<>();
