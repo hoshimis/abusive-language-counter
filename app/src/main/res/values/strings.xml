@@ -27,9 +27,13 @@
     <string name="year_count_text">%1$d回\</string>
     <string name="year_count_min_max_text">%1$d回\n%2$d回</string>
 
-    <!-- アラームで使う文字列 -->
-    <string name="start">Start</string>
-    <string name="cancel">Cancel</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- 設定画面で使用するテキスト -->
+    <string name="settings_notification_title">通知設定</string>
+    <string name="settings_notification_check_Title">通知をする</string>
+    <string name="settings_notification_check_yesterday">前日の回数を通知</string>
+    <string name="settings_notification_check_today">当日の回数を通知</string>
+    <string name="settings_notification_set_time">通知する時間帯を設定する</string>
+    <string name="settings_notification_allow">></string>
+    <string name="settings_notification_now_time_text">設定されている時間</string>
+    <string name="settings_notification_now_time">No Data</string>
 </resources>

@@ -3,7 +3,6 @@ package com.example.main.ui.bbs;
 import static android.content.ContentValues.TAG;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class BbsFragment extends Fragment implements AdapterView.OnItemLongClickListener,AdapterView.OnItemClickListener {
+public class BbsFragment extends Fragment implements AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
 
     private BbsViewModel notificationsViewModel;
 
@@ -109,7 +108,6 @@ public class BbsFragment extends Fragment implements AdapterView.OnItemLongClick
 
                 //FirebaseKeyを取得する
                 BbsData item = mBbsCustomAdapter.getBBSDataKey(result.getFirebaseKey());
-                BbsData bbsData = mBbsCustomAdapter.getBBSDataKey(result.getFirebaseKey());
 
                 //上の行に該当するリストの要素を削除
                 mBbsCustomAdapter.remove(item);
@@ -159,17 +157,13 @@ public class BbsFragment extends Fragment implements AdapterView.OnItemLongClick
         new AlertDialog.Builder(requireContext())
                 .setTitle("Delete?")
                 .setMessage("このスレッドを削除しますか？")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // OK button pressed
-                        reference.child(bbsData.getFirebaseKey()).removeValue();
-                    }
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    // OK button pressed
+                    reference.child(bbsData.getFirebaseKey()).removeValue();
                 })
                 .setNegativeButton("No", null)
                 .show();
         return false;
-
 
 
     }

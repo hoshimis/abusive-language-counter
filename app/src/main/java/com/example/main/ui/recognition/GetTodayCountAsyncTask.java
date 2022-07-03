@@ -1,5 +1,7 @@
 package com.example.main.ui.recognition;
 
+import static com.example.main.ui.recognition.RecognitionFragment.count;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.widget.ImageView;
@@ -12,19 +14,17 @@ import com.example.main.util.GetDay;
 
 import java.lang.ref.WeakReference;
 
-import static com.example.main.ui.recognition.RecognitionFragment.count;
-
 public class GetTodayCountAsyncTask extends AsyncTask<Void, Void, Integer> {
-    /*フィールド*/
-    private WeakReference<Activity> weakReference;
-    //データベースとの紐づけ（回数カウント用　→　CountDataBase）
-    private CountDatabase countDatabase;
-    //テキストビューの宣言
-    private TextView textView;
-    //イメージビューの宣言
-    private ImageView gizagiza_image;
     //日付取得機能の準備
     GetDay gt = new GetDay();
+    /*フィールド*/
+    private final WeakReference<Activity> weakReference;
+    //データベースとの紐づけ（回数カウント用　→　CountDataBase）
+    private final CountDatabase countDatabase;
+    //テキストビューの宣言
+    private final TextView textView;
+    //イメージビューの宣言
+    private final ImageView gizagiza_image;
 
     //コンストラクター
     public GetTodayCountAsyncTask(Activity activity, CountDatabase countDatabase, TextView textView, ImageView gizagiza_image) {

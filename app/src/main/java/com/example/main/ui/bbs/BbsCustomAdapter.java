@@ -15,7 +15,7 @@ import com.example.main.R;
 import java.util.List;
 
 public class BbsCustomAdapter extends ArrayAdapter<BbsData> {
-    private List<BbsData> mCards;
+    private final List<BbsData> mCards;
 
     public BbsCustomAdapter(Context context, int layoutResourceId, List<BbsData> BBSData) {
         super(context, layoutResourceId, BBSData);

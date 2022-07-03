@@ -32,26 +32,25 @@ import com.example.main.db.wordtable.WordDatabaseSingleton;
 import java.util.ArrayList;
 
 public class RecognitionFragment extends Fragment {
+    //今日の暴言をいった回数をカウントするための変数
+    public static int count;
     //以下フィールド
     //以下音声認識に使う変数
     private final int PERMISSIONS_RECORD_AUDIO = 1000;
+    //log.dで使う文字列
+    private final String TAG = "MainActivity";
+    //リスト構造を宣言
+    ArrayList<String> data = new ArrayList<>();
+    ArrayAdapter<String> adapter;
     private SpeechRecognizer speechRecognizer;
     private TextView mText;
     //    private TextView titleView;
     private TextView countText;
     private ImageView jaggedImage;
-    //log.dで使う文字列
-    private final String TAG = "MainActivity";
     //DBの宣言
     private WordDatabase wordDatabase;
     private CountDatabase countDatabase;
 
-    //今日の暴言をいった回数をカウントするための変数
-    public static int count;
-
-    //リスト構造を宣言
-    ArrayList<String> data = new ArrayList<>();
-    ArrayAdapter<String> adapter;
 
     /**
      * ActivityのようにFragmentにもライフサイクルがある
@@ -89,7 +88,6 @@ public class RecognitionFragment extends Fragment {
 //        CircleView circleView = root.findViewById(R.id.circle_view);
 //        circleView.setColor(R.color.teal_200);
 
-
         //SpeechRecognizerを使用することができるか確認する
         checkSpeechRecognizer();
         //使用できるならば、レコーディングを開始する
@@ -106,14 +104,16 @@ public class RecognitionFragment extends Fragment {
         //ビュー作成時にデータベースから回数を取得してきて、画面に表示する
         new GetTodayCountAsyncTask(getActivity(), countDatabase, countText, jaggedImage).execute();
 
+        //追加機能
+        jaggedImage.setOnClickListener(v -> {
+        });
         return root;
     }
 
-
-//      checkSpeechRecognizer()
-//      音声認識サポート端末であるかどうかを調べるメソッド
-//      サポート端末ではなかったらその旨のテキストを表示(string.xmlから)
-//      録音が許可されていなかったらユーザに許可を求めるシステムダイアログを表示する。
+    //checkSpeechRecognizer()
+    //音声認識サポート端末であるかどうかを調べるメソッド
+    //サポート端末ではなかったらその旨のテキストを表示(string.xmlから)
+    //録音が許可されていなかったらユーザに許可を求めるシステムダイアログを表示する。
 
     public Boolean checkSpeechRecognizer() {
         //音声認識が可能かチェックする
@@ -134,6 +134,8 @@ public class RecognitionFragment extends Fragment {
                     PERMISSIONS_RECORD_AUDIO);
             return false;
         }
+
+
         return true;
     }
 
@@ -150,7 +152,6 @@ public class RecognitionFragment extends Fragment {
 
         if (requestCode == PERMISSIONS_RECORD_AUDIO) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                mText.setText("");
             }
         }
     }
@@ -162,12 +163,10 @@ public class RecognitionFragment extends Fragment {
      */
     public void startRecording() {
         if (speechRecognizer == null && checkSpeechRecognizer()) {
-//            titleView.setText(getString(R.string.prepare_speech));
 
             speechRecognizer = SpeechRecognizer.createSpeechRecognizer(getActivity());
             speechRecognizer.setRecognitionListener(new listener(countDatabase, wordDatabase, countText));
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-//            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
             intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, requireActivity().getPackageName());
             //以下指定で途中の認識を拾う
             intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
@@ -178,7 +177,6 @@ public class RecognitionFragment extends Fragment {
 
     //SpeechRecognizerをキャンセルして破棄
     public void stopRecording() {
-//        titleView.setText("停止中");
         if (speechRecognizer != null && checkSpeechRecognizer()) {
             speechRecognizer.stopListening();
             speechRecognizer.cancel();
@@ -234,7 +232,6 @@ public class RecognitionFragment extends Fragment {
         public void onBeginningOfSpeech() {
             Log.d(TAG, "onBeginningOfSpeech");
             mText.setText("開始");
-//            mText.setText("");
         }
 
         //音声レベルの変化されたら、呼び出される
@@ -253,7 +250,6 @@ public class RecognitionFragment extends Fragment {
         //一度入力が終わったら停止したのちに音声入力を再開する
         @Override
         public void onEndOfSpeech() {
-//            titleView.setText("停止");
             Log.d(TAG, "onEndOfSpeech");
         }
 
@@ -262,53 +258,10 @@ public class RecognitionFragment extends Fragment {
         //そのエラーが来ても、音声入力を再開するようにする
         @Override
         public void onError(int error) {
-            String reason = "";
-            switch (error) {
-                // Audio recording error
-                case SpeechRecognizer.ERROR_AUDIO:
-                    reason = "ERROR_AUDIO";
-                    break;
-                // Other client side errors
-                case SpeechRecognizer.ERROR_CLIENT:
-                    reason = "ERROR_CLIENT";
-                    break;
-                // Insufficient permissions
-                case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
-                    reason = "ERROR_INSUFFICIENT_PERMISSIONS";
-                    break;
-                // 	Other network related errors
-                case SpeechRecognizer.ERROR_NETWORK:
-                    reason = "ERROR_NETWORK";
-                    /* ネットワーク接続をチェックする処理をここに入れる */
-                    break;
-                // Network operation timed out
-                case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
-                    reason = "ERROR_NETWORK_TIMEOUT";
-                    break;
-                // No recognition result matched
-                case SpeechRecognizer.ERROR_NO_MATCH:
-                    reason = "ERROR_NO_MATCH";
-                    break;
-                // RecognitionService busy
-                case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
-                    reason = "ERROR_RECOGNIZER_BUSY";
-                    break;
-                // Server sends error status
-                case SpeechRecognizer.ERROR_SERVER:
-                    reason = "ERROR_SERVER";
-                    /* ネットワーク接続をチェックをする処理をここに入れる */
-                    break;
-                // No speech input
-                case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-                    reason = "ERROR_SPEECH_TIMEOUT";
-                    break;
-            }
-            Log.d("開発用のログを出してるよ！！", "onError=" + error + reason);
 
-            if ((error == SpeechRecognizer.ERROR_NO_MATCH) || (error == SpeechRecognizer.ERROR_NETWORK_TIMEOUT) || (error == SpeechRecognizer.ERROR_NETWORK_TIMEOUT)) {
-                //ネットワークエラーと、無音の時にエラーが帰ってきやすいので一度止めてから再スタートして挙げる
+            if (error == SpeechRecognizer.ERROR_NETWORK_TIMEOUT ||
+                    error == SpeechRecognizer.ERROR_NO_MATCH) {
                 restartListeningService();
-                Log.d("開発用のログを出してるよ！！", "onError: 音声認識を再開させました。");
             }
         }
 
@@ -328,6 +281,7 @@ public class RecognitionFragment extends Fragment {
                 mText.setText(str);
                 //ここで、認識した言葉を非同期処理に渡して、マッチするかを確認する
                 new DataStoreAsyncTask(getActivity(), countDatabase, wordDatabase, str, CountTextView, jaggedImage).execute();
+                //任意視された言葉リストビューに挿入する
                 new InsertListViewAsyncTask(getActivity(), countDatabase, data, adapter).execute();
             }
         }

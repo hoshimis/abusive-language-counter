@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 public class GraphViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private final MutableLiveData<String> mText;
 
     public GraphViewModel() {
         mText = new MutableLiveData<>();

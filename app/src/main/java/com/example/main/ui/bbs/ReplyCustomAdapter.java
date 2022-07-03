@@ -15,7 +15,7 @@ import com.example.main.R;
 import java.util.List;
 
 public class ReplyCustomAdapter extends ArrayAdapter<ReplyData> {
-    private List<ReplyData> mCards;
+    private final List<ReplyData> mCards;
 
     public ReplyCustomAdapter(Context context, int layoutResourceId, List<ReplyData> ReplyData) {
         super(context, layoutResourceId, ReplyData);
