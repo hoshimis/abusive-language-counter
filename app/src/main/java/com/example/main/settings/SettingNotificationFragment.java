@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.DialogFragment;
@@ -119,14 +118,14 @@ public class SettingNotificationFragment extends Fragment implements TimePickerD
         //通知する時間帯を設定する(前日)を押したときに挙動
         yesterdaySetTime.setOnClickListener(view -> {
             isSelect = true;
-            DialogFragment newFragment = new TimePick();
+            DialogFragment newFragment = new TimePicker();
             newFragment.show(getChildFragmentManager(), "setYesterdayNotificationTime");
         });
 
         //通知する時間帯を設定する(当日)を押したときに挙動
         todaySetTime.setOnClickListener(view -> {
             isSelect = false;
-            DialogFragment newFragment = new TimePick();
+            DialogFragment newFragment = new TimePicker();
             newFragment.show(getChildFragmentManager(), "setTodayNotificationTime");
         });
 
@@ -169,7 +168,7 @@ public class SettingNotificationFragment extends Fragment implements TimePickerD
 
     //TimePickerの入力がここに返される
     @Override
-    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+    public void onTimeSet(android.widget.TimePicker timePicker, int hourOfDay, int minute) {
 
         //isChecked
         //true -> 昨日の設定

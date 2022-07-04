@@ -199,11 +199,6 @@ public class RecognitionFragment extends Fragment {
         speechRecognizer.destroy();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
     /**
      * 以下がRecognitionListenerの実装
      * onCreate内のsetRecognitionListenerの引数にlistenerを設定するために、新しくクラスを宣言してそのインスタンスを渡して上げる。

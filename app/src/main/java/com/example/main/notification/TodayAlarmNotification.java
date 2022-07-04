@@ -1,4 +1,4 @@
-package com.example.main;
+package com.example.main.notification;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -10,11 +10,10 @@ import android.content.Intent;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-//PendingIntentからのIntentを受け取るクラス。
-//アラームを受けてトーストを行う
-//前日の回数を通知するクラス
-//追加で当日の分も追加することができればいい
-public class AlarmNotification extends BroadcastReceiver {
+import com.example.main.R;
+import com.example.main.ui.graph.GraphWeekFragment;
+
+public class TodayAlarmNotification extends BroadcastReceiver {
 
     @Override   // データを受信した
     public void onReceive(Context context, Intent intent) {
@@ -23,26 +22,22 @@ public class AlarmNotification extends BroadcastReceiver {
         int requestCode = intent.getIntExtra("RequestCode", 0);
 
         PendingIntent pendingIntent =
-                PendingIntent.getActivity(context, requestCode, intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT |
-                                PendingIntent.FLAG_IMMUTABLE);
+                PendingIntent.getActivity(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        String channelId = "default";
+        String channelId = "today";
         // app name
         String title = context.getString(R.string.app_name);
 
-        // メッセージ
-        String message = "前日の回数:「ここに前日の回数を入れたい」";
+        String todayCount = String.valueOf(GraphWeekFragment.weekCount[0]);
+
+        // 通知するメッセージを設定
+        String message = "今日の回数:" + todayCount + "回";
 
         // Notification　Channel 設定
-        NotificationChannel channel =
-                new NotificationChannel(channelId, title,
-                        NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationChannel channel = new NotificationChannel(channelId, title, NotificationManager.IMPORTANCE_DEFAULT);
         channel.setDescription(message);
 
-        NotificationManager notificationManager =
-//                (NotificationManager)context.getSystemService(NotificationManager.class);
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.createNotificationChannel(channel);
 
         NotificationCompat.Builder builder =
@@ -52,10 +47,10 @@ public class AlarmNotification extends BroadcastReceiver {
                         //通知のタイトルを設定する
                         .setContentTitle("前日の回数")
                         //通知の本文を設定する
-                        .setContentText(message + "11時です")
+                        .setContentText(message)
                         //通知のプライオリティを設定する
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        //通知の
+                        //通知のを渡してきたインテントの設定
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true);
 

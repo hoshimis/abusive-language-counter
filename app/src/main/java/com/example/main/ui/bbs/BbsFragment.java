@@ -141,7 +141,6 @@ public class BbsFragment extends Fragment implements AdapterView.OnItemLongClick
             }
         });
 
-
         return root;
     }
 

@@ -35,7 +35,7 @@ public class GraphWeekFragment extends Fragment {
     private Typeface tfRegular;
 
     //週間の回数を格納する配列を宣言
-    static int[] weekCount = new int[7];
+    public static int[] weekCount = new int[7];
 
     //データの設定
     static final List<Data> data = new ArrayList<>();

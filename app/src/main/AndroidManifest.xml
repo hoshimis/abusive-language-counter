@@ -34,7 +34,7 @@
         </activity>
 
         <receiver
-            android:name=".AlarmNotification"
+            android:name=".notification.YesterdayAlarmNotification"
             android:process=":remote">
         </receiver>
     </application>
