@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +39,7 @@ public class AddFragment extends Fragment {
 
             //入力欄どちらかがからだったら何もしない
             if (title.isEmpty() || content.isEmpty()) {
+                Toast.makeText(requireContext(),"タイトルと本文を入力してください。",Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -52,6 +54,15 @@ public class AddFragment extends Fragment {
                 transaction.commit();
             });
         });
+        //もどるボタンの処理
+        root.findViewById(R.id.back_button).setOnClickListener(view -> {
+            Fragment back = new BbsFragment();
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+            transaction.replace(R.id.nav_host_fragment, back);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        });
+
 
         return root;
     }

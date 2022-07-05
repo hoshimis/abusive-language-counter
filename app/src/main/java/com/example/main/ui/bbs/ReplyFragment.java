@@ -54,14 +54,14 @@ public class ReplyFragment extends Fragment {
 //        String firebaseKey = intent.getStringExtra("FirebaseKey");
 //        String title = intent.getStringExtra("Title");
 
-        TextView textView3 = root.findViewById(R.id.textVIew3);
+        TextView textView3 = root.findViewById(R.id.reply_text_view);
         textView3.setText(title);
 
         //リストビューとの紐づけ
-        ListView mListView = root.findViewById(R.id.list_view2);
+        ListView mListView = root.findViewById(R.id.reply_list_view);
 
         //CustomAdapterをセットする
-        mReplyCustomAdapter = new ReplyCustomAdapter(requireActivity().getApplicationContext(), R.layout.card_view, new ArrayList<ReplyData>());
+        mReplyCustomAdapter = new ReplyCustomAdapter(requireActivity().getApplicationContext(), R.layout.card_reply_view, new ArrayList<ReplyData>());
         mListView.setAdapter(mReplyCustomAdapter);
 
         //もどるボタンの処理
@@ -77,7 +77,7 @@ public class ReplyFragment extends Fragment {
         //返信ボタンの処理
         commentEditText = root.findViewById(R.id.comment);
 
-        root.findViewById(R.id.add_button2).setOnClickListener(view -> {
+        root.findViewById(R.id.reply_button).setOnClickListener(view -> {
             String comment = commentEditText.getText().toString();
             String key = reference.push().getKey();
 
@@ -97,6 +97,7 @@ public class ReplyFragment extends Fragment {
             String threadsId = pushedThreadsRef.getKey();
 
             reference = db.getReference();
+            commentEditText.setText("");
         });
 
 

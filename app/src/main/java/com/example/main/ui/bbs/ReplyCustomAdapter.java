@@ -43,10 +43,10 @@ public class ReplyCustomAdapter extends ArrayAdapter<ReplyData> {
             viewHolder = (ReplyCustomAdapter.ViewHolder) convertView.getTag();
 
         } else {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.card_view, null);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.card_reply_view, null);
             viewHolder = new ReplyCustomAdapter.ViewHolder();
 
-            viewHolder.titleTextView = (TextView) convertView.findViewById(R.id.title_text_view);
+            viewHolder.titleTextView = convertView.findViewById(R.id.title_text_view);
             convertView.setTag(viewHolder);
 
         }
@@ -56,17 +56,6 @@ public class ReplyCustomAdapter extends ArrayAdapter<ReplyData> {
         viewHolder.titleTextView.setText(replyData.getComment());
 
         return convertView;
-    }
-
-
-    public ReplyData getReplyDataKey(String key) {
-        for (ReplyData ReplyData : mCards) {
-            if (ReplyData.getReplyKey().equals(key)) {
-                return ReplyData;
-            }
-        }
-
-        return null;
     }
 
     static class ViewHolder {
