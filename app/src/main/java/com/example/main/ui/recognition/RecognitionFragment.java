@@ -196,7 +196,7 @@ public class RecognitionFragment extends Fragment {
     //使い終わったらdestroyで破棄する
     public void onDestroyView() {
         super.onDestroyView();
-        speechRecognizer.destroy();
+        stopRecording();
     }
 
     /**

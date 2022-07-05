@@ -20,14 +20,23 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.main.db.wordtable.WordDatabase;
+import com.example.main.db.wordtable.WordDatabaseSingleton;
 import com.example.main.notification.TodayAlarmNotification;
 import com.example.main.notification.YesterdayAlarmNotification;
 import com.example.main.util.GetDay;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
+
+    //DBの宣言
+    private WordDatabase wordDatabase;
 
     @Override
     protected void onResume() {
@@ -42,20 +51,19 @@ public class MainActivity extends AppCompatActivity {
         //スーパークラスの呼び出し
         super.onCreate(savedInstanceState);
 
+        //データベースとの紐づけ
+        wordDatabase = WordDatabaseSingleton.getInstance(getApplicationContext());
+
         //XMLとこのActivityの紐づけ
         setContentView(R.layout.activity_main);
 
         //ナビゲーションバーの紐づけ
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
-        /*
-         * 各メニューのIDをIdsのセットとして渡すのは、各メニューが
-         * メニューはトップレベルの目的地とみなされるからである。
-         */
+        // 各メニューのIDをIdsのセットとして渡す
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_recognition, R.id.navigation_graph, R.id.navigation_bbs)
                 .build();
-
 
         //上部のアクションバーを非表示にする
         ActionBar actionBar = getSupportActionBar();
@@ -66,14 +74,24 @@ public class MainActivity extends AppCompatActivity {
         // ステータスバーを消す
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-
         //下部のナビゲーションバー諸々・変更の必要なし
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        //アラームの起動
         setYesterdayNotification();
         setTodayNotification();
+
+        //初回起動時のみにデータベースに値を入れる
+        if (checkInitBoot()) {
+            try {
+                new InitWordDataBase(this, readFromFile(), wordDatabase).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     @Override
@@ -81,6 +99,48 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         unMuteAudio();
+    }
+
+    private boolean checkInitBoot() {
+        //共有プリファレンスの準備
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        boolean isInitBoolean = preferences.getBoolean("initBoot", true);
+        editor.putBoolean("initBoot", false);
+
+        return isInitBoolean;
+    }
+
+    private String readFromFile() throws IOException {
+        //InputStream inputStream = openFileInput("読み込むファイル名.txt");
+        //-> openFileInputによって,InputStreamオブジェクトを取得する
+
+        //InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        //-> InputStreamReaderインスタンスに変換することで、文字列として扱えるようにする
+
+        //BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        //-> inputStreamReaderをバッファリングして、効率的に読み込めるようにする
+        Log.d("テキストファイルをよみこんでいるよ", "readFromFile: ");
+
+        String result = "";
+        InputStream inputStream = this.getAssets().open("Badword.txt");
+
+        if (inputStream != null) {
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+            String tempString = "";
+            StringBuilder stringBuilder = new StringBuilder();
+
+            while ((tempString = bufferedReader.readLine()) != null) {
+                stringBuilder.append(tempString + ",");
+            }
+            inputStream.close();
+            result = stringBuilder.toString();
+
+            Log.d("テキストファイルをよみこんでいるよ", "結果だよ" + result);
+        }
+        return result;
     }
 
     public void setYesterdayNotification() {
@@ -231,8 +291,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    //音声をミュートする
     public void muteAudio() {
         AudioManager alarmManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
