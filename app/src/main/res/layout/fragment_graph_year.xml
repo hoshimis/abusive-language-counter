@@ -10,12 +10,12 @@
     tools:context=".ui.graph.GraphYearFragment">
 
     <TextView
-        android:id="@+id/tikutiku_count"
+        android:id="@+id/Prickly_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ちくちく回数"
+        android:text="@string/graph_title"
         android:textColor="@color/black"
-        android:textSize="25dp" />
+        android:textSize="25sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,10 +26,11 @@
             android:id="@+id/week"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:text="週間" />
+            android:text="@string/graph_week"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/month"
@@ -38,18 +39,18 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:text="月間" />
+            android:text="@string/graph_month"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
             android:layout_weight="1"
-            android:text="年間"
-
-            />
+            android:text="@string/graph_year"
+            tools:ignore="ButtonStyle" />
     </LinearLayout>
 
     <TextView
@@ -58,14 +59,12 @@
         android:layout_height="wrap_content"
         android:text=""
         android:textColor="@color/black"
-        android:textSize="30dp" />
+        android:textSize="30sp" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chart2"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-
-        />
+        android:layout_height="300dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -79,26 +78,26 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="年間合計"
+            android:text="@string/year_sum_text"
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="25sp"
+            tools:ignore="NestedWeights" />
 
         <TextView
             android:id="@+id/yearSumCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="取得中"
+            android:text=""
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="25sp" />
 
         <ImageView
             android:id="@+id/year_sum_face"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-
+            android:layout_weight="1"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <LinearLayout
@@ -107,16 +106,16 @@
         android:layout_weight="0.5"
         android:orientation="horizontal">
 
-
         <TextView
             android:id="@+id/max_month_and_min_month_title"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="最大月回数\n最小月回数"
+            android:text="@string/year_max_min_text"
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="25sp"
+            tools:ignore="NestedWeights" />
 
         <TextView
             android:id="@+id/monthMinMax"
@@ -124,15 +123,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="4回\n4回"
+            android:text=""
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="25sp" />
 
         <ImageView
             android:id="@+id/min_max_face"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <LinearLayout
@@ -147,9 +147,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="年間平均回数"
+            android:text="@string/year_ave_text"
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="25sp"
+            tools:ignore="NestedWeights" />
 
         <TextView
             android:id="@+id/yearAverage"
@@ -157,15 +158,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="4回"
+            android:text=""
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="25sp" />
 
         <ImageView
             android:id="@+id/year_ave_face"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
 </LinearLayout>

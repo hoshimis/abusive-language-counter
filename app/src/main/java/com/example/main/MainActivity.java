@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -35,9 +34,6 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    //DBの宣言
-    private WordDatabase wordDatabase;
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -52,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //データベースとの紐づけ
-        wordDatabase = WordDatabaseSingleton.getInstance(getApplicationContext());
+        //DBの宣言
+        WordDatabase wordDatabase = WordDatabaseSingleton.getInstance(getApplicationContext());
 
         //XMLとこのActivityの紐づけ
         setContentView(R.layout.activity_main);
@@ -108,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isInitBoolean = preferences.getBoolean("initBoot", true);
         editor.putBoolean("initBoot", false);
 
+        editor.apply();
         return isInitBoolean;
     }
 
@@ -120,25 +118,23 @@ public class MainActivity extends AppCompatActivity {
 
         //BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         //-> inputStreamReaderをバッファリングして、効率的に読み込めるようにする
-        Log.d("テキストファイルをよみこんでいるよ", "readFromFile: ");
 
         String result = "";
-        InputStream inputStream = this.getAssets().open("Badword.txt");
+        InputStream inputStream = this.getAssets().open("BadWord.txt");
 
         if (inputStream != null) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-            String tempString = "";
+            String tempString;
             StringBuilder stringBuilder = new StringBuilder();
 
             while ((tempString = bufferedReader.readLine()) != null) {
-                stringBuilder.append(tempString + ",");
+                stringBuilder.append(tempString).append(",");
             }
             inputStream.close();
             result = stringBuilder.toString();
 
-            Log.d("テキストファイルをよみこんでいるよ", "結果だよ" + result);
         }
         return result;
     }
@@ -293,36 +289,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void muteAudio() {
         AudioManager alarmManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_MUTE, 0);
-            alarmManager.adjustStreamVolume(AudioManager.STREAM_ALARM, AudioManager.ADJUST_MUTE, 0);
-            alarmManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_MUTE, 0);
-            alarmManager.adjustStreamVolume(AudioManager.STREAM_RING, AudioManager.ADJUST_MUTE, 0);
-            alarmManager.adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_MUTE, 0);
-        } else {
-            alarmManager.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
-            alarmManager.setStreamMute(AudioManager.STREAM_ALARM, true);
-            alarmManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
-            alarmManager.setStreamMute(AudioManager.STREAM_RING, true);
-            alarmManager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
-        }
+        alarmManager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_MUTE, 0);
+        alarmManager.adjustStreamVolume(AudioManager.STREAM_ALARM, AudioManager.ADJUST_MUTE, 0);
+        alarmManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_MUTE, 0);
+        alarmManager.adjustStreamVolume(AudioManager.STREAM_RING, AudioManager.ADJUST_MUTE, 0);
+        alarmManager.adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_MUTE, 0);
     }
 
+    //ミュートを解除する
     public void unMuteAudio() {
         AudioManager alarmManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_UNMUTE, 0);
-            alarmManager.adjustStreamVolume(AudioManager.STREAM_ALARM, AudioManager.ADJUST_UNMUTE, 0);
-            alarmManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE, 0);
-            alarmManager.adjustStreamVolume(AudioManager.STREAM_RING, AudioManager.ADJUST_UNMUTE, 0);
-            alarmManager.adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_UNMUTE, 0);
-        } else {
-            alarmManager.setStreamMute(AudioManager.STREAM_NOTIFICATION, false);
-            alarmManager.setStreamMute(AudioManager.STREAM_ALARM, false);
-            alarmManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
-            alarmManager.setStreamMute(AudioManager.STREAM_RING, false);
-            alarmManager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
-        }
+        alarmManager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_UNMUTE, 0);
+        alarmManager.adjustStreamVolume(AudioManager.STREAM_ALARM, AudioManager.ADJUST_UNMUTE, 0);
+        alarmManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE, 0);
+        alarmManager.adjustStreamVolume(AudioManager.STREAM_RING, AudioManager.ADJUST_UNMUTE, 0);
+        alarmManager.adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_UNMUTE, 0);
     }
-
 }

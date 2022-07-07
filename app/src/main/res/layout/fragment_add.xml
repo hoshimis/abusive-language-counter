@@ -11,14 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <EditText
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints=""
             android:focusableInTouchMode="true"
-            android:hint="タイトル"
+            android:hint="@string/bbs_add_title"
+            android:inputType="text"
             android:singleLine="true"
             android:textSize="32sp" />
 
@@ -26,7 +29,7 @@
             android:id="@+id/add_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="本文"
+            android:text="@string/bbs_add_content"
             android:textSize="18sp" />
 
         <EditText
@@ -35,22 +38,22 @@
             android:layout_height="64dp"
             android:layout_gravity="top"
             android:background="@android:color/transparent"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:autofillHints=""
+            android:inputType="text" />
 
         <Button
             android:id="@+id/add_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="save" />
+            android:text="@string/bbs_add_submit" />
 
         <Button
             android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="もどる" />
+            android:text="@string/bbs_add_back" />
 
     </LinearLayout>
-
-
 
 </RelativeLayout>

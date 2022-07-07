@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center_horizontal"
-        android:text="新規追加"
+        android:text="@string/settings_word_title"
         android:textSize="42sp" />
 
     <TextView
@@ -20,11 +20,11 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center_horizontal"
-        android:text="現在追加されている単語"
+        android:text="@string/settings_word_current"
         android:textSize="23sp" />
 
-
     <ListView
+        android:id="@+id/current_word"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_weight="8" />
@@ -37,20 +37,24 @@
         android:weightSum="3">
 
         <EditText
+            android:id="@+id/edit_db_word"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:hint="新規追加するワード"
-            android:textSize="23sp" />
+            android:hint="@string/settings_word_add"
+            android:textSize="23sp"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            tools:ignore="NestedWeights" />
 
         <Button
+            android:id="@+id/submit_db_word"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="追加"
+            android:text="@string/settings_word_submit"
             android:textSize="23sp" />
 
     </LinearLayout>
-
 
 </LinearLayout>

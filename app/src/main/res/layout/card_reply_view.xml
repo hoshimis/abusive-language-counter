@@ -5,21 +5,14 @@
     android:layout_marginBottom="5dp"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/title_text_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:layout_margin="6dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/title_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:text="Sample Text"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="23sp" />
-
-    </LinearLayout>
+        android:paddingBottom="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="23sp" />
 
 </LinearLayout>

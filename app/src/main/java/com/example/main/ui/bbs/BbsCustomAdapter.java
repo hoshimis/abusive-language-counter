@@ -49,17 +49,14 @@ public class BbsCustomAdapter extends ArrayAdapter<BbsData> {
             viewHolder.titleTextView = (TextView) convertView.findViewById(R.id.title_text_view);
             viewHolder.contentTextView = (TextView) convertView.findViewById(R.id.content_text_view);
             convertView.setTag(viewHolder);
-
         }
 
         BbsData bbsData = mCards.get(position);
-
         viewHolder.titleTextView.setText(bbsData.getTitle());
         viewHolder.contentTextView.setText(bbsData.getContent());
 
         return convertView;
     }
-
 
     public BbsData getBBSDataKey(String key) {
         for (BbsData BBSData : mCards) {
@@ -67,7 +64,6 @@ public class BbsCustomAdapter extends ArrayAdapter<BbsData> {
                 return BBSData;
             }
         }
-
         return null;
     }
 
@@ -75,5 +71,4 @@ public class BbsCustomAdapter extends ArrayAdapter<BbsData> {
         TextView titleTextView;
         TextView contentTextView;
     }
-
 }

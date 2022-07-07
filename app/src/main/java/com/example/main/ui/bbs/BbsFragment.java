@@ -27,32 +27,17 @@ import java.util.ArrayList;
 
 public class BbsFragment extends Fragment implements AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
 
-    private BbsViewModel notificationsViewModel;
-
     //Realtime Databaseを使った掲示板の作成
     //最初は、FireStoreを使おうとしたけど分かりずらかったからRealtimeDatabaseを使うことにします。
 
-    private FirebaseDatabase db;
     private DatabaseReference reference;
-
     private BbsCustomAdapter mBbsCustomAdapter;
-    private ListView mListView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        notificationsViewModel = new ViewModelProvider(this).get(BbsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_bbs, container, false);
-//        final TextView textView = root.findViewById(R.id.text_notifications);
-//        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
-
         //RealtimeDatabaseのインスタンスを取得
-        db = FirebaseDatabase.getInstance();
-
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference pushedThreadsRef = db.getReference().push();
         String threadsId = pushedThreadsRef.getKey();
 
@@ -63,10 +48,10 @@ public class BbsFragment extends Fragment implements AdapterView.OnItemLongClick
         reference = db.getReference("Threads").child("Thread");
 
         //リストビューとの紐づけ
-        mListView = root.findViewById(R.id.list_view);
+        ListView mListView = root.findViewById(R.id.list_view);
 
         //CustomAdapterをセットする
-        mBbsCustomAdapter = new BbsCustomAdapter(requireContext().getApplicationContext(), R.layout.card_view, new ArrayList<BbsData>());
+        mBbsCustomAdapter = new BbsCustomAdapter(requireContext().getApplicationContext(), R.layout.card_view, new ArrayList<>());
         mListView.setAdapter(mBbsCustomAdapter);
 
         //LongListenerを設定
@@ -96,7 +81,6 @@ public class BbsFragment extends Fragment implements AdapterView.OnItemLongClick
             //リスト内にアイテムに対する変更がないかを監視する
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
             }
 
             //リストから削除されるアイテムがないかを監視する
@@ -118,29 +102,22 @@ public class BbsFragment extends Fragment implements AdapterView.OnItemLongClick
             //並べ替えリストの項目順に変更がないかを監視する
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
             }
 
             //ログを記録するなどError時の処理を記載する
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
 
         //スレッド作成画面に遷移
-        root.findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment toAdd = new AddFragment();
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_host_fragment, toAdd);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
+        root.findViewById(R.id.add_button).setOnClickListener(view -> {
+            Fragment toAdd = new AddFragment();
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+            transaction.replace(R.id.nav_host_fragment, toAdd);
+            transaction.addToBackStack(null);
+            transaction.commit();
         });
-
         return root;
     }
 
@@ -150,8 +127,6 @@ public class BbsFragment extends Fragment implements AdapterView.OnItemLongClick
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
         BbsData bbsData = mBbsCustomAdapter.getItem(position);
-
-        Log.d(TAG, "onItemLongClick: " + bbsData.getFirebaseKey());
 
         new AlertDialog.Builder(requireContext())
                 .setTitle("Delete?")
@@ -163,8 +138,6 @@ public class BbsFragment extends Fragment implements AdapterView.OnItemLongClick
                 .setNegativeButton("No", null)
                 .show();
         return false;
-
-
     }
 
     @Override
@@ -172,10 +145,6 @@ public class BbsFragment extends Fragment implements AdapterView.OnItemLongClick
         BbsData bbsData = mBbsCustomAdapter.getItem(position);
         String firebaseKey = bbsData.getFirebaseKey();
         String title = bbsData.getTitle();
-
-
-//        BbsData item = mCustomAdapter.getBBSDataKey(result.getFirebaseKey());
-//        String str = bbsData.getFirebaseKey();
 
         //遷移先のフラグメントに情報を渡す処理
         Fragment toReply = new ReplyFragment();
@@ -187,11 +156,5 @@ public class BbsFragment extends Fragment implements AdapterView.OnItemLongClick
         transaction.replace(R.id.nav_host_fragment, toReply);
         transaction.addToBackStack(null);
         transaction.commit();
-
-        //遷移先のアクティビティに情報を渡す処理
-//        Intent intent = new Intent(requireActivity().getApplicationContext(),ReplyActivity.class);
-//        intent.putExtra("FirebaseKey", firebaseKey);
-//        intent.putExtra("Title", title);
-//        startActivity(intent);
     }
 }

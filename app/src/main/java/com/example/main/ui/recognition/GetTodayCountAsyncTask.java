@@ -24,15 +24,14 @@ public class GetTodayCountAsyncTask extends AsyncTask<Void, Void, Integer> {
     //テキストビューの宣言
     private final TextView textView;
     //イメージビューの宣言
-    private final ImageView gizagiza_image;
+    private final ImageView jaggedImage;
 
     //コンストラクター
-    public GetTodayCountAsyncTask(Activity activity, CountDatabase countDatabase, TextView textView, ImageView gizagiza_image) {
+    public GetTodayCountAsyncTask(Activity activity, CountDatabase countDatabase, TextView textView, ImageView jaggedImage) {
         weakReference = new WeakReference<>(activity);
         this.countDatabase = countDatabase;
         this.textView = textView;
-        this.gizagiza_image = gizagiza_image;
-
+        this.jaggedImage = jaggedImage;
     }
 
     //非同期処理が行われる場所
@@ -41,7 +40,6 @@ public class GetTodayCountAsyncTask extends AsyncTask<Void, Void, Integer> {
     protected Integer doInBackground(Void... aVoid) {
         DaysCountDao daysCountDao = countDatabase.daysCountDao();
         count = daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ MM/ dd") + "%");
-
         return 0;
     }
 
@@ -57,15 +55,15 @@ public class GetTodayCountAsyncTask extends AsyncTask<Void, Void, Integer> {
 
         //ちくちくの画像がカウント回数によって変化する処理
         if (count == 0) {
-            gizagiza_image.setImageResource(R.drawable.count_level_1);
+            jaggedImage.setImageResource(R.drawable.count_level_1);
         } else if (count <= 10) {
-            gizagiza_image.setImageResource(R.drawable.count_level_2);
+            jaggedImage.setImageResource(R.drawable.count_level_2);
         } else if (count <= 20) {
-            gizagiza_image.setImageResource(R.drawable.count_level_3);
+            jaggedImage.setImageResource(R.drawable.count_level_3);
         } else if (count <= 30) {
-            gizagiza_image.setImageResource(R.drawable.count_level_4);
+            jaggedImage.setImageResource(R.drawable.count_level_4);
         } else {
-            gizagiza_image.setImageResource(R.drawable.count_level_5);
+            jaggedImage.setImageResource(R.drawable.count_level_5);
         }
     }
 }

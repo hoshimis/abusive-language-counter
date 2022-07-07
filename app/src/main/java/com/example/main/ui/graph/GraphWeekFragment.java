@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class GraphWeekFragment extends Fragment {
-    private BarChart mchart;
+    private BarChart mChart;
     private Typeface tfRegular;
 
     //週間の回数を格納する配列を宣言
@@ -53,7 +53,7 @@ public class GraphWeekFragment extends Fragment {
         TextView todaySum = root.findViewById(R.id.todaySum);
         TextView comparedYesterday = root.findViewById(R.id.comparedYesterday);
         TextView weekSum = root.findViewById(R.id.weekSum);
-        mchart = root.findViewById(R.id.chart1);
+        mChart = root.findViewById(R.id.chart1);
 
         //今週の合計値を格納する為の変数
         int weekSumCount = 0;
@@ -73,7 +73,7 @@ public class GraphWeekFragment extends Fragment {
         }
 
         //グラフの描画
-        setGraph(mchart);
+        setGraph(mChart);
 
         root.findViewById(R.id.month).setOnClickListener(
                 view -> {
@@ -144,19 +144,19 @@ public class GraphWeekFragment extends Fragment {
     }
 
     //グラフを描画する処理
-    private void setGraph(BarChart mchart) {
-        mchart.setBackgroundColor(-35);
-        mchart.setExtraTopOffset(0);
-        mchart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
-        mchart.setExtraLeftOffset(0);
-        mchart.setExtraRightOffset(0);
-        mchart.setDrawBarShadow(false);
-        mchart.setDrawBorders(false);
-        mchart.getDescription().setEnabled(false);
+    private void setGraph(BarChart mChart) {
+        mChart.setBackgroundColor(-35);
+        mChart.setExtraTopOffset(0);
+        mChart.setExtraBottomOffset(5);//値を大きくするとx軸が上に行く
+        mChart.setExtraLeftOffset(0);
+        mChart.setExtraRightOffset(0);
+        mChart.setDrawBarShadow(false);
+        mChart.setDrawBorders(false);
+        mChart.getDescription().setEnabled(false);
 
-        mchart.setPinchZoom(true);
-        mchart.setDrawGridBackground(false);
-        XAxis xAxis = mchart.getXAxis();
+        mChart.setPinchZoom(true);
+        mChart.setDrawGridBackground(false);
+        XAxis xAxis = mChart.getXAxis();
 
         //横線の値を設定する
         //一番右端を今日として、左に向かって一日前ずつ表示していく
@@ -181,7 +181,7 @@ public class GraphWeekFragment extends Fragment {
         xAxis.setCenterAxisLabels(false);
         xAxis.setGranularity(1);
 
-        YAxis left = mchart.getAxisLeft();
+        YAxis left = mChart.getAxisLeft();
         left.setDrawLabels(false); //格子の横線
         left.setSpaceTop(25f);
         left.setSpaceBottom(0);//値が０でもx軸から離れないようにするために０にする
@@ -190,8 +190,8 @@ public class GraphWeekFragment extends Fragment {
         left.setDrawZeroLine(true); // draw a zero line
         left.setZeroLineColor(Color.GRAY);
         left.setZeroLineWidth(0.7f);
-        mchart.getAxisRight().setEnabled(false);
-        mchart.getLegend().setEnabled(false);
+        mChart.getAxisRight().setEnabled(false);
+        mChart.getLegend().setEnabled(false);
     }
 
     public void setData(List<Data> dataList) {
@@ -218,12 +218,12 @@ public class GraphWeekFragment extends Fragment {
 
         BarDataSet set;
 
-        if (mchart.getData() != null &&
-                mchart.getData().getDataSetCount() > 0) {
-            set = (BarDataSet) mchart.getData().getDataSetByIndex(0);
+        if (mChart.getData() != null &&
+                mChart.getData().getDataSetCount() > 0) {
+            set = (BarDataSet) mChart.getData().getDataSetByIndex(0);
             set.setValues(values);
-            mchart.getData().notifyDataChanged();
-            mchart.notifyDataSetChanged();
+            mChart.getData().notifyDataChanged();
+            mChart.notifyDataSetChanged();
         } else {
             set = new BarDataSet(values, "Values");
             set.setColors(origin);//棒グラフの色
@@ -235,8 +235,8 @@ public class GraphWeekFragment extends Fragment {
             data.setValueFormatter(new ValueFormatter());
             data.setBarWidth(0.8f);
 
-            mchart.setData(data);
-            mchart.invalidate();
+            mChart.setData(data);
+            mChart.invalidate();
         }
     }
 

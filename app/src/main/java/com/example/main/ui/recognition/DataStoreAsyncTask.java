@@ -65,18 +65,6 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
         WordTableDao wordTableDao = wordDatabase.wordTableDao();
         DaysCountDao daysCountDao = countDatabase.daysCountDao();
 
-        //データベースに値を入れる処理
-
-//            wordTableDao.insert(new WordTable("バカ"));
-//            wordTableDao.insert(new WordTable("アホ"));
-//            wordTableDao.insert(new WordTable("死ね"));
-//            wordTableDao.insert(new WordTable("消えろ"));
-//            wordTableDao.insert(new WordTable("ハゲ"));
-//            wordTableDao.insert(new WordTable("おはよう"));
-//            wordTableDao.insert(new WordTable("ばーか"));
-//            wordTableDao.insert(new WordTable("今日は"));
-
-
         //単語DBからすべてのワードを取得してリストに代入する。
         List<WordTable> atList = wordTableDao.getAll();
 
@@ -123,6 +111,5 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
         } else {
             jagged.setImageResource(R.drawable.count_level_5);
         }
-
     }
 }

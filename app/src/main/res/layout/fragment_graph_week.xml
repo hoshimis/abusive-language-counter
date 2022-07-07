@@ -14,12 +14,12 @@
     tools:context=".ui.graph.GraphWeekFragment">
 
     <TextView
-        android:id="@+id/tikutiku_count"
+        android:id="@+id/Prickly_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ちくちく回数"
+        android:text="@string/graph_title"
         android:textColor="@color/black"
-        android:textSize="25dp" />
+        android:textSize="25sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,10 +30,11 @@
             android:id="@+id/week"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:text="週間" />
+            android:text="@string/graph_week"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/month"
@@ -42,18 +43,18 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:text="月間" />
+            android:text="@string/graph_month"
+            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
             android:layout_weight="1"
-            android:text="年間"
-
-            />
+            android:text="@string/graph_year"
+            tools:ignore="ButtonStyle" />
     </LinearLayout>
 
     <TextView
@@ -62,7 +63,7 @@
         android:layout_height="wrap_content"
         android:text=""
         android:textColor="@color/black"
-        android:textSize="30dp" />
+        android:textSize="30sp" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chart1"
@@ -81,26 +82,26 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="今日の合計"
+            android:text="@string/today_sum_text"
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="25sp"
+            tools:ignore="NestedWeights" />
 
         <TextView
             android:id="@+id/todaySum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="4回"
+            android:text=""
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="25sp" />
 
         <ImageView
             android:id="@+id/today_sum_face"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-
+            android:layout_weight="1"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <LinearLayout
@@ -109,16 +110,16 @@
         android:layout_weight="0.5"
         android:orientation="horizontal">
 
-
         <TextView
             android:id="@+id/comparedYesterday_title"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="前日比"
+            android:text="@string/today_ratio_text"
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="25sp"
+            tools:ignore="NestedWeights" />
 
         <TextView
             android:id="@+id/comparedYesterday"
@@ -126,15 +127,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="4回"
+            android:text=""
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="25sp" />
 
         <ImageView
             android:id="@+id/comparedYesterday_face"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <LinearLayout
@@ -149,9 +151,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="週間合計"
+            android:text="@string/week_sum_text"
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="25sp"
+            tools:ignore="NestedWeights" />
 
         <TextView
             android:id="@+id/weekSum"
@@ -159,16 +162,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="4回"
+            android:text=""
             android:textColor="@color/black"
-            android:textSize="25dp" />
+            android:textSize="25sp" />
 
         <ImageView
             android:id="@+id/week_sum_face"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
-
-
 </LinearLayout>

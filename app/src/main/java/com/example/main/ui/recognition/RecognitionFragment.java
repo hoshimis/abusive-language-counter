@@ -44,13 +44,11 @@ public class RecognitionFragment extends Fragment {
     ArrayAdapter<String> adapter;
     private SpeechRecognizer speechRecognizer;
     private TextView mText;
-    //    private TextView titleView;
     private TextView countText;
     private ImageView jaggedImage;
     //DBの宣言
     private WordDatabase wordDatabase;
     private CountDatabase countDatabase;
-
 
     /**
      * ActivityのようにFragmentにもライフサイクルがある
@@ -60,17 +58,14 @@ public class RecognitionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_recognition, container, false);
 
-
         //mText -> 認識した音声をテキスト化して表示するテキストビューを紐づけ
         //titleView -> 音声認識の状態を表示する部分のテキストビューを紐づけ
         //countText -> 単語DBと何回マッチしたかを表示するテキストビューの紐づけ
         //listView -> その日になんの言葉を話したか表示するListViewの紐づけ
         mText = root.findViewById(R.id.recognize_text_view);
-//        titleView = root.findViewById(R.id.text_Recognition);
         countText = root.findViewById(R.id.count_text);
         ListView listView = root.findViewById(R.id.listView);
         jaggedImage = root.findViewById(R.id.count_image);
-
 
         //データベースとの紐づけ
         wordDatabase = WordDatabaseSingleton.getInstance(requireActivity().getApplicationContext());
@@ -83,10 +78,6 @@ public class RecognitionFragment extends Fragment {
         if (ContextCompat.checkSelfPermission(requireActivity().getApplicationContext(), RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{RECORD_AUDIO}, PERMISSIONS_RECORD_AUDIO);
         }
-
-        //画面に正円を描画するための処理
-//        CircleView circleView = root.findViewById(R.id.circle_view);
-//        circleView.setColor(R.color.teal_200);
 
         //SpeechRecognizerを使用することができるか確認する
         checkSpeechRecognizer();
@@ -134,11 +125,8 @@ public class RecognitionFragment extends Fragment {
                     PERMISSIONS_RECORD_AUDIO);
             return false;
         }
-
-
         return true;
     }
-
 
     // 許可ダイアログの承認結果を受け取る
     @Override
@@ -148,11 +136,6 @@ public class RecognitionFragment extends Fragment {
 
         if (grantResults.length <= 0) {
             return;
-        }
-
-        if (requestCode == PERMISSIONS_RECORD_AUDIO) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            }
         }
     }
 
@@ -287,5 +270,4 @@ public class RecognitionFragment extends Fragment {
             Log.d(TAG, "onEvent: eventType=" + i);
         }
     }
-
 }

@@ -9,11 +9,11 @@
     android:orientation="vertical"
     tools:context=".ui.bbs.ReplyFragment">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,7 +24,8 @@
                 android:id="@+id/back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="もどる" />
+                android:text="@string/reply_back" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -36,14 +37,15 @@
                 android:id="@+id/reply_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="コメント"
+                android:text="@string/reply_comment"
                 android:textSize="45sp" />
+
         </LinearLayout>
 
         <ListView
             android:id="@+id/reply_list_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1" />
 
         <LinearLayout
@@ -53,28 +55,27 @@
             android:orientation="horizontal"
             android:weightSum="5">
 
-
             <EditText
                 android:id="@+id/comment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:focusableInTouchMode="true"
-                android:hint="コメントを入力"
+                android:hint="@string/reply_edit_comment"
+                android:inputType="text"
                 android:singleLine="true"
-                android:textSize="32sp" />
+                android:textSize="32sp"
+                tools:ignore="Autofill" />
 
             <Button
                 android:id="@+id/reply_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="返信" />
+                android:text="@string/reply_send" />
 
         </LinearLayout>
 
-
     </LinearLayout>
-
 
 </LinearLayout>

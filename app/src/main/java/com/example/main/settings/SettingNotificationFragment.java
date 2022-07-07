@@ -42,7 +42,6 @@ public class SettingNotificationFragment extends Fragment implements TimePickerD
         preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
         SharedPreferences.Editor editor = preferences.edit();
 
-
         //XMLとの紐づけ
         //前日関連
         yesterdayNotificationTime = root.findViewById(R.id.notification_yesterday_time);
@@ -58,7 +57,6 @@ public class SettingNotificationFragment extends Fragment implements TimePickerD
         LinearLayout rootBox = root.findViewById(R.id.notification_box);
         LinearLayout yesterdayBox = root.findViewById(R.id.notification_yesterday_box);
         LinearLayout todayBox = root.findViewById(R.id.notification_today_box);
-
 
         //↓のサイトを参考にSwitchの挙動を実装した
         //https://pentan.info/android/app/sample/visibility_invisible_gone.html
@@ -78,7 +76,6 @@ public class SettingNotificationFragment extends Fragment implements TimePickerD
                 editor.putBoolean("isRootNotification", false);
                 editor.putBoolean("isYesterdayNotification", false);
                 editor.putBoolean("isTodayNotification", false);
-
             }
             editor.apply();
         });
@@ -95,7 +92,6 @@ public class SettingNotificationFragment extends Fragment implements TimePickerD
                 //チェック状態を共有プリファレンスに格納する
                 editor.putBoolean("isYesterdayNotification", false);
             }
-
             editor.apply();
         });
 
@@ -111,7 +107,6 @@ public class SettingNotificationFragment extends Fragment implements TimePickerD
                 //チェック状態を共有プリファレンスに格納する
                 editor.putBoolean("isTodayNotification", false);
             }
-
             editor.apply();
         });
 
@@ -161,7 +156,6 @@ public class SettingNotificationFragment extends Fragment implements TimePickerD
         switchRoot.setChecked(isRootNotification);
         switchYesterday.setChecked(isYesterdayNotification);
         switchToday.setChecked(isTodayNotification);
-
 
         return root;
     }

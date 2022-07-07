@@ -1,5 +1,7 @@
 package com.example.main.ui.bbs;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,12 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-import static android.content.ContentValues.TAG;
-
 public class ReplyFragment extends Fragment {
-
-    ArrayList<String> data = new ArrayList<>();
-
 
     FirebaseDatabase db = FirebaseDatabase.getInstance();
     DatabaseReference reference = db.getReference();
@@ -36,7 +33,6 @@ public class ReplyFragment extends Fragment {
 
     //xmlとの紐づけ用の変数
     private EditText commentEditText;
-    private BbsCustomAdapter mBbsCustomAdapter;
     private ReplyCustomAdapter mReplyCustomAdapter;
 
     @Override
@@ -49,11 +45,6 @@ public class ReplyFragment extends Fragment {
         //読込先の場所を参照する
         replyReference = db.getReference("Threads").child("Thread").child(firebaseKey).child("reply");
 
-        //遷移元のフラグメントから情報を受け取る処理
-//        Intent intent = getIntent();
-//        String firebaseKey = intent.getStringExtra("FirebaseKey");
-//        String title = intent.getStringExtra("Title");
-
         TextView textView3 = root.findViewById(R.id.reply_text_view);
         textView3.setText(title);
 
@@ -61,7 +52,7 @@ public class ReplyFragment extends Fragment {
         ListView mListView = root.findViewById(R.id.reply_list_view);
 
         //CustomAdapterをセットする
-        mReplyCustomAdapter = new ReplyCustomAdapter(requireActivity().getApplicationContext(), R.layout.card_reply_view, new ArrayList<ReplyData>());
+        mReplyCustomAdapter = new ReplyCustomAdapter(requireActivity().getApplicationContext(), R.layout.card_reply_view, new ArrayList<>());
         mListView.setAdapter(mReplyCustomAdapter);
 
         //もどるボタンの処理
@@ -93,13 +84,9 @@ public class ReplyFragment extends Fragment {
             //RealtimeDatabaseのインスタンスを取得
             db = FirebaseDatabase.getInstance();
 
-            DatabaseReference pushedThreadsRef = db.getReference().push();
-            String threadsId = pushedThreadsRef.getKey();
-
             reference = db.getReference();
             commentEditText.setText("");
         });
-
 
         //firebaseと同期するリスナー
         replyReference.addChildEventListener(new ChildEventListener() {
@@ -146,7 +133,6 @@ public class ReplyFragment extends Fragment {
 
             }
         });
-
         return root;
     }
 }
