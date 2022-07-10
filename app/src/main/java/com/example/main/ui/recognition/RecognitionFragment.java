@@ -255,6 +255,7 @@ public class RecognitionFragment extends Fragment {
             Log.d(TAG, "onPartialResults");
             String str = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).get(0);
             if (str.length() > 0) {
+                Log.d(TAG, "認識された言葉 -> " + str);
                 //ここで、認識した言葉を非同期処理に渡して、マッチするかを確認する
                 new DataStoreAsyncTask(getActivity(), countDatabase, wordDatabase, str, CountTextView, jaggedImage).execute();
                 //任意視された言葉リストビューに挿入する

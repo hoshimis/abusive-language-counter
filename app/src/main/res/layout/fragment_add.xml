@@ -37,10 +37,10 @@
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_gravity="top"
-            android:background="@android:color/transparent"
-            android:textSize="18sp"
             android:autofillHints=""
-            android:inputType="text" />
+            android:background="@android:color/transparent"
+            android:inputType="text"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/add_button"
