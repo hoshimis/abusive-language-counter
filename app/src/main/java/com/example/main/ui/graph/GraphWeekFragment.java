@@ -1,8 +1,11 @@
 package com.example.main.ui.graph;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +32,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class GraphWeekFragment extends Fragment {
     private BarChart mChart;
@@ -106,16 +110,24 @@ public class GraphWeekFragment extends Fragment {
 
         setData(data);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        int WeekLevel1=preferences.getInt("WeekCountLevel1",10);
+        int WeekLevel2=preferences.getInt("WeekCountLevel2",20);
+        int WeekLevel3=preferences.getInt("WeekCountLevel3",30);
+
+
         //合計の表情画像表示
         ImageView sum_today = root.findViewById(R.id.today_sum_face);
         if (weekCount[0] == 0) {
             sum_today.setImageResource(R.drawable.level_0);
-        } else if (weekCount[0] <= 10) {
+        } else if (weekCount[0] <=WeekLevel1 ) {
             sum_today.setImageResource(R.drawable.level_15);
-        } else if (weekCount[0] <= 20) {
+        } else if (weekCount[0] <=WeekLevel2 ) {
             sum_today.setImageResource(R.drawable.level_510);
-        } else {
+        } else if (weekCount[0] <=WeekLevel3) {
             sum_today.setImageResource(R.drawable.level_max);
+        }else {
+            sum_today.setImageResource(R.drawable.level_over);
         }
         //前日比の表情画像表示
         ImageView compared_yesterday = root.findViewById(R.id.comparedYesterday_face);
@@ -125,19 +137,23 @@ public class GraphWeekFragment extends Fragment {
             compared_yesterday.setImageResource(R.drawable.level_15);
         } else if (weekCount[0] - weekCount[1] >= 20) {
             compared_yesterday.setImageResource(R.drawable.level_510);
-        } else {
+        } else if (weekCount[0] - weekCount[1] >= 30){
             compared_yesterday.setImageResource(R.drawable.level_max);
+        }else{
+            compared_yesterday.setImageResource(R.drawable.level_over);
         }
         //週間合計の表情画像表示
         ImageView sum_week = root.findViewById(R.id.week_sum_face);
         if (weekSumCount == 0) {
             sum_week.setImageResource(R.drawable.level_0);
-        } else if (weekSumCount <= 70) {
+        } else if (weekSumCount <= WeekLevel1*7) {
             sum_week.setImageResource(R.drawable.level_15);
-        } else if (weekSumCount <= 140) {
+        } else if (weekSumCount <= WeekLevel2*7) {
             sum_week.setImageResource(R.drawable.level_510);
-        } else {
+        } else if (weekSumCount <= WeekLevel3*7){
             sum_week.setImageResource(R.drawable.level_max);
+        }else{
+            sum_week.setImageResource(R.drawable.level_over);
         }
 
         return root;

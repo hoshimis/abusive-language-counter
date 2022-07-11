@@ -22,12 +22,14 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.main.R;
 import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.CountDatabaseSingleton;
 import com.example.main.db.wordtable.WordDatabase;
 import com.example.main.db.wordtable.WordDatabaseSingleton;
+
 
 import java.util.ArrayList;
 
@@ -95,9 +97,15 @@ public class RecognitionFragment extends Fragment {
         //ビュー作成時にデータベースから回数を取得してきて、画面に表示する
         new GetTodayCountAsyncTask(getActivity(), countDatabase, countText, jaggedImage).execute();
 
-        //追加機能
-        jaggedImage.setOnClickListener(v -> {
-        });
+        root.findViewById(R.id.setting_go).setOnClickListener(
+                view -> {
+                    Fragment toMonths = new SettingFragment();
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment, toMonths);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+        );
         return root;
     }
 
