@@ -19,6 +19,10 @@ public interface DaysCountDao {
     @Query("select count(*) from dayscount where date like :date")
     int getCount(String date);
 
+    //（開発用）指定した日付にデータを挿入する
+    @Query("insert into dayscount values (null, 2022/01/01, 'test')")
+    void setValue();
+
     //デフォルト：要素を挿入
     @Insert
     void insert(DaysCount daysCount);

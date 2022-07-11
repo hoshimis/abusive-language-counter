@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
+    android:background="#FFFFDD"
+    android:layout_marginBottom="50dp"
     tools:context=".settings.AddWordDBFragment">
 
     <TextView

@@ -1,7 +1,5 @@
 package com.example.main.ui.recognition;
 
-import static android.Manifest.permission.RECORD_AUDIO;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,8 +28,9 @@ import com.example.main.db.dayscount.CountDatabaseSingleton;
 import com.example.main.db.wordtable.WordDatabase;
 import com.example.main.db.wordtable.WordDatabaseSingleton;
 
-
 import java.util.ArrayList;
+
+import static android.Manifest.permission.RECORD_AUDIO;
 
 public class RecognitionFragment extends Fragment {
     //今日の暴言をいった回数をカウントするための変数
@@ -58,8 +57,8 @@ public class RecognitionFragment extends Fragment {
      * onCreateView()で渡されるLayoutInflaterにFragmentのレイアウトを挿入して返す
      */
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_recognition, container, false);
-
         //mText -> 認識した音声をテキスト化して表示するテキストビューを紐づけ
         //titleView -> 音声認識の状態を表示する部分のテキストビューを紐づけ
         //countText -> 単語DBと何回マッチしたかを表示するテキストビューの紐づけ

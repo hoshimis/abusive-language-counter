@@ -1,17 +1,18 @@
 package com.example.main.ui.recognition;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.main.R;
+import com.example.main.settings.AddWordDBFragment;
+import com.example.main.settings.SettingNotificationFragment;
 import com.example.main.ui.graph.CountSetting;
-import com.example.main.ui.graph.GraphWeekFragment;
 
 public class SettingFragment extends Fragment {
 
@@ -20,20 +21,20 @@ public class SettingFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View root = inflater.inflate(R.layout.setting_fragment, container, false);
 
-        root.findViewById(R.id.alert_setting).setOnClickListener(
+        root.findViewById(R.id.word_add).setOnClickListener(
                 view -> {
-                    Fragment toWeek = new GraphWeekFragment();
+                    Fragment toAddDB = new AddWordDBFragment();
                     FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                    transaction.replace(R.id.nav_host_fragment, toWeek);
+                    transaction.replace(R.id.nav_host_fragment, toAddDB);
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }
         );
-        root.findViewById(R.id.word_add).setOnClickListener(
+        root.findViewById(R.id.alert_setting).setOnClickListener(
                 view -> {
-                    Fragment toWeek = new GraphWeekFragment();
+                    Fragment toSettingNotification = new SettingNotificationFragment();
                     FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                    transaction.replace(R.id.nav_host_fragment, toWeek);
+                    transaction.replace(R.id.nav_host_fragment, toSettingNotification);
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }

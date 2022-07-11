@@ -2,6 +2,7 @@ package com.example.main.settings;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.example.main.db.wordtable.WordDatabase;
@@ -22,7 +23,6 @@ public class AddWordAsyncTask extends AsyncTask<Void, Void, Integer> {
     //アダプター
     ArrayAdapter<String> adapter;
 
-
     //コンストラクタ―
     public AddWordAsyncTask(Activity activity, String addWord, WordDatabase wordDatabase, ArrayAdapter adapter) {
         weakReference = new WeakReference<>(activity);
@@ -34,10 +34,8 @@ public class AddWordAsyncTask extends AsyncTask<Void, Void, Integer> {
     @Override
     protected Integer doInBackground(Void... params) {
         WordTableDao wordTableDao = wordDatabase.wordTableDao();
-
         //新しいワードを追加する
         wordTableDao.insert(new WordTable(addWord));
-
         return 0;
     }
 
@@ -50,6 +48,8 @@ public class AddWordAsyncTask extends AsyncTask<Void, Void, Integer> {
         if (activity == null) {
             return;
         }
+
+        Log.d("非同期処理後の処理", "onPostExecute: " + "値を更新するよ");
 
         //新規追加した後にリストビューを更新する
         adapter.notifyDataSetChanged();
