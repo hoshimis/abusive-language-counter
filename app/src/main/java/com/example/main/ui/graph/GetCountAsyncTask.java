@@ -9,6 +9,8 @@ import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.DaysCountDao;
 import com.example.main.util.GetDay;
 
+import java.util.Locale;
+
 public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
     /*フィールド*/
 
@@ -33,7 +35,6 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
         this.distinction = distinction;
         this.month = month;
     }
-
 
     //非同期処理より前に処理される
     @Override
@@ -76,7 +77,7 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
             case 12:
                 for (int i = 0; i < 31; i++) {
                     GraphMonthFragment.monthCount[i] =
-                            daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ MM/ ") + String.format("%02d", i + 1) + "%");
+                            daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ MM/ ") + String.format(Locale.JAPAN, "%02d", i + 1) + "%");
                     GraphMonthFragment.data.add(new Data(i, GraphMonthFragment.monthCount[i], "1"));
 
                 }
@@ -84,7 +85,7 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
             case 2:
                 for (int i = 0; i < 28; i++) {
                     GraphMonthFragment.monthCount[i] =
-                            daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ MM/ ") + String.format("%02d", i + 1) + "%");
+                            daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ MM/ ") + String.format(Locale.JAPAN, "%02d", i + 1) + "%");
                     GraphMonthFragment.data.add(new Data(i, GraphMonthFragment.monthCount[i], "1"));
 
                 }
@@ -95,25 +96,21 @@ public class GetCountAsyncTask extends AsyncTask<Void, Void, Integer> {
             case 11:
                 for (int i = 0; i < 30; i++) {
                     GraphMonthFragment.monthCount[i] =
-                            daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ MM/ ") + String.format("%02d", i + 1) + "%");
+                            daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ MM/ ") + String.format(Locale.JAPAN, "%02d", i + 1) + "%");
                     GraphMonthFragment.data.add(new Data(i, GraphMonthFragment.monthCount[i], "1"));
-
                 }
                 break;
         }
-
-        return;
     }
 
     private void getYearCount(DaysCountDao daysCountDao) {
         for (int i = 0; i < 12; i++) {
             Log.d(TAG, "getYearCount: 年間のデータを入れるよ！！");
             GraphYearFragment.yearCount[i] =
-                    daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ ") + String.format("%02d", i + 1) + "%");
+                    daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ ") + String.format(Locale.JAPAN, "%02d", i + 1) + "%");
             GraphYearFragment.data.add(new Data(i + 1, GraphYearFragment.yearCount[i], "01-02"));
 
         }
-        return;
     }
 
 }

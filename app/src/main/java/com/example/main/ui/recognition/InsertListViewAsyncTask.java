@@ -19,14 +19,13 @@ public class InsertListViewAsyncTask extends AsyncTask<Void, Void, Integer> {
     //データベースとの紐づけ（回数カウント用　→　CountDataBase）
     private final CountDatabase countDatabase;
     //リストの宣言
-    private List<String> arrayList;
     private final ArrayAdapter<String> adapter;
-
     //日付取得機能の準備
     GetDay gt = new GetDay();
+    private final ArrayList<String> arrayList;
 
     //コンストラクタ―
-    public InsertListViewAsyncTask(Activity activity, CountDatabase countDatabase, ArrayList arrayList, ArrayAdapter<String> adapter) {
+    public InsertListViewAsyncTask(Activity activity, CountDatabase countDatabase, ArrayList<String> arrayList, ArrayAdapter<String> adapter) {
         weakReference = new WeakReference<>(activity);
         this.countDatabase = countDatabase;
         this.arrayList = arrayList;

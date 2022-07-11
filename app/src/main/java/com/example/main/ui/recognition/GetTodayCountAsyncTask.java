@@ -1,5 +1,7 @@
 package com.example.main.ui.recognition;
 
+import static com.example.main.ui.recognition.RecognitionFragment.count;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.widget.ImageView;
@@ -12,27 +14,24 @@ import com.example.main.util.GetDay;
 
 import java.lang.ref.WeakReference;
 
-import static com.example.main.ui.recognition.RecognitionFragment.count;
-
 public class GetTodayCountAsyncTask extends AsyncTask<Void, Void, Integer> {
-    /*フィールド*/
-    private WeakReference<Activity> weakReference;
-    //データベースとの紐づけ（回数カウント用　→　CountDataBase）
-    private CountDatabase countDatabase;
-    //テキストビューの宣言
-    private TextView textView;
-    //イメージビューの宣言
-    private ImageView gizagiza_image;
     //日付取得機能の準備
     GetDay gt = new GetDay();
+    /*フィールド*/
+    private final WeakReference<Activity> weakReference;
+    //データベースとの紐づけ（回数カウント用　→　CountDataBase）
+    private final CountDatabase countDatabase;
+    //テキストビューの宣言
+    private final TextView textView;
+    //イメージビューの宣言
+    private final ImageView jaggedImage;
 
     //コンストラクター
-    public GetTodayCountAsyncTask(Activity activity, CountDatabase countDatabase, TextView textView, ImageView gizagiza_image) {
+    public GetTodayCountAsyncTask(Activity activity, CountDatabase countDatabase, TextView textView, ImageView jaggedImage) {
         weakReference = new WeakReference<>(activity);
         this.countDatabase = countDatabase;
         this.textView = textView;
-        this.gizagiza_image = gizagiza_image;
-
+        this.jaggedImage = jaggedImage;
     }
 
     //非同期処理が行われる場所
@@ -41,7 +40,6 @@ public class GetTodayCountAsyncTask extends AsyncTask<Void, Void, Integer> {
     protected Integer doInBackground(Void... aVoid) {
         DaysCountDao daysCountDao = countDatabase.daysCountDao();
         count = daysCountDao.getCount("%" + gt.getDate(GetDay.TODAY, "yyyy/ MM/ dd") + "%");
-
         return 0;
     }
 
@@ -57,15 +55,15 @@ public class GetTodayCountAsyncTask extends AsyncTask<Void, Void, Integer> {
 
         //ちくちくの画像がカウント回数によって変化する処理
         if (count == 0) {
-            gizagiza_image.setImageResource(R.drawable.count_level_1);
+            jaggedImage.setImageResource(R.drawable.count_level_1);
         } else if (count <= 10) {
-            gizagiza_image.setImageResource(R.drawable.count_level_2);
+            jaggedImage.setImageResource(R.drawable.count_level_2);
         } else if (count <= 20) {
-            gizagiza_image.setImageResource(R.drawable.count_level_3);
+            jaggedImage.setImageResource(R.drawable.count_level_3);
         } else if (count <= 30) {
-            gizagiza_image.setImageResource(R.drawable.count_level_4);
+            jaggedImage.setImageResource(R.drawable.count_level_4);
         } else {
-            gizagiza_image.setImageResource(R.drawable.count_level_5);
+            jaggedImage.setImageResource(R.drawable.count_level_5);
         }
     }
 }

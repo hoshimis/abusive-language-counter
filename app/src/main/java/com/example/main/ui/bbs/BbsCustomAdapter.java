@@ -14,10 +14,10 @@ import com.example.main.R;
 
 import java.util.List;
 
-public class CustomAdapter extends ArrayAdapter<BbsData> {
-    private List<BbsData> mCards;
+public class BbsCustomAdapter extends ArrayAdapter<BbsData> {
+    private final List<BbsData> mCards;
 
-    public CustomAdapter(Context context, int layoutResourceId, List<BbsData> BBSData) {
+    public BbsCustomAdapter(Context context, int layoutResourceId, List<BbsData> BBSData) {
         super(context, layoutResourceId, BBSData);
 
         this.mCards = BBSData;
@@ -49,17 +49,14 @@ public class CustomAdapter extends ArrayAdapter<BbsData> {
             viewHolder.titleTextView = (TextView) convertView.findViewById(R.id.title_text_view);
             viewHolder.contentTextView = (TextView) convertView.findViewById(R.id.content_text_view);
             convertView.setTag(viewHolder);
-
         }
 
-        BbsData BBSData = mCards.get(position);
-
-        viewHolder.titleTextView.setText(BBSData.getTitle());
-        viewHolder.contentTextView.setText(BBSData.getContent());
+        BbsData bbsData = mCards.get(position);
+        viewHolder.titleTextView.setText(bbsData.getTitle());
+        viewHolder.contentTextView.setText(bbsData.getContent());
 
         return convertView;
     }
-
 
     public BbsData getBBSDataKey(String key) {
         for (BbsData BBSData : mCards) {
@@ -67,7 +64,6 @@ public class CustomAdapter extends ArrayAdapter<BbsData> {
                 return BBSData;
             }
         }
-
         return null;
     }
 
@@ -75,5 +71,4 @@ public class CustomAdapter extends ArrayAdapter<BbsData> {
         TextView titleTextView;
         TextView contentTextView;
     }
-
 }

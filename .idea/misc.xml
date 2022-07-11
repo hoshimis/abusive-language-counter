@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/User/AndroidStudioProjects/abusive-language-counter/app/src/main/res/layout/card_reply_view.xml" value="0.3880208333333333" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/abusive-language-counter/app/src/main/res/layout/card_view.xml" value="0.1887031408308004" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/abusive-language-counter/app/src/main/res/layout/fragment_add.xml" value="0.1" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/abusive-language-counter/app/src/main/res/layout/fragment_add_word_db.xml" value="0.25" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/abusive-language-counter/app/src/main/res/layout/fragment_bbs.xml" value="0.1099290780141844" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/abusive-language-counter/app/src/main/res/layout/fragment_graph_month.xml" value="0.1" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/abusive-language-counter/app/src/main/res/layout/fragment_graph_week.xml" value="0.1" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/abusive-language-counter/app/src/main/res/layout/fragment_graph_year.xml" value="0.1099290780141844" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/abusive-language-counter/app/src/main/res/layout/fragment_reply.xml" value="0.1099290780141844" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/abusive-language-counter/app/src/main/res/layout/fragment_setting_notification.xml" value="0.1099290780141844" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

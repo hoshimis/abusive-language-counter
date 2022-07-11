@@ -63,4 +63,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-database:20.0.5'
 
+    //Material Componentsを使用するための依存関係を記述する
+    implementation 'com.google.android.material:material:<version>'
+
 }

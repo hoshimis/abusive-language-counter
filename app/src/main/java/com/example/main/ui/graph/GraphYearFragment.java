@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,6 @@ import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.CountDatabaseSingleton;
 import com.example.main.util.GetDay;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.components.YAxis;
@@ -39,22 +39,19 @@ public class GraphYearFragment extends Fragment {
     /*フィールド*/
     //maker Ryo Kamizato feat シュトゥーデューム
 
-    private BarChart mChart;
-    private Typeface tfRegular;
     //年間の回数を格納する配列を宣言
     static int[] yearCount = new int[12];
-
     //データの設定
     static List<Data> data = new ArrayList<>();
-
     //日付取得機能の準備
     GetDay gt = new GetDay();
     final String YEAR = gt.getDate(GetDay.TODAY, "yyyy");
-    final int MONTH=Integer.parseInt(gt.getDate(GetDay.TODAY,"MM"));
-
+    final int MONTH = Integer.parseInt(gt.getDate(GetDay.TODAY, "MM"));
     int yearSumCount;
     int yearMaxCount = 0;
     int yearMinCount = 10000000;
+    private BarChart mChart;
+    private Typeface tfRegular;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -154,7 +151,7 @@ public class GraphYearFragment extends Fragment {
         }
         //年間平均の表情画像表示
         ImageView ave_month = root.findViewById(R.id.year_ave_face);
-        if ((yearSumCount /MONTH) == 0) {
+        if ((yearSumCount / MONTH) == 0) {
             ave_month.setImageResource(R.drawable.level_0);
         } else if ((yearSumCount / MONTH) <=yearLevel1/365 ) {
             ave_month.setImageResource(R.drawable.level_15);
@@ -173,7 +170,7 @@ public class GraphYearFragment extends Fragment {
         ArrayList<BarEntry> values = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
 
-        int origin=Color.rgb(184,90,78);
+        int origin = Color.rgb(184, 90, 78);
         int green = Color.rgb(110, 190, 102);
         int red = Color.rgb(211, 74, 88);
 

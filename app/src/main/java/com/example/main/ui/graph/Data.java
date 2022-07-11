@@ -1,7 +1,7 @@
 package com.example.main.ui.graph;
 
 //データを表現するデモクラス
- class Data {
+class Data {
 
     final String xAxisValue;
     final float yValue;

@@ -33,23 +33,20 @@ import java.util.Collections;
 import java.util.List;
 
 public class GraphMonthFragment extends Fragment {
-    /*フィールド*/
-    /* maker Ryo Kamizato feat シュトゥーデューム */
-    private BarChart mChart;
-    private Typeface tfRegular;
-
+    //1ヶ月分の回数を格納する配列を宣言
+    public static int[] monthCount = new int[31];
+    //データの設定
+    static List<Data> data = new ArrayList<>();
     //日付取得機能の準備
     GetDay gt = new GetDay();
     //年、月をそれぞれ定義しておく
     final String YEAR = gt.getDate(GetDay.TODAY, "yyyy");
     final String MONTH = gt.getDate(GetDay.TODAY, "MM");
     int thisMonth = Integer.parseInt(gt.getDate(GetDay.TODAY, "MM"));
-
-    //1ヶ月分の回数を格納する配列を宣言
-    public static int[] monthCount = new int[31];
-
-    //データの設定
-    static List<Data> data = new ArrayList<>();
+    /*フィールド*/
+    /* maker Ryo Kamizato feat シュトゥーデューム */
+    private BarChart mChart;
+    private Typeface tfRegular;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,8 +114,8 @@ public class GraphMonthFragment extends Fragment {
         int MonthLevel3=preferences.getInt("MonthCountLevel3",900);
 
         //月間合計の表情画像表示
-        ImageView sum_month= root.findViewById(R.id.month_sum_face);
-        if(monthSumCount==0){
+        ImageView sum_month = root.findViewById(R.id.month_sum_face);
+        if (monthSumCount == 0) {
             sum_month.setImageResource(R.drawable.level_0);
         }else if(monthSumCount<=MonthLevel1){
             sum_month.setImageResource(R.drawable.level_15);
@@ -130,12 +127,12 @@ public class GraphMonthFragment extends Fragment {
             sum_month.setImageResource(R.drawable.level_over);
         }
         //前月比の表情画像表示
-        ImageView  last_month= root.findViewById(R.id.last_month_face);
-        if(diff<=0){
+        ImageView last_month = root.findViewById(R.id.last_month_face);
+        if (diff <= 0) {
             last_month.setImageResource(R.drawable.level_0);
-        }else if(diff<=300){
+        } else if (diff <= 300) {
             last_month.setImageResource(R.drawable.level_15);
-        }else if(diff<=600){
+        } else if (diff <= 600) {
             last_month.setImageResource(R.drawable.level_510);
         }else if(diff<=900){
             last_month.setImageResource(R.drawable.level_max);
@@ -143,8 +140,8 @@ public class GraphMonthFragment extends Fragment {
             last_month.setImageResource(R.drawable.level_over);
         }
         //月間平均の表情画像表示
-        ImageView  ave_month= root.findViewById(R.id.month_ave_face);
-        if(monthSumCount / getLastDay(thisMonth)==0){
+        ImageView ave_month = root.findViewById(R.id.month_ave_face);
+        if (monthSumCount / getLastDay(thisMonth) == 0) {
             ave_month.setImageResource(R.drawable.level_0);
         }else if(monthSumCount / getLastDay(thisMonth)<=MonthLevel1/31){
             ave_month.setImageResource(R.drawable.level_15);
@@ -164,14 +161,14 @@ public class GraphMonthFragment extends Fragment {
         ArrayList<BarEntry> values = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
 
-        int origin=Color.rgb(184,90,78);
+        int origin = Color.rgb(184, 90, 78);
         int green = Color.rgb(110, 190, 102);
         int red = Color.rgb(211, 74, 88);
 
         for (int i = 0; i < dataList.size(); i++) {
 
             Data d = dataList.get(i);
-                BarEntry entry = new BarEntry(d.xValue, d.yValue);
+            BarEntry entry = new BarEntry(d.xValue, d.yValue);
             values.add(entry);
 
             // specific colors

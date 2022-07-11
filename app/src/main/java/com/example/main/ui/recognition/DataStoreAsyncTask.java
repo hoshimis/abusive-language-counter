@@ -5,7 +5,6 @@ import static android.content.ContentValues.TAG;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,7 +18,6 @@ import com.example.main.db.wordtable.WordTableDao;
 import com.example.main.util.GetDay;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,18 +65,6 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
         WordTableDao wordTableDao = wordDatabase.wordTableDao();
         DaysCountDao daysCountDao = countDatabase.daysCountDao();
 
-        //データベースに値を入れる処理
-
-//            wordTableDao.insert(new WordTable("バカ"));
-//            wordTableDao.insert(new WordTable("アホ"));
-//            wordTableDao.insert(new WordTable("死ね"));
-//            wordTableDao.insert(new WordTable("消えろ"));
-//            wordTableDao.insert(new WordTable("ハゲ"));
-//            wordTableDao.insert(new WordTable("おはよう"));
-//            wordTableDao.insert(new WordTable("ばーか"));
-//            wordTableDao.insert(new WordTable("今日は"));
-
-
         //単語DBからすべてのワードを取得してリストに代入する。
         List<WordTable> atList = wordTableDao.getAll();
 
@@ -125,6 +111,5 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
         } else {
             jagged.setImageResource(R.drawable.count_level_5);
         }
-
     }
 }
