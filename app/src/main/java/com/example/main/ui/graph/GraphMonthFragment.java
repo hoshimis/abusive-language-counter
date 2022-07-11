@@ -1,8 +1,10 @@
 package com.example.main.ui.graph;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,16 +110,24 @@ public class GraphMonthFragment extends Fragment {
         comparedBeforeMonth.setText(getResources().getString(R.string.month_count_text, diff));
         monthAverage.setText(getResources().getString(R.string.month_count_text, monthSumCount / getLastDay(thisMonth)));
         setData(data);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        int MonthLevel1=preferences.getInt("MonthCountLevel1",300);
+        int MonthLevel2=preferences.getInt("MonthCountLevel2",600);
+        int MonthLevel3=preferences.getInt("MonthCountLevel3",900);
+
         //月間合計の表情画像表示
         ImageView sum_month= root.findViewById(R.id.month_sum_face);
         if(monthSumCount==0){
             sum_month.setImageResource(R.drawable.level_0);
-        }else if(monthSumCount<=300){
+        }else if(monthSumCount<=MonthLevel1){
             sum_month.setImageResource(R.drawable.level_15);
-        }else if(monthSumCount<=600){
+        }else if(monthSumCount<=MonthLevel2){
             sum_month.setImageResource(R.drawable.level_510);
-        }else{
+        }else if(monthSumCount<=MonthLevel3){
             sum_month.setImageResource(R.drawable.level_max);
+        }else{
+            sum_month.setImageResource(R.drawable.level_over);
         }
         //前月比の表情画像表示
         ImageView  last_month= root.findViewById(R.id.last_month_face);
@@ -127,19 +137,23 @@ public class GraphMonthFragment extends Fragment {
             last_month.setImageResource(R.drawable.level_15);
         }else if(diff<=600){
             last_month.setImageResource(R.drawable.level_510);
-        }else{
+        }else if(diff<=900){
             last_month.setImageResource(R.drawable.level_max);
+        }else{
+            last_month.setImageResource(R.drawable.level_over);
         }
         //月間平均の表情画像表示
         ImageView  ave_month= root.findViewById(R.id.month_ave_face);
         if(monthSumCount / getLastDay(thisMonth)==0){
             ave_month.setImageResource(R.drawable.level_0);
-        }else if(monthSumCount / getLastDay(thisMonth)<=10){
+        }else if(monthSumCount / getLastDay(thisMonth)<=MonthLevel1/31){
             ave_month.setImageResource(R.drawable.level_15);
-        }else if(monthSumCount / getLastDay(thisMonth)<=20){
+        }else if(monthSumCount / getLastDay(thisMonth)<=MonthLevel2/31){
             ave_month.setImageResource(R.drawable.level_510);
-        }else{
+        }else if(monthSumCount / getLastDay(thisMonth)<=MonthLevel3/31){
             ave_month.setImageResource(R.drawable.level_max);
+        }else{
+            ave_month.setImageResource(R.drawable.level_over);
         }
         return root;
     }

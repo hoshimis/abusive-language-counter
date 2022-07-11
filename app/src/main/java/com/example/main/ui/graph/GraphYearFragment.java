@@ -2,9 +2,11 @@ package com.example.main.ui.graph;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,16 +121,23 @@ public class GraphYearFragment extends Fragment {
 
         setData(data);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        int yearLevel1=preferences.getInt("YearCountLevel1",3650);
+        int yearLevel2=preferences.getInt("YearCountLevel2",7300);
+        int yearLevel3=preferences.getInt("YearCountLevel3",10);
+
         //年間合計の表情画像表示
         ImageView sum_year = root.findViewById(R.id.year_sum_face);
         if (yearSumCount == 0) {
             sum_year.setImageResource(R.drawable.level_0);
-        } else if (yearSumCount <= 3650) {
+        } else if (yearSumCount <= yearLevel1) {
             sum_year.setImageResource(R.drawable.level_15);
-        } else if (yearSumCount <= 7300) {
+        } else if (yearSumCount <= yearLevel2) {
             sum_year.setImageResource(R.drawable.level_510);
-        } else {
+        } else if (yearSumCount <= yearLevel3){
             sum_year.setImageResource(R.drawable.level_max);
+        }else{
+            sum_year.setImageResource(R.drawable.level_over);
         }
         //最大最小の表情画像表示
         ImageView min_mux = root.findViewById(R.id.min_max_face);
@@ -138,19 +147,23 @@ public class GraphYearFragment extends Fragment {
             min_mux.setImageResource(R.drawable.level_15);
         } else if (yearMaxCount <= 600 || yearMinCount <= 600) {
             min_mux.setImageResource(R.drawable.level_510);
-        } else {
+        } else if (yearMaxCount <= 900 || yearMinCount <= 900){
             min_mux.setImageResource(R.drawable.level_max);
+        }else{
+            min_mux.setImageResource(R.drawable.level_over);
         }
         //年間平均の表情画像表示
         ImageView ave_month = root.findViewById(R.id.year_ave_face);
         if ((yearSumCount /MONTH) == 0) {
             ave_month.setImageResource(R.drawable.level_0);
-        } else if ((yearSumCount / MONTH) <= 120) {
+        } else if ((yearSumCount / MONTH) <=yearLevel1/365 ) {
             ave_month.setImageResource(R.drawable.level_15);
-        } else if ((yearSumCount / MONTH) <= 240) {
+        } else if ((yearSumCount / MONTH) <= yearLevel2/365) {
             ave_month.setImageResource(R.drawable.level_510);
-        } else {
+        } else if ((yearSumCount / MONTH) <= yearLevel3/365){
             ave_month.setImageResource(R.drawable.level_max);
+        }else{
+            ave_month.setImageResource(R.drawable.level_over);
         }
         return root;
     }
