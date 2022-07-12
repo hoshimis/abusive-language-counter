@@ -1,8 +1,7 @@
-package com.example.main.settings;
+package com.example.main.settings.addword;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.example.main.db.wordtable.WordDatabase;
@@ -10,32 +9,43 @@ import com.example.main.db.wordtable.WordTable;
 import com.example.main.db.wordtable.WordTableDao;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
-public class AddWordAsyncTask extends AsyncTask<Void, Void, Integer> {
+public class InitCurrentListAsyncTask extends AsyncTask<Void, Void, Integer> {
     /*フィールド*/
     //データベースの準備
     WordDatabase wordDatabase;
 
     private final WeakReference<Activity> weakReference;
     //受け取った文字列を格納する
-    String addWord;
+    ArrayList<String> data;
 
     //アダプター
     ArrayAdapter<String> adapter;
 
     //コンストラクタ―
-    public AddWordAsyncTask(Activity activity, String addWord, WordDatabase wordDatabase, ArrayAdapter adapter) {
+    public InitCurrentListAsyncTask(Activity activity, WordDatabase wordDatabase, ArrayList<String> data, ArrayAdapter<String> adapter) {
         weakReference = new WeakReference<>(activity);
-        this.addWord = addWord;
+        this.data = data;
         this.wordDatabase = wordDatabase;
         this.adapter = adapter;
     }
 
     @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+    }
+
+    @Override
     protected Integer doInBackground(Void... params) {
         WordTableDao wordTableDao = wordDatabase.wordTableDao();
-        //新しいワードを追加する
-        wordTableDao.insert(new WordTable(addWord));
+
+        //単語DBからすべてのワードを取得してリストに代入する。
+        List<WordTable> atList = wordTableDao.getAll();
+        for (WordTable str : atList) {
+            data.add(str.getWord());
+        }
         return 0;
     }
 
@@ -48,10 +58,6 @@ public class AddWordAsyncTask extends AsyncTask<Void, Void, Integer> {
         if (activity == null) {
             return;
         }
-
-        Log.d("非同期処理後の処理", "onPostExecute: " + "値を更新するよ");
-
-        //新規追加した後にリストビューを更新する
         adapter.notifyDataSetChanged();
     }
 }

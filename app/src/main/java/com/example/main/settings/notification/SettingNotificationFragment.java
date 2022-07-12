@@ -1,4 +1,4 @@
-package com.example.main.settings;
+package com.example.main.settings.notification;
 
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
@@ -16,6 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.example.main.R;
+import com.example.main.settings.notification.TimePicker;
 
 import java.util.Locale;
 

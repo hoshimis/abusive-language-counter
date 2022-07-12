@@ -1,4 +1,4 @@
-package com.example.main.settings;
+package com.example.main.settings.notification;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;

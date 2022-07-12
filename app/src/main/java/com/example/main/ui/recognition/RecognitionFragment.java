@@ -27,6 +27,7 @@ import com.example.main.db.dayscount.CountDatabase;
 import com.example.main.db.dayscount.CountDatabaseSingleton;
 import com.example.main.db.wordtable.WordDatabase;
 import com.example.main.db.wordtable.WordDatabaseSingleton;
+import com.example.main.settings.SettingFragment;
 
 import java.util.ArrayList;
 

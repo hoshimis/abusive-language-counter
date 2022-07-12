@@ -1,118 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFDD"
     android:orientation="vertical"
-    tools:context=".ui.graph.CountYearSetting">
+    android:paddingStart="20dp"
+    tools:context=".settings.count.SettingCountWeekFragment"
+    tools:ignore="RtlSymmetry">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:text="ちくちく回数を\n設定してください。"
-        android:textSize="30dp"
         android:textColor="@color/black"
-        android:layout_gravity="center_horizontal" />
+        android:textSize="30sp" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="50dp"
+        android:orientation="horizontal">
+
         <EditText
-            android:id="@+id/year_level_1"
+            android:id="@+id/week_level_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="level1の回数"
             android:inputType="number"
-            android:textSize="50dp"/>
+            android:textSize="50sp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/level_15" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="50dp"
+        android:orientation="horizontal">
+
         <EditText
-            android:id="@+id/year_level_2"
+            android:id="@+id/week_level_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="level2の回数"
             android:inputType="number"
-            android:textSize="50dp"/>
+            android:textSize="50sp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/level_510"
-            />
+            android:src="@drawable/level_510" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="50dp"
+        android:orientation="horizontal">
+
         <EditText
-            android:id="@+id/year_level_3"
+            android:id="@+id/week_level_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="level3の回数"
             android:inputType="number"
-            android:textSize="50dp"/>
+            android:textSize="50sp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/level_max"
-            />
+            android:src="@drawable/level_max" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="50dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/week_level_4"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:hint="変更不可"
-            android:textSize="50dp" />
+            android:textSize="50sp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/level_over"
-            />
+            android:src="@drawable/level_over" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="25dp"
             android:text="戻る"
-            android:textSize="50dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="25dp"
-            />
+            android:textSize="50sp" />
+
         <Button
             android:id="@+id/save_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="20dp"
             android:text="保存"
-            android:textSize="50dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="20dp"/>
+            android:textSize="50sp" />
     </LinearLayout>
-
-
 
 </LinearLayout>

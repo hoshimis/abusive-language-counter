@@ -2,9 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.main">
     <!-- 音声入力を許可する -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- Speech Recognizer（インターネット版）とFireBaseとの通信を許可する -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 通知を許可する -->
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" /> <!-- Speech Recognizerを使うための記述ここから -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- Speech Recognizer（インターネット版）とFireBaseとの通信を許可する -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 通知を許可する -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <!-- Speech Recognizerを使うための記述ここから -->
     <queries>
         <intent>
             <action android:name="android.speech.RecognitionService" />
@@ -18,11 +21,6 @@
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Appnav">
-        <activity android:name=".ui.recognition.CountColerSetting"></activity>
-        <!-- <activity android:name=".ui.graph.CountYearSetting"></activity> -->
-        <!-- <activity android:name=".ui.graph.CountMonthSetting" /> -->
-        <!-- <activity android:name=".ui.graph.CountWeekSetting" /> -->
-        <!-- <activity android:name=".ui.graph.CountSetting" /> -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
