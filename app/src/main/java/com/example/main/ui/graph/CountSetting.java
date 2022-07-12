@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.main.R;
+import com.example.main.ui.recognition.CountColerSetting;
 import com.example.main.ui.recognition.SettingFragment;
 
 public class CountSetting extends Fragment {
@@ -42,6 +43,16 @@ public class CountSetting extends Fragment {
                     Fragment toYearCount = new CountYearSetting();
                     FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                     transaction.replace(R.id.nav_host_fragment, toYearCount);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+        );
+
+        root.findViewById(R.id.count_color).setOnClickListener(
+                view -> {
+                    Fragment toSettingColor = new CountColerSetting();
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment, toSettingColor);
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }

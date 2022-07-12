@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="○○回数を\n設定してください。"
+        android:text="ちくちく回数を\n設定してください。"
         android:textSize="30dp"
         android:textColor="@color/black"
         android:layout_gravity="center_horizontal"

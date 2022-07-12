@@ -133,11 +133,11 @@ public class GraphWeekFragment extends Fragment {
         ImageView compared_yesterday = root.findViewById(R.id.comparedYesterday_face);
         if (weekCount[0] - weekCount[1] <= 0) {
             compared_yesterday.setImageResource(R.drawable.level_0);
-        } else if (weekCount[0] - weekCount[1] >= 10) {
+        } else if (weekCount[0] - weekCount[1] <= WeekLevel1) {
             compared_yesterday.setImageResource(R.drawable.level_15);
-        } else if (weekCount[0] - weekCount[1] >= 20) {
+        } else if (weekCount[0] - weekCount[1] <= WeekLevel2) {
             compared_yesterday.setImageResource(R.drawable.level_510);
-        } else if (weekCount[0] - weekCount[1] >= 30){
+        } else if (weekCount[0] - weekCount[1] <= WeekLevel3){
             compared_yesterday.setImageResource(R.drawable.level_max);
         }else{
             compared_yesterday.setImageResource(R.drawable.level_over);

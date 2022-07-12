@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFDD"
     android:orientation="vertical"
-    tools:context=".ui.graph.CountMonthSetting">
+    tools:context=".ui.graph.CountWeekSetting">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
         android:orientation="horizontal"
         android:layout_marginBottom="50dp">
         <EditText
-            android:id="@+id/month_level_1"
+            android:id="@+id/week_level_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="level1の回数"
@@ -31,7 +31,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/level_15" />
+            android:src="@drawable/count_level_2" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
         android:orientation="horizontal"
         android:layout_marginBottom="50dp">
         <EditText
-            android:id="@+id/month_level_2"
+            android:id="@+id/week_level_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="level2の回数"
@@ -49,7 +49,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/level_510"
+            android:src="@drawable/count_level_3"
             />
     </LinearLayout>
     <LinearLayout
@@ -58,7 +58,7 @@
         android:orientation="horizontal"
         android:layout_marginBottom="50dp">
         <EditText
-            android:id="@+id/month_level_3"
+            android:id="@+id/week_level_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="level3の回数"
@@ -68,7 +68,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/level_max"
+            android:src="@drawable/count_level_4"
             />
     </LinearLayout>
     <LinearLayout
@@ -78,7 +78,7 @@
         android:layout_marginBottom="50dp">
 
         <TextView
-            android:id="@+id/month_level_4"
+            android:id="@+id/week_level_4"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:hint="変更不可"
@@ -87,7 +87,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/level_over"
+            android:src="@drawable/count_level_5"
             />
     </LinearLayout>
     <LinearLayout

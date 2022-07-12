@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFDD"
     android:orientation="vertical"
+    android:layout_marginBottom="45dp"
     tools:context=".ui.graph.CountSetting">
 
     <Button
@@ -13,35 +14,54 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="戻る"
-        android:textSize="30dp"/>
+        android:textSize="30dp" />
 
-    <Button
-        android:id="@+id/week_count_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="週間設定"
-        android:layout_gravity="center"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="100dp"
-        android:textSize="50dp"
-        />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFDD"
+        android:orientation="vertical"
+        android:layout_weight="4"
+        tools:context=".ui.graph.CountSetting">
 
-    <Button
-        android:id="@+id/month_count_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="月間設定"
-        android:layout_gravity="center"
-        android:layout_marginBottom="100dp"
-        android:textSize="50dp"
-        />
-    <Button
-        android:id="@+id/year_count_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="年間設定"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:textSize="50dp"
-        />
+        <Button
+            android:id="@+id/week_count_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="週間設定"
+            android:textSize="50dp" />
+
+        <Button
+            android:id="@+id/month_count_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+
+            android:text="月間設定"
+            android:textSize="50dp" />
+
+        <Button
+            android:id="@+id/year_count_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+
+            android:text="年間設定"
+            android:textSize="50dp" />
+
+        <Button
+            android:id="@+id/count_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="認識回数"
+            android:textSize="50dp" />
+    </LinearLayout>
 </LinearLayout>
