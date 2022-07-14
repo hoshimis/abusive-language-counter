@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">App-nav</string>
+    <string name="app_name">ちくちくカウンター</string>
     <string name="title_Recognition">Recognition</string>
     <string name="title_Graph">Graph</string>
     <string name="title_BBS">BBS</string>

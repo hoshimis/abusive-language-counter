@@ -21,8 +21,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.main.db.wordtable.WordDatabase;
 import com.example.main.db.wordtable.WordDatabaseSingleton;
-import com.example.main.notification.TodayAlarmNotification;
-import com.example.main.notification.YesterdayAlarmNotification;
+import com.example.main.settings.notification.TodayAlarmNotification;
+import com.example.main.settings.notification.YesterdayAlarmNotification;
 import com.example.main.util.GetDay;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

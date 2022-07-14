@@ -1,4 +1,4 @@
-package com.example.main.notification;
+package com.example.main.settings.notification;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,7 +13,11 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.main.R;
 import com.example.main.ui.graph.GraphWeekFragment;
 
-public class TodayAlarmNotification extends BroadcastReceiver {
+//PendingIntentからのIntentを受け取るクラス。
+//アラームを受けてトーストを行う
+//前日の回数を通知するクラス
+//追加で当日の分も追加することができればいい
+public class YesterdayAlarmNotification extends BroadcastReceiver {
 
     @Override   // データを受信した
     public void onReceive(Context context, Intent intent) {
@@ -24,14 +28,14 @@ public class TodayAlarmNotification extends BroadcastReceiver {
         PendingIntent pendingIntent =
                 PendingIntent.getActivity(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        String channelId = "today";
+        String channelId = "yesterday";
         // app name
         String title = context.getString(R.string.app_name);
 
-        String todayCount = String.valueOf(GraphWeekFragment.weekCount[0]);
+        String yesterdayCount = String.valueOf(GraphWeekFragment.weekCount[1]);
 
         // 通知するメッセージを設定
-        String message = "今日の回数:" + todayCount + "回";
+        String message = "前日の回数:" + yesterdayCount + "回";
 
         // Notification　Channel 設定
         NotificationChannel channel = new NotificationChannel(channelId, title, NotificationManager.IMPORTANCE_DEFAULT);
@@ -45,7 +49,7 @@ public class TodayAlarmNotification extends BroadcastReceiver {
                         //ステータスバーに表示されるアイコンを指定する
                         .setSmallIcon(android.R.drawable.btn_star)
                         //通知のタイトルを設定する
-                        .setContentTitle("前日の回数")
+                        .setContentTitle("今日の回数")
                         //通知の本文を設定する
                         .setContentText(message)
                         //通知のプライオリティを設定する
@@ -54,8 +58,7 @@ public class TodayAlarmNotification extends BroadcastReceiver {
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true);
 
-        NotificationManagerCompat notificationManagerCompat
-                = NotificationManagerCompat.from(context);
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
 
         // 通知を最終的に表示させる設定
         notificationManagerCompat.notify(R.string.app_name, builder.build());
