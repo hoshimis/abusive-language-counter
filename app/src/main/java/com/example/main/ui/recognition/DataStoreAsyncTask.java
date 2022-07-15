@@ -3,7 +3,9 @@ package com.example.main.ui.recognition;
 import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,13 +41,10 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
     //日付取得機能の準備
     GetDay gt = new GetDay();
 
+    //共有プリファレンスの宣言
+    SharedPreferences preferences;
     //コンストラクタ―
-    public DataStoreAsyncTask(
-            Activity activity,
-            CountDatabase countDatabase,
-            WordDatabase wordDatabase, String speechText,
-            TextView countText,
-            ImageView jagged) {
+    public DataStoreAsyncTask(Activity activity, CountDatabase countDatabase, WordDatabase wordDatabase, String speechText, TextView countText, ImageView jagged, SharedPreferences preferences) {
 
         //ここで、インスタンス化した時に渡された引数の値をフィールドの値に代入する
         weakReference = new WeakReference<>(activity);
@@ -54,6 +53,7 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
         this.speechText = speechText;
         this.countText = countText;
         this.jagged = jagged;
+        this.preferences = preferences;
     }
 
     //AsyncTaskの実装
@@ -99,14 +99,18 @@ public class DataStoreAsyncTask extends AsyncTask<Void, Void, Integer> {
         Log.d(TAG, "onPostExecute: " + RecognitionFragment.count);
         countText.setText(String.valueOf(RecognitionFragment.count));
 
+        int MonthLevel1=preferences.getInt("ColorCountLevel1",20);
+        int MonthLevel2=preferences.getInt("ColorCountLevel2",30);
+        int MonthLevel3=preferences.getInt("ColorCountLevel3",40);
+
         //ちくちくの画像がカウント回数によって変化する処理
         if (RecognitionFragment.count == 0) {
             jagged.setImageResource(R.drawable.count_level_1);
-        } else if (RecognitionFragment.count <= 10) {
+        } else if (RecognitionFragment.count <= MonthLevel1) {
             jagged.setImageResource(R.drawable.count_level_2);
-        } else if (RecognitionFragment.count <= 20) {
+        } else if (RecognitionFragment.count <= MonthLevel2) {
             jagged.setImageResource(R.drawable.count_level_3);
-        } else if (RecognitionFragment.count <= 30) {
+        } else if (RecognitionFragment.count <= MonthLevel3) {
             jagged.setImageResource(R.drawable.count_level_4);
         } else {
             jagged.setImageResource(R.drawable.count_level_5);

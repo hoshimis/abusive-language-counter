@@ -23,7 +23,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/week_level_1"
+            android:id="@+id/color_level_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints=""
@@ -44,7 +44,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/week_level_2"
+            android:id="@+id/color_level_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="level2の回数"
@@ -64,7 +64,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/week_level_3"
+            android:id="@+id/color_level_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="level3の回数"

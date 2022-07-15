@@ -2,8 +2,10 @@ package com.example.main.ui.recognition;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -52,6 +54,9 @@ public class RecognitionFragment extends Fragment {
     private WordDatabase wordDatabase;
     private CountDatabase countDatabase;
 
+    //共有プリファレンスの宣言
+    SharedPreferences preferences;
+
     /**
      * ActivityのようにFragmentにもライフサイクルがある
      * Viewを生成するたタイミングで呼ばれるのがonCreateView()
@@ -68,6 +73,9 @@ public class RecognitionFragment extends Fragment {
         countText = root.findViewById(R.id.count_text);
         ListView listView = root.findViewById(R.id.listView);
         jaggedImage = root.findViewById(R.id.count_image);
+
+        //共有プリファレンスの宣言
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         //データベースとの紐づけ
         wordDatabase = WordDatabaseSingleton.getInstance(requireActivity().getApplicationContext());
@@ -265,7 +273,7 @@ public class RecognitionFragment extends Fragment {
             if (str.length() > 0) {
                 Log.d(TAG, "認識された言葉 -> " + str);
                 //ここで、認識した言葉を非同期処理に渡して、マッチするかを確認する
-                new DataStoreAsyncTask(getActivity(), countDatabase, wordDatabase, str, CountTextView, jaggedImage).execute();
+                new DataStoreAsyncTask(getActivity(), countDatabase, wordDatabase, str, CountTextView, jaggedImage, preferences).execute();
                 //任意視された言葉リストビューに挿入する
                 new InsertListViewAsyncTask(getActivity(), countDatabase, data, adapter).execute();
             }
