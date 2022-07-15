@@ -61,8 +61,8 @@
     <string name="settings_word_submit">追加</string>
 
     <!-- スレッド追加画面で使用するテキスト -->
-    <string name="bbs_add_title">タイトル</string>
-    <string name="bbs_add_content">本文</string>
+    <string name="bbs_add_title">本文</string>
+    <string name="bbs_add_content">補足</string>
     <string name="bbs_add_submit">save</string>
     <string name="bbs_add_back">もどる</string>
 
