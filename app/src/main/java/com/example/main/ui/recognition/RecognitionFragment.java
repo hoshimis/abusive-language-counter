@@ -66,6 +66,9 @@ public class RecognitionFragment extends Fragment {
         mText = root.findViewById(R.id.recognize_text_view);
         countText = root.findViewById(R.id.count_text);
         ListView listView = root.findViewById(R.id.listView);
+
+        //リストビューを常に最下部にフォーカスする
+        listView.setSelection(data.size());
         jaggedImage = root.findViewById(R.id.count_image);
 
         //データベースとの紐づけ
